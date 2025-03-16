@@ -1,0 +1,31 @@
+version: "3"
+services:
+  django-admin:
+    build:
+      context: .
+      dockerfile: ./docker_env/django/Dockerfile
+      args:
+        - COMPOSE_DOCKER_CLI_BUILD=1  # 设置串行构建
+    container_name: django
+    working_dir: /backend
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
+    restart: always
+    volumes:
+      - ./backend:/backend
+      - ./docker_env/django/logs:/var/log
+  django-web:
+    container_name: django-web
+    ports:
+      - "8080:8080"
+    build:
+      context: ./
+      dockerfile: ./docker_env/web/Dockerfile
+      args:
+        - COMPOSE_DOCKER_CLI_BUILD=1  # 设置串行构建
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./docker_env/nginx/my.conf:/etc/nginx/conf.d/my.conf

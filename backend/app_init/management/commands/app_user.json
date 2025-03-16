@@ -1,0 +1,105 @@
+[
+    {
+        "model": "app_user.users",
+        "pk": 234457355328,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$e0jTXC1TrB9PTRKkLTLOL6$JBQDOTiTpuCOvvI7KLT2uWw49waPNnxy+U4iJUj+CdM=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-10-24T11:23:16",
+            "creator": null,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-04T16:44:16.356",
+            "create_datetime": "2023-10-24T11:23:16.177",
+            "status": "0",
+            "username": "test",
+            "nickname": "测试用户",
+            "employee_no": null,
+            "email": "123@qq.com",
+            "phone": "13229671222",
+            "avatar": null,
+            "gender": "1",
+            "dept": 10414461824,
+            "last_token": null,
+            "is_delete": false,
+            "remark": "测试",
+            "post": [
+                62104692200590,
+                517572581700082
+            ],
+            "role": [
+                444421914176
+            ]
+        }
+    },
+    {
+        "model": "app_user.users",
+        "pk": 252375424640,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$vICG6lABy8yQ0C802zt551$dSfe9kmFUqW07vTPy4HQD+X0BB7/3R9iGyXNtqhgbEQ=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-10-27T17:09:26",
+            "creator": null,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-03T21:45:42.492",
+            "create_datetime": "2023-10-27T17:09:26.010",
+            "status": "0",
+            "username": "nini",
+            "nickname": "妮妮",
+            "employee_no": null,
+            "email": "123@qq.com",
+            "phone": "13228791221",
+            "avatar": null,
+            "gender": "1",
+            "dept": 10414461824,
+            "last_token": null,
+            "is_delete": false,
+            "remark": null,
+            "post": [
+                517572581700082
+            ],
+            "role": [
+                540775921959829
+            ]
+        }
+    },
+    {
+        "model": "app_user.users",
+        "pk": 541150219354505,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$PsjRRnRPVP3HH3iuWIFc3K$P/78Ut0cjzt2OxDWHG1U/0+ZgdEM/N2M79LfmSF+wCo=",
+            "last_login": null,
+            "is_superuser": true,
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-08-31T17:37:46",
+            "creator": null,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-15T16:43:25.930",
+            "create_datetime": "2023-08-31T17:37:46.379",
+            "status": "0",
+            "username": "paopao",
+            "nickname": "泡泡",
+            "employee_no": null,
+            "email": "1638206958@qq.com",
+            "phone": "13229671229",
+            "avatar": null,
+            "gender": "0",
+            "dept": 94609026700594,
+            "last_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcwMjcxNjIwNSwiaWF0IjoxNzAyNjI5ODA1LCJqdGkiOiI2MTNhNDAzNWYyOTA0MTk4YjIzOWNjZDhlMGNmY2JmZiIsInVzZXJfaWQiOjU0MTE1MDIxOTM1NDUwNX0.XL5Ksj-9gpYh-ktU3_3mHC3aBQidUzwmy9-Odv2h2Oo",
+            "is_delete": false,
+            "remark": null,
+            "post": [
+                62104692200590
+            ],
+            "role": [
+                540775921959829
+            ]
+        }
+    }
+]

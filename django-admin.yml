@@ -1,0 +1,18 @@
+version: "3"
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./docker_env/django/Dockerfile
+      args:
+        - COMPOSE_DOCKER_CLI_BUILD=1
+    container_name: django
+    working_dir: /backend
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
+    restart: always
+    volumes:
+      - ./backend:/backend
+      - ./docker_env/django/logs:/var/log

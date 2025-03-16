@@ -1,0 +1,420 @@
+[
+    {
+        "model": "app_dict.dicttype",
+        "pk": 506442600448,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-12T15:52:45.632",
+            "create_datetime": "2023-12-12T15:52:45.632",
+            "dict_name": "信息类型",
+            "dict_type": "sys_notice_type",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dicttype",
+        "pk": 545106760873017,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-11T15:39:39.386",
+            "create_datetime": "2023-09-11T15:39:39.386",
+            "dict_name": "用户性别",
+            "dict_type": "sys_user_sex",
+            "status": "0",
+            "remark": "性别字典"
+        }
+    },
+    {
+        "model": "app_dict.dicttype",
+        "pk": 545186208771211,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-11T20:55:21.241",
+            "create_datetime": "2023-09-11T20:55:21.241",
+            "dict_name": "菜单类型",
+            "dict_type": "sys_menu_type",
+            "status": "0",
+            "remark": "菜单类型"
+        }
+    },
+    {
+        "model": "app_dict.dicttype",
+        "pk": 545186358604333,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-11T20:55:56.964",
+            "create_datetime": "2023-09-11T20:55:56.964",
+            "dict_name": "菜单状态",
+            "dict_type": "sys_show_hide",
+            "status": "0",
+            "remark": "菜单状态"
+        }
+    },
+    {
+        "model": "app_dict.dicttype",
+        "pk": 545186413918814,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-11T20:56:10.152",
+            "create_datetime": "2023-09-11T20:56:10.152",
+            "dict_name": "数字是否",
+            "dict_type": "sys_num_yes_no",
+            "status": "0",
+            "remark": "数字是否"
+        }
+    },
+    {
+        "model": "app_dict.dicttype",
+        "pk": 545186489282068,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-11T20:56:28.120",
+            "create_datetime": "2023-09-11T20:56:28.120",
+            "dict_name": "状态是否",
+            "dict_type": "sys_yes_no",
+            "status": "0",
+            "remark": "状态是否"
+        }
+    },
+    {
+        "model": "app_dict.dicttype",
+        "pk": 545186565144444,
+        "fields": {
+            "creator": null,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-11-09T15:51:02.889",
+            "create_datetime": "2023-09-11T20:56:46.207",
+            "dict_name": "网络请求方法",
+            "dict_type": "sys_method_api",
+            "status": "0",
+            "remark": ""
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2142562432,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:04:37.538",
+            "create_datetime": "2023-09-12T11:04:37.538",
+            "sort": 3,
+            "dict_label": "未知",
+            "dict_value": "2",
+            "dict_type": "sys_user_sex",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2145471872,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:05:22.998",
+            "create_datetime": "2023-09-12T11:05:22.998",
+            "sort": 0,
+            "dict_label": "目录",
+            "dict_value": "M",
+            "dict_type": "sys_menu_type",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2146028928,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:05:31.702",
+            "create_datetime": "2023-09-12T11:05:31.702",
+            "sort": 1,
+            "dict_label": "菜单",
+            "dict_value": "C",
+            "dict_type": "sys_menu_type",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2146541632,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:05:39.713",
+            "create_datetime": "2023-09-12T11:05:39.713",
+            "sort": 2,
+            "dict_label": "按钮",
+            "dict_value": "F",
+            "dict_type": "sys_menu_type",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2148299328,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:06:07.177",
+            "create_datetime": "2023-09-12T11:06:07.177",
+            "sort": 0,
+            "dict_label": "显示",
+            "dict_value": "0",
+            "dict_type": "sys_show_hide",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2148816448,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:06:15.257",
+            "create_datetime": "2023-09-12T11:06:15.257",
+            "sort": 1,
+            "dict_label": "隐藏",
+            "dict_value": "1",
+            "dict_type": "sys_show_hide",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2149911552,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:06:32.368",
+            "create_datetime": "2023-09-12T11:06:32.368",
+            "sort": 1,
+            "dict_label": "是",
+            "dict_value": "0",
+            "dict_type": "sys_num_yes_no",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2150559168,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:06:42.487",
+            "create_datetime": "2023-09-12T11:06:42.487",
+            "sort": 1,
+            "dict_label": "否",
+            "dict_value": "1",
+            "dict_type": "sys_num_yes_no",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2153187072,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T14:56:20.061",
+            "create_datetime": "2023-09-12T11:07:23.548",
+            "sort": 0,
+            "dict_label": "正常",
+            "dict_value": "0",
+            "dict_type": "sys_yes_no",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2153897792,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T14:56:25.959",
+            "create_datetime": "2023-09-12T11:07:34.653",
+            "sort": 1,
+            "dict_label": "停用",
+            "dict_value": "1",
+            "dict_type": "sys_yes_no",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2156130880,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:08:09.545",
+            "create_datetime": "2023-09-12T11:08:09.545",
+            "sort": 1,
+            "dict_label": "创建(POST)",
+            "dict_value": "POST",
+            "dict_type": "sys_method_api",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2156676928,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:08:18.077",
+            "create_datetime": "2023-09-12T11:08:18.077",
+            "sort": 1,
+            "dict_label": "查询(GET)",
+            "dict_value": "GET",
+            "dict_type": "sys_method_api",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2157233856,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:08:26.779",
+            "create_datetime": "2023-09-12T11:08:26.779",
+            "sort": 1,
+            "dict_label": "修改(PUT)",
+            "dict_value": "PUT",
+            "dict_type": "sys_method_api",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 2159468032,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T11:09:01.688",
+            "create_datetime": "2023-09-12T11:09:01.688",
+            "sort": 1,
+            "dict_label": "删除(DELETE)",
+            "dict_value": "DELETE",
+            "dict_type": "sys_method_api",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 506443966400,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-12T15:53:06.975",
+            "create_datetime": "2023-12-12T15:53:06.975",
+            "sort": 1,
+            "dict_label": "按用户",
+            "dict_value": "0",
+            "dict_type": "sys_notice_type",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 506444722112,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-12T15:53:18.783",
+            "create_datetime": "2023-12-12T15:53:18.783",
+            "sort": 2,
+            "dict_label": "按角色",
+            "dict_value": "1",
+            "dict_type": "sys_notice_type",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 506446082944,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-12T15:53:40.046",
+            "create_datetime": "2023-12-12T15:53:40.046",
+            "sort": 3,
+            "dict_label": "按部门",
+            "dict_value": "2",
+            "dict_type": "sys_notice_type",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 506446891712,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-12T15:53:52.683",
+            "create_datetime": "2023-12-12T15:53:52.683",
+            "sort": 4,
+            "dict_label": "通知公告",
+            "dict_value": "3",
+            "dict_type": "sys_notice_type",
+            "status": "0",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 545107425737310,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-11T15:42:17.902",
+            "create_datetime": "2023-09-11T15:42:17.902",
+            "sort": 1,
+            "dict_label": "男",
+            "dict_value": "0",
+            "dict_type": "sys_user_sex",
+            "status": "0",
+            "remark": ""
+        }
+    },
+    {
+        "model": "app_dict.dictdata",
+        "pk": 545107468653428,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-11T15:42:28.134",
+            "create_datetime": "2023-09-11T15:42:28.134",
+            "sort": 2,
+            "dict_label": "女",
+            "dict_value": "1",
+            "dict_type": "sys_user_sex",
+            "status": "0",
+            "remark": ""
+        }
+    }
+]

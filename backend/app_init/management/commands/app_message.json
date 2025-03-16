@@ -1,0 +1,232 @@
+[
+    {
+        "model": "app_message.messagecenter",
+        "pk": 43330263808,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:15.372",
+            "create_datetime": "2024-01-13T15:37:15.372",
+            "title": "发给用户的",
+            "content": "<p><strong>测试水水水水水水水水水水水水撒啊啊啊啊啊啊</strong></p>",
+            "target_type": "0",
+            "remark": null,
+            "target_dept": [],
+            "target_role": []
+        }
+    },
+    {
+        "model": "app_message.messagecenter",
+        "pk": 43331630656,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:36.729",
+            "create_datetime": "2024-01-13T15:37:36.729",
+            "title": "发给角色的",
+            "content": "<p>撒啊水水水水水水水水说法伽师</p>",
+            "target_type": "1",
+            "remark": null,
+            "target_dept": [],
+            "target_role": [
+                540775921959829,
+                444421914176
+            ]
+        }
+    },
+    {
+        "model": "app_message.messagecenter",
+        "pk": 43332798016,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:54.969",
+            "create_datetime": "2024-01-13T15:37:54.970",
+            "title": "发给部门的",
+            "content": "<p>啊啊啊啊啊啊啊啊啊啊啊啊啊</p>",
+            "target_type": "2",
+            "remark": null,
+            "target_dept": [
+                10414461824,
+                376960140500837,
+                94609026700594,
+                114667862200894,
+                57407999600609,
+                42188673800208
+            ],
+            "target_role": []
+        }
+    },
+    {
+        "model": "app_message.messagecenter",
+        "pk": 43333811200,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:38:10.800",
+            "create_datetime": "2024-01-13T15:38:10.800",
+            "title": "公告",
+            "content": "<p>这是一份公告</p>",
+            "target_type": "3",
+            "remark": null,
+            "target_dept": [],
+            "target_role": []
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43330264640,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:15.385",
+            "create_datetime": "2024-01-13T15:37:15.385",
+            "users": 252375424640,
+            "messagecenter": 43330263808,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43330264832,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:15.388",
+            "create_datetime": "2024-01-13T15:37:15.388",
+            "users": 234457355328,
+            "messagecenter": 43330263808,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43330264960,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:15.390",
+            "create_datetime": "2024-01-13T15:37:15.390",
+            "users": 541150219354505,
+            "messagecenter": 43330263808,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43331632000,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:36.750",
+            "create_datetime": "2024-01-13T15:37:36.750",
+            "users": 252375424640,
+            "messagecenter": 43331630656,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43331632320,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:36.755",
+            "create_datetime": "2024-01-13T15:37:36.755",
+            "users": 234457355328,
+            "messagecenter": 43331630656,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43331632448,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:36.757",
+            "create_datetime": "2024-01-13T15:37:36.757",
+            "users": 541150219354505,
+            "messagecenter": 43331630656,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43332799360,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:54.990",
+            "create_datetime": "2024-01-13T15:37:54.990",
+            "users": 252375424640,
+            "messagecenter": 43332798016,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43332799552,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:54.993",
+            "create_datetime": "2024-01-13T15:37:54.993",
+            "users": 234457355328,
+            "messagecenter": 43332798016,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43332799680,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:37:54.995",
+            "create_datetime": "2024-01-13T15:37:54.995",
+            "users": 541150219354505,
+            "messagecenter": 43332798016,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43333811904,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:38:10.811",
+            "create_datetime": "2024-01-13T15:38:10.811",
+            "users": 252375424640,
+            "messagecenter": 43333811200,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43333812160,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:38:10.815",
+            "create_datetime": "2024-01-13T15:38:10.815",
+            "users": 234457355328,
+            "messagecenter": 43333811200,
+            "is_read": false
+        }
+    },
+    {
+        "model": "app_message.messagecentertargetuser",
+        "pk": 43333812224,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:38:13.084",
+            "create_datetime": "2024-01-13T15:38:10.816",
+            "users": 541150219354505,
+            "messagecenter": 43333811200,
+            "is_read": true
+        }
+    }
+]

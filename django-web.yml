@@ -1,0 +1,15 @@
+version: "3"
+services:
+  django-web:
+    container_name: django-web
+    ports:
+      - "8080:8080"
+    build:
+      context: ./
+      dockerfile: ./docker_env/web/Dockerfile
+      args:
+        - COMPOSE_DOCKER_CLI_BUILD=1
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./docker_env/nginx/my.conf:/etc/nginx/conf.d/my.conf

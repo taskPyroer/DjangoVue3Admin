@@ -1,0 +1,1263 @@
+[
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 128,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/update-user-info/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 129,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dept/:dept_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 130,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/job/crontab/periodic-task/:job_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 132,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/user/:user_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 133,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/menu/:menu_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 134,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-data/:dict-data_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 135,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dept/dept-tree/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 136,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/apis/:api_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 137,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-type/:dict-type_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 138,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/post/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 139,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-type/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 141,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dept/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 142,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/role/:role_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 143,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/menu/menu-tree-simple/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 144,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/post/:post_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 145,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/menu/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 146,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/apis/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 148,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/role/role-id-to-menu/:role_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 149,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-data/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 150,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/post/get-all-posts/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 151,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/job/crontab/periodic-task/:job_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 152,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/role/get-all-roles/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 153,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/role/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 154,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/job/crontab/periodic-task/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 155,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/menu/:menu_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 156,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-type/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 158,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/menu/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 159,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/apis/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 160,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/job/crontab/periodic-task/tasklist/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 161,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/user/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 162,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-data/:dict-data_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 163,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-data/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 164,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dept/:dept_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 165,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-type/:dict-type_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 166,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/user/:user_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 167,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/apis/:api_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 168,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/role/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 169,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/job/crontab/periodic-task/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 170,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/menu/menu-tree/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 171,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-data/:dict-data_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 172,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dept/:dept_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 173,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dict-type/:dict-type_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 174,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/user/:user_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 175,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/apis/:api_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 176,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/role/:role_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 177,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/post/:post_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 178,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/job/crontab/task-result/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 179,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/post/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 180,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/role/:role_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 181,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/user/user-info/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 182,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/user/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 183,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/post/:post_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 184,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/dept/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 185,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/job/crontab/periodic-task/enabled/:job_id/",
+            "v2": "PUT",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 187,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/menu/:menu_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 188,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/post/get-all-posts/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 189,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/post/:post_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 190,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/post/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 191,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/role/get-all-roles/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 192,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/role/role-id-to-menu/:role_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 193,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/role/:role_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 194,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/role/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 195,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/user/user-info/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 196,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/user/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 197,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/user/:user_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 198,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/menu/menu-tree-simple/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 199,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/menu/menu-tree/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 200,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/menu/:menu_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 202,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/menu/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 203,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/dict-data/:dict-data_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 204,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/dict-data/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 206,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/dict-type/:dict-type_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 207,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/dict-type/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 209,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/dept/dept-tree/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 211,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/dept/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 212,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/dept/:dept_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 213,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/apis/:api_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 214,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/apis/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 217,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/apis/get-all-api-group/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 218,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/tool/monitor/get-system-info/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 219,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/operation-log/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 220,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/operation-log/delete-all-logs/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 221,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/operation-log/:log_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 223,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/operation-log/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 225,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/message-center/:message_id/",
+            "v2": "DELETE",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 226,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/message-center/:message_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 227,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/message-center/get-self-receive/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 228,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/message-center/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 229,
+        "fields": {
+            "ptype": "p",
+            "v0": "admin",
+            "v1": "/system/message-center/",
+            "v2": "POST",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 231,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/message-center/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 232,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/message-center/get-self-receive/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 234,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/message-center/:message_id/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 235,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/system/apis/get-all-api-group/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 236,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/job/crontab/periodic-task/tasklist/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 237,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/job/crontab/task-result/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 238,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/tool/monitor/get-system-info/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    },
+    {
+        "model": "casbin_adapter.casbinrule",
+        "pk": 239,
+        "fields": {
+            "ptype": "p",
+            "v0": "test",
+            "v1": "/job/crontab/periodic-task/",
+            "v2": "GET",
+            "v3": "",
+            "v4": "",
+            "v5": ""
+        }
+    }
+]

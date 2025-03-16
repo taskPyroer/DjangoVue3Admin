@@ -1,0 +1,47 @@
+[
+    {
+        "model": "app_post.post",
+        "pk": 43274229824,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-13T15:22:39.841",
+            "create_datetime": "2024-01-13T15:22:39.841",
+            "post_name": "测试",
+            "post_code": "TEST",
+            "sort": 3,
+            "status": "1",
+            "remark": null
+        }
+    },
+    {
+        "model": "app_post.post",
+        "pk": 62104692200590,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T15:07:25.255",
+            "create_datetime": "2023-08-23T15:15:37.358",
+            "post_name": "首席执行官",
+            "post_code": "CEO",
+            "sort": 1,
+            "status": "0",
+            "remark": ""
+        }
+    },
+    {
+        "model": "app_post.post",
+        "pk": 517572581700082,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T15:39:20.600",
+            "create_datetime": "2023-08-23T15:39:20.600",
+            "post_name": "首席技术执行官",
+            "post_code": "CTO",
+            "sort": 2,
+            "status": "0",
+            "remark": "44444"
+        }
+    }
+]

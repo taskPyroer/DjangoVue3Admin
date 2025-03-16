@@ -1,0 +1,110 @@
+[
+    {
+        "model": "app_dept.dept",
+        "pk": 10414461824,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-13T22:58:45.966",
+            "create_datetime": "2023-09-13T22:58:45.966",
+            "dept_name": "产品设计部门",
+            "dept_key": "cpsjbm",
+            "sort": 1,
+            "leader": "pp",
+            "phone": null,
+            "email": null,
+            "status": "0",
+            "parent": null
+        }
+    },
+    {
+        "model": "app_dept.dept",
+        "pk": 42188673800208,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T17:09:07.102",
+            "create_datetime": "2023-08-24T11:16:50.659",
+            "dept_name": "架构设计四组",
+            "dept_key": "jgsjsz1",
+            "sort": 5,
+            "leader": "pp",
+            "phone": "18888888888",
+            "email": "163@qq.com",
+            "status": "0",
+            "parent": 376960140500837
+        }
+    },
+    {
+        "model": "app_dept.dept",
+        "pk": 57407999600609,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T17:08:56.461",
+            "create_datetime": "2023-08-24T10:46:04.785",
+            "dept_name": "架构设计三组",
+            "dept_key": "jgsjsz",
+            "sort": 4,
+            "leader": "pp",
+            "phone": "18888888888",
+            "email": "163@qq.com",
+            "status": "0",
+            "parent": 376960140500837
+        }
+    },
+    {
+        "model": "app_dept.dept",
+        "pk": 94609026700594,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T22:38:15.023",
+            "create_datetime": "2023-08-23T16:08:21.698",
+            "dept_name": "架构设计一组",
+            "dept_key": "jgsjyz",
+            "sort": 2,
+            "leader": "pp",
+            "phone": "18888888888",
+            "email": "163@qq.com",
+            "status": "0",
+            "parent": 376960140500837
+        }
+    },
+    {
+        "model": "app_dept.dept",
+        "pk": 114667862200894,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T17:08:46.610",
+            "create_datetime": "2023-08-23T16:08:41.757",
+            "dept_name": "架构设计二组",
+            "dept_key": "jgsjrz",
+            "sort": 3,
+            "leader": "pp",
+            "phone": "18888888888",
+            "email": "163@qq.com",
+            "status": "0",
+            "parent": 376960140500837
+        }
+    },
+    {
+        "model": "app_dept.dept",
+        "pk": 376960140500837,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-12T17:08:20.194",
+            "create_datetime": "2023-08-23T16:05:08.097",
+            "dept_name": "架构设计部门",
+            "dept_key": "jgsjbm",
+            "sort": 1,
+            "leader": "pp",
+            "phone": "18888888888",
+            "email": "163@qq.com",
+            "status": "0",
+            "parent": null
+        }
+    }
+]

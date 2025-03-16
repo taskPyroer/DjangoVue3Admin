@@ -1,0 +1,992 @@
+[
+    {
+        "model": "app_apis.apis",
+        "pk": 29775558784,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:00:43.106",
+            "create_datetime": "2023-09-17T11:00:43.106",
+            "path": "/system/role/role-id-to-menu/:role_id/",
+            "description": "获取单个角色API权限",
+            "api_group": "role",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208122656320,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:05:16.505",
+            "create_datetime": "2023-10-19T17:05:16.505",
+            "path": "/system/dict-type/",
+            "description": "添加字典类型信息",
+            "api_group": "dict",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208129003520,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:06:55.680",
+            "create_datetime": "2023-10-19T17:06:55.680",
+            "path": "/system/dict-type/",
+            "description": "获取字典类型列表",
+            "api_group": "dict",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208132094400,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:07:43.975",
+            "create_datetime": "2023-10-19T17:07:43.975",
+            "path": "/system/dict-type/:dict-type_id/",
+            "description": "删除字典类型",
+            "api_group": "dict",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208133283712,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:08:02.558",
+            "create_datetime": "2023-10-19T17:08:02.558",
+            "path": "/system/dict-type/:dict-type_id/",
+            "description": "更新字典类型",
+            "api_group": "dict",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208134697920,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:08:24.655",
+            "create_datetime": "2023-10-19T17:08:24.655",
+            "path": "/system/dict-type/:dict-type_id/",
+            "description": "获取字典类型信息",
+            "api_group": "dict",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208143283520,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:10:38.805",
+            "create_datetime": "2023-10-19T17:10:38.805",
+            "path": "/system/dict-data/",
+            "description": "添加字典数值信息",
+            "api_group": "dict",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208144666112,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:11:00.408",
+            "create_datetime": "2023-10-19T17:11:00.408",
+            "path": "/system/dict-data/",
+            "description": "获取字典数值列表",
+            "api_group": "dict",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208146358016,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:11:26.844",
+            "create_datetime": "2023-10-19T17:11:26.844",
+            "path": "/system/dict-data/:dict-data_id/",
+            "description": "删除字典数值",
+            "api_group": "dict",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208148071680,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:11:53.620",
+            "create_datetime": "2023-10-19T17:11:53.620",
+            "path": "/system/dict-data/:dict-data_id/",
+            "description": "更新字典数值",
+            "api_group": "dict",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208149170880,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:12:10.795",
+            "create_datetime": "2023-10-19T17:12:10.795",
+            "path": "/system/dict-data/:dict-data_id/",
+            "description": "查询字典数值信息",
+            "api_group": "dict",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208158315008,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:14:33.672",
+            "create_datetime": "2023-10-19T17:14:33.672",
+            "path": "/system/menu/menu-tree-simple/",
+            "description": "获取界面菜单树型接口-简单版本",
+            "api_group": "menu",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208182767616,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:20:55.744",
+            "create_datetime": "2023-10-19T17:20:55.744",
+            "path": "/system/user/user-info/",
+            "description": "获取当前用户信息",
+            "api_group": "user",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 208184439552,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:21:21.868",
+            "create_datetime": "2023-10-19T17:21:21.868",
+            "path": "/system/update-user-info/",
+            "description": "修改当前用户信息",
+            "api_group": "user",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 230337122560,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-23T17:30:17.540",
+            "create_datetime": "2023-10-23T17:30:17.540",
+            "path": "/system/role/get-all-roles/",
+            "description": "获取所有角色名称",
+            "api_group": "role",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 230339457856,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-23T17:30:54.029",
+            "create_datetime": "2023-10-23T17:30:54.029",
+            "path": "/system/post/get-all-posts/",
+            "description": "获取所有岗位名称",
+            "api_group": "post",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 423593769024,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-11-27T16:17:32.641",
+            "create_datetime": "2023-11-27T16:17:32.641",
+            "path": "/job/crontab/periodic-task/",
+            "description": "查询定时任务调度列表",
+            "api_group": "job",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 423598306496,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-11-27T16:18:43.539",
+            "create_datetime": "2023-11-27T16:18:43.539",
+            "path": "/job/crontab/task-result/",
+            "description": "查询定时任务调度详细",
+            "api_group": "job",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 423599807936,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-11-27T16:19:06.999",
+            "create_datetime": "2023-11-27T16:19:06.999",
+            "path": "/job/crontab/periodic-task/",
+            "description": "新增定时任务调度",
+            "api_group": "job",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 423603733440,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-11-27T16:20:44.394",
+            "create_datetime": "2023-11-27T16:20:08.336",
+            "path": "/job/crontab/periodic-task/:job_id/",
+            "description": "修改定时任务调度",
+            "api_group": "job",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 423607226112,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-11-27T16:21:02.908",
+            "create_datetime": "2023-11-27T16:21:02.908",
+            "path": "/job/crontab/periodic-task/:job_id/",
+            "description": "删除定时任务调度",
+            "api_group": "job",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 423610525504,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-11-27T16:21:54.461",
+            "create_datetime": "2023-11-27T16:21:54.461",
+            "path": "/job/crontab/periodic-task/enabled/:job_id/",
+            "description": "调度定时任务",
+            "api_group": "job",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 423612291584,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-11-27T16:22:22.056",
+            "create_datetime": "2023-11-27T16:22:22.056",
+            "path": "/job/crontab/periodic-task/tasklist/",
+            "description": "获取本地所有的内置定时任务",
+            "api_group": "job",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 444430774784,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-01T10:43:50.856",
+            "create_datetime": "2023-12-01T10:43:50.856",
+            "path": "/system/apis/get-all-api-group/",
+            "description": "获取API所有的分组",
+            "api_group": "apis",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 444583075072,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-01T16:47:00.763",
+            "create_datetime": "2023-12-01T11:23:30.548",
+            "path": "/tool/monitor/get-system-info/",
+            "description": "实时获取本机监控信息",
+            "api_group": "monitor",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 456847716224,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-03T16:37:25.566",
+            "create_datetime": "2023-12-03T16:37:25.566",
+            "path": "/system/operation-log/delete-all-logs/",
+            "description": "操作日志-清空数据",
+            "api_group": "operation_log",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 456852236224,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-03T16:38:36.191",
+            "create_datetime": "2023-12-03T16:38:36.191",
+            "path": "/system/operation-log/:log_id/",
+            "description": "操作日志-删除数据",
+            "api_group": "operation_log",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 456853998848,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-03T16:39:03.732",
+            "create_datetime": "2023-12-03T16:39:03.732",
+            "path": "/system/operation-log/",
+            "description": "操作日志-获取数据列表",
+            "api_group": "operation_log",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 517416997504,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-14T15:30:40.586",
+            "create_datetime": "2023-12-14T15:30:40.586",
+            "path": "/system/message-center/",
+            "description": "查询信息列表",
+            "api_group": "message",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 517420513792,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-14T15:31:44.630",
+            "create_datetime": "2023-12-14T15:31:35.528",
+            "path": "/system/message-center/:message_id/",
+            "description": "查询信息详细",
+            "api_group": "message",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 517429348480,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-14T15:33:53.570",
+            "create_datetime": "2023-12-14T15:33:53.570",
+            "path": "/system/message-center/get-self-receive/",
+            "description": "查询我接收的信息列表",
+            "api_group": "message",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 517430787776,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-14T15:34:16.059",
+            "create_datetime": "2023-12-14T15:34:16.059",
+            "path": "/system/message-center/",
+            "description": "新增信息",
+            "api_group": "message",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 517432827840,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2023-12-14T15:34:47.935",
+            "create_datetime": "2023-12-14T15:34:47.935",
+            "path": "/system/message-center/:message_id/",
+            "description": "删除信息",
+            "api_group": "message",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 637940542400,
+        "fields": {
+            "creator": 541150219354505,
+            "modifier": "541150219354505",
+            "update_datetime": "2024-01-05T10:37:00.975",
+            "create_datetime": "2024-01-05T10:37:00.975",
+            "path": "/system/user/auth/",
+            "description": "用户角色个人权限信息",
+            "api_group": "auth",
+            "method": "GET",
+            "enable_datasource": "1"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 90743268800150,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:06:14.550",
+            "create_datetime": "2023-08-23T17:06:14.550",
+            "path": "/system/dept/:dept_id/",
+            "description": "更新部门信息",
+            "api_group": "dept",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 96577568100591,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:06:20.384",
+            "create_datetime": "2023-08-23T17:06:20.384",
+            "path": "/system/dept/:dept_id/",
+            "description": "删除部门信息",
+            "api_group": "dept",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 141914787100125,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:07:05.722",
+            "create_datetime": "2023-08-23T17:07:05.722",
+            "path": "/system/dept/:dept_id/",
+            "description": "获取部门信息",
+            "api_group": "dept",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 195580817900813,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:07:59.388",
+            "create_datetime": "2023-08-23T17:07:59.388",
+            "path": "/system/dept/",
+            "description": "获取部门列表",
+            "api_group": "dept",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 247035582800744,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:08:50.842",
+            "create_datetime": "2023-08-23T17:08:50.842",
+            "path": "/system/dept/",
+            "description": "添加部门信息",
+            "api_group": "dept",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 310843027100161,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:22:10.277",
+            "create_datetime": "2023-08-23T17:22:10.277",
+            "path": "/system/apis/",
+            "description": "添加API信息",
+            "api_group": "apis",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 324866616600411,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:22:24.301",
+            "create_datetime": "2023-08-23T17:22:24.301",
+            "path": "/system/apis/",
+            "description": "获取API列表",
+            "api_group": "apis",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 345536676700546,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:22:44.971",
+            "create_datetime": "2023-08-23T17:22:44.971",
+            "path": "/system/apis/:api_id/",
+            "description": "获取API信息",
+            "api_group": "apis",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 362784584600938,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:23:02.219",
+            "create_datetime": "2023-08-23T17:23:02.219",
+            "path": "/system/apis/:api_id/",
+            "description": "删除API信息",
+            "api_group": "apis",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 371215327200723,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:23:10.650",
+            "create_datetime": "2023-08-23T17:23:10.650",
+            "path": "/system/apis/:api_id/",
+            "description": "更新API信息",
+            "api_group": "apis",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 517649286600945,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:01:21.933",
+            "create_datetime": "2023-08-23T17:01:21.933",
+            "path": "/system/post/",
+            "description": "添加岗位信息",
+            "api_group": "post",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 532031994000284,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:01:36.316",
+            "create_datetime": "2023-08-23T17:01:36.316",
+            "path": "/system/post/",
+            "description": "获取岗位列表",
+            "api_group": "post",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541143409226678,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-31T17:10:42.718",
+            "create_datetime": "2023-08-31T17:10:42.718",
+            "path": "/system/menu/",
+            "description": "获取菜单列表",
+            "api_group": "menu",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541143609139789,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-31T17:11:30.381",
+            "create_datetime": "2023-08-31T17:11:30.381",
+            "path": "/system/menu/",
+            "description": "添加菜单信息",
+            "api_group": "menu",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541143771157364,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:01:57.384",
+            "create_datetime": "2023-08-31T17:12:09.009",
+            "path": "/system/menu/:menu_id/",
+            "description": "获取菜单信息",
+            "api_group": "menu",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541143816816558,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:01:53.455",
+            "create_datetime": "2023-08-31T17:12:19.895",
+            "path": "/system/menu/:menu_id/",
+            "description": "删除菜单信息",
+            "api_group": "menu",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541143897246531,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:01:47.411",
+            "create_datetime": "2023-08-31T17:12:39.071",
+            "path": "/system/menu/:menu_id/",
+            "description": "更新菜单信息",
+            "api_group": "menu",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541144112649207,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-10-19T17:14:50.591",
+            "create_datetime": "2023-08-31T17:13:30.427",
+            "path": "/system/menu/menu-tree/",
+            "description": "获取菜单树形列表",
+            "api_group": "menu",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541144228592353,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-31T17:13:58.070",
+            "create_datetime": "2023-08-31T17:13:58.070",
+            "path": "/system/role/",
+            "description": "获取角色列表",
+            "api_group": "role",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541144299710971,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-31T17:14:15.026",
+            "create_datetime": "2023-08-31T17:14:15.026",
+            "path": "/system/role/",
+            "description": "添加角色信息",
+            "api_group": "role",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541144399661236,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:01:11.776",
+            "create_datetime": "2023-08-31T17:14:38.856",
+            "path": "/system/role/:role_id/",
+            "description": "删除角色信息",
+            "api_group": "role",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541144616150237,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:01:07.455",
+            "create_datetime": "2023-08-31T17:15:30.471",
+            "path": "/system/role/:role_id/",
+            "description": "获取角色信息",
+            "api_group": "role",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541144660706328,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:01:02.606",
+            "create_datetime": "2023-08-31T17:15:41.094",
+            "path": "/system/role/:role_id/",
+            "description": "更新角色信息",
+            "api_group": "role",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541508472194203,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:01:40.076",
+            "create_datetime": "2023-09-01T17:21:20.512",
+            "path": "/system/user/:user_id/",
+            "description": "更新用户信息",
+            "api_group": "user",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541508570034733,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:01:33.581",
+            "create_datetime": "2023-09-01T17:21:43.839",
+            "path": "/system/user/:user_id/",
+            "description": "获取用户信息",
+            "api_group": "user",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541508653081952,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-17T11:01:30.257",
+            "create_datetime": "2023-09-01T17:22:03.639",
+            "path": "/system/user/:user_id/",
+            "description": "删除用户信息",
+            "api_group": "user",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541508804928339,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-01T17:22:39.842",
+            "create_datetime": "2023-09-01T17:22:39.842",
+            "path": "/system/user/",
+            "description": "添加用户信息",
+            "api_group": "user",
+            "method": "POST",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 541509091344777,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-09-01T17:23:48.129",
+            "create_datetime": "2023-09-01T17:23:48.129",
+            "path": "/system/user/",
+            "description": "获取用户列表",
+            "api_group": "user",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 569646089000281,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:02:13.931",
+            "create_datetime": "2023-08-23T17:02:13.931",
+            "path": "/system/post/:post_id/",
+            "description": "获取岗位信息",
+            "api_group": "post",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 581633986900336,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:02:25.918",
+            "create_datetime": "2023-08-23T17:02:25.918",
+            "path": "/system/post/:post_id/",
+            "description": "删除岗位信息",
+            "api_group": "post",
+            "method": "DELETE",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 591806089400182,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-23T17:02:36.091",
+            "create_datetime": "2023-08-23T17:02:36.091",
+            "path": "/system/post/:post_id/",
+            "description": "更新岗位信息",
+            "api_group": "post",
+            "method": "PUT",
+            "enable_datasource": "0"
+        }
+    },
+    {
+        "model": "app_apis.apis",
+        "pk": 619964488200256,
+        "fields": {
+            "creator": null,
+            "modifier": null,
+            "update_datetime": "2023-08-24T11:27:47.492",
+            "create_datetime": "2023-08-24T11:27:47.492",
+            "path": "/system/dept/dept-tree/",
+            "description": "获取部门树形列表",
+            "api_group": "dept",
+            "method": "GET",
+            "enable_datasource": "0"
+        }
+    }
+]
