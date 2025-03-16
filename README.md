@@ -1,9 +1,10 @@
 
-# PaoDjangoAdmin
+# DjangoVue3Admin
+> 打个广告：Python爬虫管理平台上线了：https://github.com/taskPyroer/taskpyro
 
 ## 项目简介
 
-PaoDjangoAdmin 是一个基于 Django + Vue3 的前后端分离的后台管理系统，采用了最新的前后端技术栈，内置了丰富的功能模块，可以帮助开发者快速搭建企业级中后台产品。
+DjangoVue3Admin 是一个基于 Django + Vue3 的前后端分离的后台管理系统，采用了最新的前后端技术栈，内置了丰富的功能模块，可以帮助开发者快速搭建企业级中后台产品。
 
 ## 技术架构
 
@@ -101,7 +102,7 @@ python manage.py runserver 127.0.0.1:8000
 pnpm install
 
 # 开发环境
-pnpm dev
+pnpm run dev
 
 # 生产环境
 pnpm build
@@ -125,15 +126,32 @@ pnpm build
 - API 接口按模块组织在 api 目录
 - 使用 ESLint + Prettier 进行代码规范
 
-## 贡献指南
+## 演示图
 
-欢迎提交 Issue 或 Pull Request 来帮助改进项目。在提交之前，请确保：
-
-1. Issue 没有被重复提交
-2. Pull Request 遵循项目代码规范
-3. 更新相关文档
-4. 编写必要的测试用例
+![登录页面](https://pic1.imgdb.cn/item/67d673c388c538a9b5bf3083.png)
+![旋转验证码](https://pic1.imgdb.cn/item/67d673c488c538a9b5bf3089.png)
+![首页](https://pic1.imgdb.cn/item/67d673c388c538a9b5bf3084.png)
+![主题修改](https://pic1.imgdb.cn/item/67d673c488c538a9b5bf308c.png)
+![API管理](https://pic1.imgdb.cn/item/67d673c488c538a9b5bf308a.png)
+![岗位管理](https://pic1.imgdb.cn/item/67d673c388c538a9b5bf3086.png)
+![部门管理](https://pic1.imgdb.cn/item/67d673c388c538a9b5bf3088.png)
+![菜单管理](https://pic1.imgdb.cn/item/67d673c488c538a9b5bf308b.png)
+![角色管理](https://pic1.imgdb.cn/item/67d673c388c538a9b5bf3085.png)
+![用户管理](https://pic1.imgdb.cn/item/67d673c388c538a9b5bf3087.png)
+![字典管理](https://pic1.imgdb.cn/item/67d673c488c538a9b5bf308d.png)
+![信息中心](https://pic1.imgdb.cn/item/67d673c588c538a9b5bf308e.png)
+![服务监控](https://pic1.imgdb.cn/item/67d673c588c538a9b5bf3090.png)
+![定时任务](https://pic1.imgdb.cn/item/67d673c588c538a9b5bf308f.png)
+![操作日志](https://pic1.imgdb.cn/item/67d673c588c538a9b5bf3091.png)
+![运行日志](https://pic1.imgdb.cn/item/67d673c688c538a9b5bf3093.png)
 
 ## 许可证
 
-[MIT License](LICENSE)
+此项目为开源项目，请勿商用，若要商用，请联系作者
+
+## 学习交流
+
+| 微信：PJ221BBB | 公众号：布鲁的Python之旅 |
+|-------------|-----------------|
+| ![个人微信](https://www.helloimg.com/i/2025/03/06/67c8f41cc017f.png) | ![公众号](https://www.helloimg.com/i/2025/03/06/67c8f41ca7f2a.png) |
+

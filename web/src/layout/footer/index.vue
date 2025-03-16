@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-footer mt15" v-show="isDelayFooter">
 		<div class="layout-footer-warp">
-			<div>PaoPao-Admin，Made by PaoPao with ❤️</div>
+			<div>Django-Vue3-Admin，Made by TaskPyroer with ❤️</div>
 			<div class="mt5">{{ $t('message.copyright.one5') }}</div>
 		</div>
 	</div>
