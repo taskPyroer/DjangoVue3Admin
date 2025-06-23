@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, onMounted} from "vue";
+import {reactive, onMounted, onUnmounted} from "vue";
 import { getServer } from "@/api/tool/monitor";
 import {ElMessage} from "element-plus";
 import StatusCard from "./component/statusCard.vue";
@@ -79,6 +79,10 @@ const clearIntervalMonitor = () => {
 };
 onMounted(() => {
   handleServer();
+});
+
+onUnmounted(() => {
+  clearIntervalMonitor();
 });
 </script>
 
