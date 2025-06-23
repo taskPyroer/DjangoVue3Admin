@@ -1,6 +1,6 @@
-@import 'mixins/function.scss';
-@import 'mixins/element-mixins.scss';
-@import 'mixins/mixins.scss';
+@use 'mixins/function.scss' as fn;
+@use 'mixins/element-mixins.scss' as em;
+@use 'mixins/mixins.scss' as m;
 
 
 /* Button 按钮
@@ -8,28 +8,28 @@
 // default
 .el-button--default:hover,
 .el-button--default:focus {
-	@include Button(primary, primary-light-8, primary-light-6);
+	@include em.Button(primary, primary-light-8, primary-light-6);
 }
 .el-button--default.is-plain:hover,
 .el-button--default.is-plain:focus {
-	@include Button(primary, whites, primary-light-1);
+	@include em.Button(primary, whites, primary-light-1);
 }
 .el-button--default:active {
-	@include Button(primary, whites, primary-light-1);
+	@include em.Button(primary, whites, primary-light-1);
 }
 // primary
 .el-button--primary {
-	@include Button(whites, primary, primary);
+	@include em.Button(whites, primary, primary);
 	&:hover,
 	&:focus {
-		@include Button(whites, primary-light-3, primary-light-3);
+		@include em.Button(whites, primary-light-3, primary-light-3);
 	}
 }
 .el-button--primary.is-plain {
-	@include Button(primary, primary-light-8, primary-light-6);
+	@include em.Button(primary, primary-light-8, primary-light-6);
 	&:hover,
 	&:focus {
-		@include Button(whites, primary, primary);
+		@include em.Button(whites, primary, primary);
 	}
 }
 
@@ -49,87 +49,87 @@
 .el-button--primary.is-disabled:active,
 .el-button--primary.is-disabled:focus,
 .el-button--primary.is-disabled:hover {
-	@include Button(whites, primary-light-7, primary-light-7);
+	@include em.Button(whites, primary-light-7, primary-light-7);
 }
 .el-button--primary.is-active,
 .el-button--primary:active {
-	@include Button(whites, primary, primary);
+	@include em.Button(whites, primary, primary);
 }
 // success
 .el-button--success {
-	@include Button(whites, success, success);
+	@include em.Button(whites, success, success);
 	&:hover,
 	&:focus {
-		@include Button(whites, success-light-3, success-light-3);
+		@include em.Button(whites, success-light-3, success-light-3);
 	}
 }
 .el-button--success.is-plain {
-	@include Button(success, success-light-8, success-light-6);
+	@include em.Button(success, success-light-8, success-light-6);
 	&:hover,
 	&:focus {
-		@include Button(whites, success, success);
+		@include em.Button(whites, success, success);
 	}
 }
 .el-button--success.is-active,
 .el-button--success:active {
-	@include Button(whites, success, success);
+	@include em.Button(whites, success, success);
 }
 // info
 .el-button--info {
-	@include Button(whites, info, info);
+	@include em.Button(whites, info, info);
 	&:hover,
 	&:focus {
-		@include Button(whites, info-light-3, info-light-3);
+		@include em.Button(whites, info-light-3, info-light-3);
 	}
 }
 .el-button--info.is-plain {
-	@include Button(info, info-light-8, info-light-6);
+	@include em.Button(info, info-light-8, info-light-6);
 	&:hover,
 	&:focus {
-		@include Button(whites, info, info);
+		@include em.Button(whites, info, info);
 	}
 }
 .el-button--info.is-active,
 .el-button--info:active {
-	@include Button(whites, info, info);
+	@include em.Button(whites, info, info);
 }
 // warning
 .el-button--warning {
-	@include Button(whites, warning, warning);
+	@include em.Button(whites, warning, warning);
 	&:hover,
 	&:focus {
-		@include Button(whites, warning-light-3, warning-light-3);
+		@include em.Button(whites, warning-light-3, warning-light-3);
 	}
 }
 .el-button--warning.is-plain {
-	@include Button(warning, warning-light-8, warning-light-6);
+	@include em.Button(warning, warning-light-8, warning-light-6);
 	&:hover,
 	&:focus {
-		@include Button(whites, warning, warning);
+		@include em.Button(whites, warning, warning);
 	}
 }
 .el-button--warning.is-active,
 .el-button--warning:active {
-	@include Button(whites, warning, warning);
+	@include em.Button(whites, warning, warning);
 }
 // danger
 .el-button--danger {
-	@include Button(whites, danger, danger);
+	@include em.Button(whites, danger, danger);
 	&:hover,
 	&:focus {
-		@include Button(whites, danger-light-3, danger-light-3);
+		@include em.Button(whites, danger-light-3, danger-light-3);
 	}
 }
 .el-button--danger.is-plain {
-	@include Button(danger, danger-light-8, danger-light-6);
+	@include em.Button(danger, danger-light-8, danger-light-6);
 	&:hover,
 	&:focus {
-		@include Button(whites, danger, danger);
+		@include em.Button(whites, danger, danger);
 	}
 }
 .el-button--danger.is-active,
 .el-button--danger:active {
-	@include Button(whites, danger, danger);
+	@include em.Button(whites, danger, danger);
 }
 // 第三方字体图标大小
 .el-button i.iconfont,
@@ -225,11 +225,11 @@
 	color: set-color(primary);
 }
 .el-radio__input.is-checked .el-radio__inner {
-	@include RadioCheckbox(primary);
+	@include em.RadioCheckbox(primary);
 }
 .el-radio-button__orig-radio:checked + .el-radio-button__inner {
 	color: set-color(whites);
-	@include RadioCheckbox(primary);
+	@include em.RadioCheckbox(primary);
 	box-shadow: -1px 0 0 0 set-color(primary);
 }
 .el-radio.is-bordered.is-checked,
@@ -244,7 +244,7 @@
 	color: set-color(primary);
 }
 .el-checkbox__input.is-checked .el-checkbox__inner {
-	@include RadioCheckbox(primary);
+	@include em.RadioCheckbox(primary);
 }
 .el-checkbox__input.is-focus .el-checkbox__inner,
 .el-checkbox__inner:hover,
@@ -254,7 +254,7 @@
 }
 .el-checkbox-button.is-checked .el-checkbox-button__inner {
 	color: set-color(whites);
-	@include RadioCheckbox(primary);
+	@include em.RadioCheckbox(primary);
 	box-shadow: -1px 0 0 0 set-color(primary);
 }
 .el-checkbox-button.is-checked:first-child .el-checkbox-button__inner {
@@ -407,16 +407,16 @@
 ------------------------------- */
 // primary
 .el-tag {
-	@include Tag(primary, primary-light-8, primary-light-6);
+	@include em.Tag(primary, primary-light-8, primary-light-6);
 }
 .el-tag .el-tag__close {
 	color: set-color(primary);
 	&:hover {
-		@include TagDark(whites, primary);
+		@include em.TagDark(whites, primary);
 	}
 }
 .el-tag--dark {
-	@include TagDark(whites, primary);
+	@include em.TagDark(whites, primary);
 }
 .el-tag--dark .el-tag__close {
 	color: set-color(whites);
@@ -425,20 +425,20 @@
 	}
 }
 .el-tag--plain {
-	@include Tag(primary, whites, primary-light-3);
+	@include em.Tag(primary, primary-light-9, primary);
 }
 // success
 .el-tag.el-tag--success {
-	@include Tag(success, success-light-8, success-light-6);
+	@include em.Tag(success, success-light-8, success-light-6);
 }
 .el-tag.el-tag--success .el-tag__close {
 	color: set-color(success);
 	&:hover {
-		@include TagDark(whites, success);
+		@include em.TagDark(whites, success);
 	}
 }
 .el-tag--dark.el-tag--success {
-	@include TagDark(whites, success);
+	@include em.TagDark(whites, success);
 }
 .el-tag--dark.el-tag--success .el-tag__close {
 	color: set-color(whites);
@@ -447,20 +447,20 @@
 	}
 }
 .el-tag--plain.el-tag--success {
-	@include Tag(success, whites, success-light-3);
+	@include em.Tag(success, success-light-9, success);
 }
 // info
 .el-tag.el-tag--info {
-	@include Tag(info, info-light-8, info-light-6);
+	@include em.Tag(info, info-light-8, info-light-6);
 }
 .el-tag.el-tag--info .el-tag__close {
 	color: set-color(info);
 	&:hover {
-		@include TagDark(whites, info);
+		@include em.TagDark(whites, info);
 	}
 }
 .el-tag--dark.el-tag--info {
-	@include TagDark(whites, info);
+	@include em.TagDark(whites, info);
 }
 .el-tag--dark.el-tag--info .el-tag__close {
 	color: set-color(whites);
@@ -469,20 +469,20 @@
 	}
 }
 .el-tag--plain.el-tag--info {
-	@include Tag(info, whites, info-light-3);
+	@include em.Tag(info, info-light-9, info);
 }
 // warning
 .el-tag.el-tag--warning {
-	@include Tag(warning, warning-light-8, warning-light-6);
+	@include em.Tag(warning, warning-light-8, warning-light-6);
 }
 .el-tag.el-tag--warning .el-tag__close {
 	color: set-color(warning);
 	&:hover {
-		@include TagDark(whites, warning);
+		@include em.TagDark(whites, warning);
 	}
 }
 .el-tag--dark.el-tag--warning {
-	@include TagDark(whites, warning);
+	@include em.TagDark(whites, warning);
 }
 .el-tag--dark.el-tag--warning .el-tag__close {
 	color: set-color(whites);
@@ -491,20 +491,20 @@
 	}
 }
 .el-tag--plain.el-tag--warning {
-	@include Tag(warning, whites, warning-light-3);
+	@include em.Tag(warning, warning-light-9, warning);
 }
 // danger
 .el-tag.el-tag--danger {
-	@include Tag(danger, danger-light-8, danger-light-6);
+	@include em.Tag(danger, danger-light-8, danger-light-6);
 }
 .el-tag.el-tag--danger .el-tag__close {
 	color: set-color(danger);
 	&:hover {
-		@include TagDark(whites, danger);
+		@include em.TagDark(whites, danger);
 	}
 }
 .el-tag--dark.el-tag--danger {
-	@include TagDark(whites, danger);
+	@include em.TagDark(whites, danger);
 }
 .el-tag--dark.el-tag--danger .el-tag__close {
 	color: set-color(whites);
@@ -513,7 +513,7 @@
 	}
 }
 .el-tag--plain.el-tag--danger {
-	@include Tag(danger, whites, danger-light-3);
+	@include em.Tag(danger, danger-light-9, danger);
 }
 
 /* Progress 进度条
@@ -607,40 +607,40 @@
 ------------------------------- */
 // success
 .el-alert--success.is-light {
-	@include Alert(success, success-light-9, success-light-7);
+	@include em.Alert(success, success-light-9, success-light-5);
 }
 .el-alert--success.is-dark {
-	@include Alert(whites, success, success-light-7);
+	@include em.Alert(whites, success, success-light-7);
 }
 .el-alert--success.is-light .el-alert__description {
 	color: set-color(success);
 }
 // warning
 .el-alert--warning.is-light {
-	@include Alert(warning, warning-light-9, warning-light-7);
+	@include em.Alert(warning, warning-light-9, warning-light-5);
 }
 .el-alert--warning.is-dark {
-	@include Alert(whites, warning, warning-light-7);
+	@include em.Alert(whites, warning, warning-light-7);
 }
 .el-alert--warning.is-light .el-alert__description {
 	color: set-color(warning);
 }
 // info
 .el-alert--info.is-light {
-	@include Alert(info, info-light-9, info-light-7);
+	@include em.Alert(info, info-light-9, info-light-5);
 }
 .el-alert--info.is-dark {
-	@include Alert(whites, info, info-light-7);
+	@include em.Alert(whites, info, info-light-7);
 }
 .el-alert--info.is-light .el-alert__description {
 	color: set-color(info);
 }
 // error
 .el-alert--error.is-light {
-	@include Alert(danger, danger-light-9, danger-light-7);
+	@include em.Alert(danger, danger-light-9, danger-light-5);
 }
 .el-alert--error.is-dark {
-	@include Alert(whites, danger, danger-light-7);
+	@include em.Alert(whites, danger, danger-light-7);
 }
 .el-alert--error.is-light .el-alert__description {
 	color: set-color(danger);
@@ -826,9 +826,9 @@
 	}
 }
 #add-is-active {
-	@extend .el-active-extend;
+	background-color: set-color(primary) !important;
 	&:hover {
-		@extend .el-active-extend;
+		background-color: set-color(primary) !important;
 	}
 }
 // 菜单收起时且是a链接
@@ -856,11 +856,11 @@
 // 第三方图标字体间距/大小设置
 .el-menu-item .iconfont,
 .el-sub-menu .iconfont {
-	@include generalIcon;
+	@include m.generalIcon;
 }
 .el-menu-item .fa,
 .el-sub-menu .fa {
-	@include generalIcon;
+	@include m.generalIcon;
 }
 
 // 去掉离开浏览器时，菜单的默认高亮

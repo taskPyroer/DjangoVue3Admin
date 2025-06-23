@@ -1,6 +1,5 @@
 
 # DjangoVue3Admin
-> 打个广告：Python爬虫管理平台上线了：https://github.com/taskPyroer/taskpyro
 
 ## 项目简介
 
@@ -82,6 +81,7 @@ docker-compose -f django-web.yml up -d
 
 ##### 后端部署
 ```bash
+cd backend
 # 安装依赖
 pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
@@ -98,6 +98,7 @@ python manage.py runserver 127.0.0.1:8000
 
 ##### 前端部署
 ```bash
+cd web
 # 安装依赖
 pnpm install
 
@@ -149,9 +150,4 @@ pnpm build
 
 此项目为开源项目，请勿商用，若要商用，请联系作者
 
-## 学习交流
-
-| 微信：PJ221BBB | 公众号：布鲁的Python之旅 |
-|-------------|-----------------|
-| ![个人微信](https://www.helloimg.com/i/2025/03/06/67c8f41cc017f.png) | ![公众号](https://www.helloimg.com/i/2025/03/06/67c8f41ca7f2a.png) |
 

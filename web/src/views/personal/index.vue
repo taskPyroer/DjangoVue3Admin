@@ -364,7 +364,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "../../theme/mixins/mixins.scss";
+@use "../../theme/mixins/mixins.scss" as m;
 .personal {
   .personal-user {
     height: 130px;
@@ -395,7 +395,7 @@ onMounted(() => {
       padding: 0 15px;
       .personal-title {
         font-size: 18px;
-        @include text-ellipsis(1);
+        @include m.text-ellipsis(1);
       }
       .personal-item {
         display: flex;
@@ -403,10 +403,10 @@ onMounted(() => {
         font-size: 13px;
         .personal-item-label {
           color: var(--el-text-color-secondary);
-          @include text-ellipsis(1);
+          @include m.text-ellipsis(1);
         }
         .personal-item-value {
-          @include text-ellipsis(1);
+          @include m.text-ellipsis(1);
         }
       }
     }
@@ -431,7 +431,7 @@ onMounted(() => {
           padding-bottom: 10px;
           .personal-info-li-title {
             display: inline-block;
-            @include text-ellipsis(1);
+            @include m.text-ellipsis(1);
             color: var(--el-text-color-secondary);
             text-decoration: none;
           }
@@ -513,7 +513,7 @@ onMounted(() => {
           }
           .personal-edit-safe-item-left-value {
             color: var(--el-text-color-secondary);
-            @include text-ellipsis(1);
+            @include m.text-ellipsis(1);
             margin-right: 15px;
           }
         }
