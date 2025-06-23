@@ -32,6 +32,7 @@ urlpatterns = [
     path('system/', include('app_user.urls')),
     path('system/', include('app_operation_log.urls')),
     path('system/', include('app_message.urls')),
+    path('system/', include('app_example.urls')),
     path('job/crontab/', include('app_crontab.urls')),
     path('tool/', include('app_monitor.urls')),
 ]
