@@ -132,7 +132,7 @@
     </el-drawer>
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="dictList">
 import {
   reactive,
   toRefs,
@@ -145,125 +145,121 @@ import { delData, listData } from "@/api/system/dict/data";
 import { ElMessageBox, ElMessage } from "element-plus";
 import editDictItem from "./editDictItem.vue";
 
-export default {
-  name: "dictList",
-  components: { editDictItem },
-  setup() {
-    const { proxy } = getCurrentInstance() as any;
-    const dictItemModuleRef = ref();
-    const state = reactive({
-      // 遮罩层
-      loading: true,
-      // 弹出层标题
-      title: "",
-      // 字典表格数据
-      tableData: [],
-      // 是否显示抽屉
-      isShowDrawer: false,
-      direction: "rtl",
-      //   抽屉的宽度
-      screenWidth: 800,
-      // 状态数据字典
-      statusOptions: [{
-        dictValue: "0",
-        dictLabel: "正常"
-      },{
-        dictValue: "1",
-        dictLabel: "禁用"
-      }],
-
-      // 查询参数
-      queryParams: {
-        dict_type: undefined,
-        search: undefined,
-        status: undefined,
-      },
-    });
-
-    // 页面加载时
-    const openDrawer = (row: any) => {
-      resetScreenSize();
-      state.queryParams.dict_type = row.dict_type;
-      proxy.getDicts(row.dict_type).then((response: any) => {
-        state.tableData = response.data.data;
-        state.loading = false;
-      });
-      state.isShowDrawer = true;
-    };
-
-    /** 查询字典列表 */
-    const handleQuery = () => {
-      state.loading = true;
-      listData(state.queryParams).then((response) => {
-        state.tableData = response.data.data;
-        state.loading = false;
-      });
-    };
-    // 抽屉的宽度随着屏幕大小来改变
-    const resetScreenSize = () => {
-      let screenWidth = document.body.clientWidth;
-      if (screenWidth < 600) {
-        state.screenWidth = screenWidth;
-      } else {
-        state.screenWidth = 600;
-      }
-    };
-    /** 重置按钮操作 */
-    const resetQuery = () => {
-      state.queryParams.search = undefined;
-      state.queryParams.status = undefined;
-      handleQuery();
-    };
-    // 打开新增字典数据弹窗
-    const onOpenAddModule = (row: any) => {
-      row ={}
-      row.dict_type = state.queryParams.dict_type;
-      state.title = "添加字典数据";
-      dictItemModuleRef.value.openDialog(row);
-    };
-    // 打开编辑字典数据弹窗
-    const onOpenEditModule = (row: object) => {
-      state.title = "修改字典数据";
-      dictItemModuleRef.value.openDialog(row);
-    };
-    /** 删除按钮操作 */
-    const onTabelRowDel = (row: any) => {
-      const dictCode = row.id;
-      ElMessageBox({
-        message: '是否确认删除字典编号为"' + dictCode + '"的数据项?',
-        title: "警告",
-        showCancelButton: true,
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(function () {
-        return delData(dictCode).then(() => {
-          handleQuery();
-          ElMessage.success("删除成功");
-        });
-      });
-    };
-    // 页面加载时
-    onMounted(() => {
-      proxy.mittBus.on("onEditDictItemModule", (res: any) => {
-        handleQuery();
-      });
-    });
-    // 页面卸载时
-    onUnmounted(() => {
-      proxy.mittBus.off("onEditDictItemModule");
-    });
-    return {
-      dictItemModuleRef,
-      resetScreenSize,
-      onOpenAddModule,
-      onOpenEditModule,
-      onTabelRowDel,
-      resetQuery,
-      openDrawer,
-      handleQuery,
-      ...toRefs(state),
-    };
+const { proxy } = getCurrentInstance() as any;
+const dictItemModuleRef = ref();
+const state = reactive({
+  // 遮罩层
+  loading: true,
+  // 弹出层标题
+  title: "",
+  // 字典表格数据
+  tableData: [],
+  // 是否显示抽屉
+  isShowDrawer: false,
+  direction: "rtl",
+  //   抽屉的宽度
+  screenWidth: 800,
+  // 状态数据字典
+  statusOptions: [
+    { dictValue: "0", dictLabel: "正常" },
+    { dictValue: "1", dictLabel: "禁用" }
+  ],
+  // 查询参数
+  queryParams: {
+    dict_type: undefined,
+    search: undefined,
+    status: undefined,
   },
+});
+
+const {
+  loading,
+  title,
+  tableData,
+  isShowDrawer,
+  direction,
+  screenWidth,
+  statusOptions,
+  queryParams,
+} = toRefs(state);
+
+// 抽屉的宽度随着屏幕大小来改变
+const resetScreenSize = () => {
+  const width = document.body.clientWidth;
+  state.screenWidth = width < 600 ? width : 600;
 };
+
+// 页面加载时
+const openDrawer = (row: any) => {
+  resetScreenSize();
+  state.queryParams.dict_type = row.dict_type;
+  proxy.getDicts(row.dict_type).then((response: any) => {
+    state.tableData = response.data.data;
+    state.loading = false;
+  });
+  state.isShowDrawer = true;
+};
+
+/** 查询字典列表 */
+const handleQuery = () => {
+  state.loading = true;
+  listData(state.queryParams).then((response) => {
+    state.tableData = response.data.data;
+    state.loading = false;
+  });
+};
+
+/** 重置按钮操作 */
+const resetQuery = () => {
+  state.queryParams.search = undefined;
+  state.queryParams.status = undefined;
+  handleQuery();
+};
+
+// 打开新增字典数据弹窗
+const onOpenAddModule = () => {
+  const row: any = { dict_type: state.queryParams.dict_type };
+  state.title = "添加字典数据";
+  dictItemModuleRef.value.openDialog(row);
+};
+
+// 打开编辑字典数据弹窗
+const onOpenEditModule = (row: object) => {
+  state.title = "修改字典数据";
+  dictItemModuleRef.value.openDialog(row);
+};
+
+/** 删除按钮操作 */
+const onTabelRowDel = (row: any) => {
+  const dictCode = row.id;
+  ElMessageBox({
+    message: '是否确认删除字典编号为"' + dictCode + '"的数据项?',
+    title: "警告",
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(function () {
+    return delData(dictCode).then(() => {
+      handleQuery();
+      ElMessage.success("删除成功");
+    });
+  });
+};
+
+// 页面加载时
+onMounted(() => {
+  proxy.mittBus.on("onEditDictItemModule", () => {
+    handleQuery();
+  });
+});
+
+// 页面卸载时
+onUnmounted(() => {
+  proxy.mittBus.off("onEditDictItemModule");
+});
+
+defineExpose({
+  openDrawer,
+});
 </script>

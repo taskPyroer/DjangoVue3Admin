@@ -1,6 +1,6 @@
 """
 Time:     2023/8/6 16:07
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:
 Describe: 自定义序列化器
@@ -25,16 +25,20 @@ class CustomModelSerializer(ModelSerializer):
     def get_modifier_name(self, instance):
         if not hasattr(instance, 'modifier'):
             return None
-        queryset = Users.objects.filter(id=instance.modifier).values_list('nickname', flat=True).first()
-        if queryset:
-            return queryset
-        return None
+        modifier_id = getattr(instance, 'modifier', None)
+        if not modifier_id:
+            return None
+        # 使用 context 级局部缓存，彻底消除列表序列化时的 N+1 重复查库
+        cache = self.context.setdefault('_user_nickname_cache', {})
+        if modifier_id in cache:
+            return cache[modifier_id]
+        name = Users.objects.filter(id=modifier_id).values_list('nickname', flat=True).first()
+        cache[modifier_id] = name
+        return name
 
     # 创建人的审计字段名称, 默认creator, 继承使用时可自定义覆盖
     creator_field_id = 'creator'
     creator_name = serializers.SlugRelatedField(slug_field="nickname", source="creator", read_only=True)
-    # # 数据所属部门字段
-    # dept_belong_id_field_name = 'dept_belong_id'
     # 添加默认时间返回格式
     create_datetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
     update_datetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False)
@@ -47,26 +51,17 @@ class CustomModelSerializer(ModelSerializer):
         return super().save(**kwargs)
 
     def create(self, validated_data):
-        if self.request:
-            if str(self.request.user) != "AnonymousUser":
-                if self.modifier_field_id in self.fields.fields:
-                    validated_data[self.modifier_field_id] = self.get_request_user_id()
-                if self.creator_field_id in self.fields.fields:
-                    validated_data[self.creator_field_id] = self.request.user
+        if self.request and getattr(self.request, 'user', None) and self.request.user.is_authenticated:
+            if self.modifier_field_id in self.fields.fields:
+                validated_data[self.modifier_field_id] = self.get_request_user_id()
+            if self.creator_field_id in self.fields.fields:
+                validated_data[self.creator_field_id] = self.request.user
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        """
-        self.request：这是一个类的属性，代表HTTP请求对象。它被用于获取当前请求的用户信息。
-        self.request.user：表示当前请求的用户。如果用户为匿名用户（未登录），则其值为"AnonymousUser"。
-        self.modifier_field_id：这是一个字段标识符，用于指定要修改的字段。
-        self.fields.fields：这是一个字段集合，包含了模型序列化器中定义的所有字段。
-        validated_data：这是经过验证后的数据字典，其中包含了要更新的字段和对应的值。
-        """
-        if self.request:
-            if str(self.request.user) != "AnonymousUser":
-                if self.modifier_field_id in self.fields.fields:
-                    validated_data[self.modifier_field_id] = self.get_request_user_id()
+        if self.request and getattr(self.request, 'user', None) and self.request.user.is_authenticated:
+            if self.modifier_field_id in self.fields.fields:
+                validated_data[self.modifier_field_id] = self.get_request_user_id()
             if hasattr(self.instance, self.modifier_field_id):
                 setattr(self.instance, self.modifier_field_id, self.get_request_user_id())
         return super().update(instance, validated_data)

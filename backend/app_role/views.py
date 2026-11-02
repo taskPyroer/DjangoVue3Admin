@@ -39,35 +39,20 @@ class RoleViewSet(CustomModelViewSet):
         重写单次查询
         """
         instance = self.get_object()
-        menus = instance.menu.values('id', 'parent')
-        cleaned_menus = []
+        menus = list(instance.menu.values('id', 'parent'))
+        menu_parents = {m['parent'] for m in menus}
+        menu_ids = [m['id'] for m in menus if m['id'] not in menu_parents]
 
-        # 过滤掉已经在parent字段中出现过的id
-        menu_parents = [m['parent'] for m in menus]
-        for menu in menus:
-            if menu['id'] not in menu_parents:
-                cleaned_menus.append(menu)
+        depts = list(instance.dept.values('id', 'parent'))
+        dept_parents = {d['parent'] for d in depts}
+        dept_ids = [d['id'] for d in depts if d['id'] not in dept_parents]
 
-        menu_ids = [menu['id'] for menu in cleaned_menus]
-
-        depts = instance.dept.values('id', 'parent')
-        cleaned_depts = []
-
-        # 过滤掉已经在parent字段中出现过的id
-        dept_parents = [d['parent'] for d in depts]
-        for dept in depts:
-            if dept['id'] not in dept_parents:
-                cleaned_depts.append(dept)
-
-        dept_ids = [dept['id'] for dept in cleaned_depts]
-
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
+        serializer = self.get_serializer(instance)
         data = serializer.data
         data['menu'] = menu_ids
         data['dept'] = dept_ids
 
-        return DetailResponse(data={'data': data}, msg="获取成功")
+        return DetailResponse(data=data, msg="获取成功")
 
 
     def get_policy_path_role(self, request, *args, **kwargs):

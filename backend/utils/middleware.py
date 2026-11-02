@@ -1,6 +1,6 @@
 """
 Time:     2023/12/3 14:16
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     middleware
 Describe: 自定义中间件
@@ -28,7 +28,6 @@ class ApiLoggingMiddleware(MiddlewareMixin):
         super().__init__(get_response)
         self.enable = getattr(settings, 'API_LOG_ENABLE', None) or False
         self.methods = getattr(settings, 'API_LOG_METHODS', None) or set()
-        self.operation_log_id = None
 
     @classmethod
     def __handle_request(cls, request):
@@ -51,7 +50,12 @@ class ApiLoggingMiddleware(MiddlewareMixin):
         except Exception:
             return
         user = get_request_user(request)
+        modular = getattr(request, '_operation_modular', None)
+        if not modular and hasattr(settings, 'API_MODEL_MAP') and settings.API_MODEL_MAP.get(request.request_path):
+            modular = settings.API_MODEL_MAP[request.request_path]
+
         info = {
+            'request_modular': modular or '',
             'request_ip': getattr(request, 'request_ip', 'unknown'),
             'creator': user if not isinstance(user, AnonymousUser) else None,
             'request_method': request.method,
@@ -60,23 +64,18 @@ class ApiLoggingMiddleware(MiddlewareMixin):
             'response_code': response.data.get('code'),
             'request_os': get_os(request),
             'request_browser': get_browser(request),
-            'request_msg': request.session.get('request_msg'),
+            'request_msg': request.session.get('request_msg') if hasattr(request, 'session') else None,
             'status': True if response.data.get('code') in [200, ] else False,
             'json_result': {"code": response.data.get('code', ''), "msg": response.data.get('msg', '')},
         }
-        operation_log, creat = OperationLog.objects.update_or_create(defaults=info, id=self.operation_log_id)
-        if not operation_log.request_modular and settings.API_MODEL_MAP.get(request.request_path, None):
-            operation_log.request_modular = settings.API_MODEL_MAP[request.request_path]
-            operation_log.save()
+        # 单次批量插入完整日志，避免先Insert后Update的重复数据库IO
+        OperationLog.objects.create(**info)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         if hasattr(view_func, 'cls') and hasattr(view_func.cls, 'queryset'):
             if self.enable:
                 if self.methods == 'ALL' or request.method in self.methods:
-                    log = OperationLog(request_modular=get_verbose_name(view_func.cls.queryset))
-                    log.save()
-                    self.operation_log_id = log.id
-
+                    request._operation_modular = get_verbose_name(view_func.cls.queryset)
         return
 
     def process_request(self, request):

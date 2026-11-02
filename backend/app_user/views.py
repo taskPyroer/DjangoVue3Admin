@@ -93,29 +93,18 @@ class UserViewSet(CustomModelViewSet):
             if menu_type in ['F', 'C']:
                 permissions.append(permission)
 
-        res_p = []
-        # 创建数据字典
-        data_dict = {item["id"]: item for item in menus}
-
-        # 遍历数据，找出最高级节点（parent_id为None）
+        # 采用 O(N) 线性邻接字典构建菜单树
+        children_map = {}
         for item in menus:
-            if item["parent_id"] is None:
-                res_p.append(item)
+            p_id = item["parent_id"]
+            children_map.setdefault(p_id, []).append(item)
 
-        # 递归构建树形结构
-        def build_tree(node, data_dict):
-            node["children"] = [
-                build_tree(data_dict[child_id], data_dict)
-                for child_id in data_dict
-                if data_dict[child_id]["parent_id"] == node["id"]
-            ]
-            return node
+        for item in menus:
+            children = children_map.get(item["id"])
+            if children:
+                item["children"] = children
 
-        # 构建树形结构
-        for item in res_p:
-            build_tree(item, data_dict)
-
-        result['menus'] = res_p
+        result['menus'] = children_map.get(None, [])
         result['permissions'] = permissions
         return DetailResponse(data=result, msg="获取成功")
 
@@ -134,11 +123,13 @@ class UserViewSet(CustomModelViewSet):
 
     def update_user_info(self, request):
         """
-        修改当前用户信息
+        修改当前用户信息（白名单字段限制，杜绝越权篡改权限）
         """
         user = request.user
-        Users.objects.filter(id=user.id).update(**request.data)
-        return DetailResponse(data=None, msg="修改成功")
+        serializer = UserInfoUpdateSerializer(user, data=request.data, partial=True, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return DetailResponse(data=serializer.data, msg="修改成功")
 
     def export_to_excel(self, request):
         """

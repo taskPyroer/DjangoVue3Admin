@@ -15,36 +15,31 @@
   </el-container>
 </template>
 
-<script lang="ts">
-import { computed, getCurrentInstance, watch,ref } from "vue";
+<script setup lang="ts" name="layoutDefaults">
+import { computed, watch, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useThemeConfigStateStore } from "@/stores/themeConfig";
 import Aside from "@/layout/component/aside.vue";
 import Header from "@/layout/component/header.vue";
 import Main from "@/layout/component/main.vue";
-export default {
-  name: "layoutDefaults",
-  components: { Aside, Header, Main },
-  setup() {
-    const { proxy } = getCurrentInstance() as any;
-    const route = useRoute();
-    const theme = useThemeConfigStateStore();
 
-    const layoutDefaultsScrollbarRef = ref()
-    const isFixedHeader = computed(() => {
-      return theme.themeConfig.isFixedHeader;
-    });
-    // 监听路由的变化
-    watch(
-      () => route.path,
-      () => {
-        proxy.$refs.layoutDefaultsScrollbarRef.wrapRef.scrollTop = 0;
-        //proxy.$refs.layoutDefaultsScrollbarRef.setScrollTop(0)
+const route = useRoute();
+const theme = useThemeConfigStateStore();
+const layoutDefaultsScrollbarRef = ref<any>(null);
+
+const isFixedHeader = computed(() => theme.themeConfig.isFixedHeader);
+
+// 监听路由的变化
+watch(
+  () => route.path,
+  () => {
+    if (layoutDefaultsScrollbarRef.value) {
+      if (layoutDefaultsScrollbarRef.value.setScrollTop) {
+        layoutDefaultsScrollbarRef.value.setScrollTop(0);
+      } else if (layoutDefaultsScrollbarRef.value.wrapRef) {
+        layoutDefaultsScrollbarRef.value.wrapRef.scrollTop = 0;
       }
-    );
-    return {
-      isFixedHeader,
-    };
-  },
-};
+    }
+  }
+);
 </script>

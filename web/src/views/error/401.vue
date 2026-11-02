@@ -18,23 +18,15 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { Session } from '@/utils/storage';
-import img from '@/assets/401.png'
-export default {
-	name: '401',
-	setup() {
-		const router = useRouter();
-		const onSetAuth = () => {
-			Session.clear();
-			router.push('/login');
-		};
-		return {
-			img,
-			onSetAuth,
-		};
-	},
+import img from '@/assets/401.png';
+
+const router = useRouter();
+const onSetAuth = () => {
+	Session.clear();
+	router.push('/login');
 };
 </script>
 

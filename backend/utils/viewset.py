@@ -1,13 +1,12 @@
 """
 Time:     2023/8/6 16:07
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:
 Describe: 自定义视图集
 """
 from rest_framework.viewsets import ModelViewSet
 
-# from utils.filters import DataLevelPermissionsFilter
 from utils.json_response import SuccessResponse, ErrorResponse, DetailResponse
 from utils.permission import CustomPermission
 from django_filters.rest_framework import DjangoFilterBackend
@@ -87,7 +86,12 @@ class CustomModelViewSet(ModelViewSet):
     filter_backends = [CustomDjangoFilterBackend, OrderingFilter, SearchFilter]
 
     def filter_queryset(self, queryset):
-        for backend in set(set(self.filter_backends) | set(self.extra_filter_backends or [])):
+        backends = list(self.filter_backends) + list(self.extra_filter_backends or [])
+        unique_backends = []
+        for b in backends:
+            if b not in unique_backends:
+                unique_backends.append(b)
+        for backend in unique_backends:
             queryset = backend().filter_queryset(self.request, queryset, self)
         return queryset
 
@@ -121,7 +125,7 @@ class CustomModelViewSet(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return SuccessResponse(data=serializer.data, msg="获取成功")
+        return DetailResponse(data=serializer.data, msg="获取成功")
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -149,7 +153,8 @@ class CustomModelViewSet(ModelViewSet):
         )
         filter_kwargs = {f"{self.lookup_field}__in": self.kwargs[lookup_url_kwarg].split(',')}
         obj = queryset.filter(**filter_kwargs)
-        self.check_object_permissions(self.request, obj)
+        for item in obj:
+            self.check_object_permissions(self.request, item)
         return obj
 
     # 重写delete方法，让它支持批量删除 如：  /api/admin/user/1,2,3/ 批量删除id 1，2，3得用户

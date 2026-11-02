@@ -54,20 +54,23 @@ service.interceptors.response.use(
                 }, 2000); // 延迟两秒后执行重定向
                 Session.clear(); // 清除浏览器全部临时缓存
             }
-            return Promise.reject(service.interceptors.response);
+            return Promise.reject(res);
         } else {
             return response.data;
         }
     },
     (error) => {
         // 对响应错误做点什么
-        if (error.message.indexOf('timeout') != -1) {
+        if (error.message?.indexOf('timeout') != -1) {
             ElMessage.error('网络超时');
         } else if (error.message == 'Network Error') {
             ElMessage.error('网络连接错误');
+        } else if (error.response?.data?.msg) {
+            ElMessage.error(error.response.data.msg);
+        } else if (error.response?.statusText) {
+            ElMessage.error(error.response.statusText);
         } else {
-            if (error.response.data) ElMessage.error(error.response.statusText);
-            else ElMessage.error('接口路径找不到');
+            ElMessage.error(error.message || '接口请求失败');
         }
         return Promise.reject(error);
     }

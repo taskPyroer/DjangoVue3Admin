@@ -110,7 +110,7 @@
             <el-pagination
                     background
                     :total="state.total"
-                    :current-page="state.queryParams.pageNum"
+                    :current-page="state.queryParams.page"
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size="state.queryParams.pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
@@ -123,125 +123,75 @@
 </template>
 
 <script lang="ts" setup name="Logininfo">
-    import { reactive, onMounted, toRefs, ref, getCurrentInstance } from "vue";
-    import {
-        listLoginInfo,
-        delLoginInfo,
-        cleanLoginInfo,
-    } from "@/api/log/login";
-    import { ElMessageBox, ElMessage } from "element-plus";
-    const { proxy } = getCurrentInstance() as any;
-    const ruleFormRef = ref<HTMLElement | null>(null);
-    const state = reactive({
-      // 遮罩层
-      loading: true,
-      // 总条数
-      total: 0,
-      // 列表表格数据
-      tableData: [],
-      // 选中数组
-      ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 弹出层标题
-      title: "",
-      // 类型数据字典
-      statusOptions: [],
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        loginLocation: undefined,
-        username: undefined,
-      },
+import { reactive, onMounted, getCurrentInstance } from "vue";
+import { listLoginInfo, delLoginInfo, cleanLoginInfo } from "@/api/log/login";
+import { ElMessageBox, ElMessage } from "element-plus";
+import { useCrud } from "@/hooks/useCrud";
+
+const { proxy } = getCurrentInstance() as any;
+
+const {
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  handleQuery,
+  resetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+} = useCrud({
+  listApi: listLoginInfo,
+  deleteApi: delLoginInfo,
+  title: "登录日志",
+  defaultParams: {
+    loginLocation: undefined,
+    username: undefined,
+  },
+});
+
+const state = reactive({
+  loading,
+  total,
+  tableData,
+  multiple,
+  statusOptions: [],
+  queryParams,
+});
+
+/** 清空按钮操作 */
+const handleClean = () => {
+  ElMessageBox({
+    message: "是否确认清空所有登录日志数据项?",
+    title: "警告",
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => cleanLoginInfo())
+    .then(() => {
+      handleQuery();
+      ElMessage.success("清空成功");
     });
+};
 
-    /** 查询定时任务列表 */
-    const handleQuery = () => {
-      state.loading = true;
-      listLoginInfo(state.queryParams).then((response) => {
-        state.tableData = response.data.data;
-        state.total = response.data.total;
-        state.loading = false;
-      });
-    };
+const onTabelRowDel = handleDelete;
 
-    /** 重置按钮操作 */
-    const resetQuery = () => {
-      state.queryParams.loginLocation = undefined;
-      state.queryParams.username = undefined;
-      handleQuery();
-    };
+// 操作日志状态字典翻译
+const statusFormat = (row: any) => {
+  return proxy.selectDictLabel(state.statusOptions, row.status);
+};
 
-    /** 清空按钮操作 */
-    const handleClean = () => {
-      ElMessageBox({
-        message: "是否确认清空所有登录日志数据项?",
-        title: "警告",
-        showCancelButton: true,
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-          .then(function () {
-            return cleanLoginInfo();
-          })
-          .then(() => {
-            handleQuery();
-            ElMessage.success("清空成功");
-          });
-    };
-
-    /** 删除按钮操作 */
-    const onTabelRowDel = (row: any) => {
-      const infoIds = row.infoId || state.ids;
-      ElMessageBox({
-        message: '是否确认删除访问编号为"' + infoIds + '"的数据项?',
-        title: "警告",
-        showCancelButton: true,
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(function () {
-        return delLoginInfo(infoIds).then(() => {
-          handleQuery();
-          ElMessage.success("删除成功");
-        });
-      });
-    };
-
-    //分页页面大小发生变化
-    const handleSizeChange = (val: any) => {
-      state.queryParams.pageSize = val;
-      handleQuery();
-    };
-    //当前页码发生变化
-    const handleCurrentChange = (val: any) => {
-      state.queryParams.pageNum = val;
-      handleQuery();
-    };
-
-    // 操作日志状态字典翻译
-    const statusFormat = (row: any, column: any) => {
-      return proxy.selectDictLabel(state.statusOptions, row.status);
-    };
-    // 多选框选中数据
-    const handleSelectionChange = (selection: any) => {
-      state.ids = selection.map((item: any) => item.infoId);
-      state.single = selection.length != 1;
-      state.multiple = !selection.length;
-    };
-
-    // 页面加载时调用
-    onMounted(() => {
-      // 查询列表数据信息
-      handleQuery();
-      proxy.getDicts("sys_common_status").then((response: any) => {
-        state.statusOptions = response.data;
-      });
-    });
+// 页面加载时调用
+onMounted(() => {
+  handleQuery();
+  proxy.getDicts("sys_common_status").then((response: any) => {
+    state.statusOptions = response?.data || [];
+  });
+});
 </script>
 
 <style>

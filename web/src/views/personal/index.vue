@@ -47,7 +47,7 @@
                     <el-col :xs="24" :sm="16" class="personal-item mb6">
                       <div class="personal-item-label">登录时间：</div>
                       <div class="personal-item-value">
-                        {{ parseTime(getUserInfos.lastLoginTime) }}
+                        {{ dateStrFormat(getUserInfos.lastLoginTime) }}
                       </div>
                     </el-col>
                   </el-row>

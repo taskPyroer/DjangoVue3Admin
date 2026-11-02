@@ -348,46 +348,56 @@ import {
 } from "@/api/system/api";
 import {deptTreeSelect} from "@/api/system/dept";
 import {dateStrFormat} from "@/utils/formatTime";
+import {useCrud} from "@/hooks/useCrud";
 
 const {proxy} = getCurrentInstance() as any;
 const roleFormRef = ref<HTMLElement | null>(null);
 const menuRef = ref<HTMLElement | null>(null);
 const apiRef = ref<HTMLElement | null>(null);
 const deptRef = ref<HTMLElement | null>(null);
+
+const {
+  loading,
+  tableData: roleList,
+  total,
+  queryParams,
+  multiple,
+  handleQuery,
+  resetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+} = useCrud({
+  listApi: listRole,
+  deleteApi: delRole,
+  title: "角色",
+  defaultParams: {
+    search: undefined,
+    status: undefined,
+  },
+});
+
+const getRoleList = handleQuery;
+
 const state: any = reactive({
   activeName: 'first',
-  // 遮罩层
-  loading: true,
+  loading,
   bunLoading: false,
-  // 选中数组
   ids: [],
-  // 总条数
-  total: 0,
-  // 弹出层标题
+  total,
   title: "",
-  // 是否显示弹出层
   open: false,
-  // 角色表格数据
-  roleList: [],
-  // 显示搜索条件
+  roleList,
   showSearch: true,
-  // 非单个禁用
   single: true,
-  // 非多个禁用
-  multiple: true,
-  // 状态数据字典
+  multiple,
   statusOptions: [],
-  // 菜单列表
   menuOptions: [],
-  // 菜单列表
   apiOptions: [],
-  //角色具有的菜单列表
   menuCheckedKeys: [],
-  //角色具有的api列表
   apiCheckedKeys: [],
-  // 部门列表
   deptOptions: [],
-  // 是否显示弹出层（数据权限）
   openDataScope: false,
   menuExpand: false,
   menuNodeAll: false,
@@ -395,102 +405,43 @@ const state: any = reactive({
   apiNodeAll: false,
   deptExpand: true,
   deptNodeAll: false,
-  // 查询参数
-  queryParams: {
-    page: 1,
-    pageSize: 10,
-    search: undefined,
-    status: undefined,
-  },
-  // 数据范围选项
+  queryParams,
   dataScopeOptions: [
-    {
-      value: "1",
-      label: "全部数据权限",
-    },
-    {
-      value: "2",
-      label: "自定数据权限",
-    },
-    {
-      value: "3",
-      label: "本部门数据权限",
-    },
-    {
-      value: "4",
-      label: "本部门及以下数据权限",
-    },
-    {
-      value: "5",
-      label: "仅本人数据权限",
-    },
+    { value: "1", label: "全部数据权限" },
+    { value: "2", label: "自定数据权限" },
+    { value: "3", label: "本部门数据权限" },
+    { value: "4", label: "本部门及以下数据权限" },
+    { value: "5", label: "仅本人数据权限" },
   ],
-  // 表单参数
   roleForm: {},
-  // 表单校验
   rules: {
-    role_name: [
-      {required: true, message: "角色名称不能为空", trigger: "blur"},
-    ],
-    role_key: [
-      {required: true, message: "权限字符不能为空", trigger: "blur"},
-    ],
-    sort: [
-      {required: true, message: "角色顺序不能为空", trigger: "blur"},
-    ],
+    role_name: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
+    role_key: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
+    sort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }],
   },
 });
+
 // 表单重置
 const reset = () => {
-  (state.menuExpand = false),
-      (state.menuNodeAll = false),
-      (state.apiExpand = false),
-      (state.apiNodeAll = false),
-      (state.deptExpand = true),
-      (state.deptNodeAll = false),
-      (state.roleForm = {
-        id: undefined,
-        role_name: undefined,
-        role_key: undefined,
-        sort: 0,
-        status: "0",
-        menu: [],
-        api: [],
-        dept: [],
-        menuCheckStrictly: true,
-        deptCheckStrictly: true,
-        remark: undefined,
-      });
-  state.roleForm = {};
-};
-/** 重置按钮操作 */
-const resetQuery = () => {
-  state.queryParams.page = 1;
-  state.queryParams.pageSize = 10;
-  state.queryParams.search = "";
-  state.queryParams.status = "";
-  handleQuery();
-};
-/** 查询角色列表 */
-const getRoleList = () => {
-  state.loading = true;
-  listRole(state.queryParams).then(
-      (response) => {
-        state.roleList = response.data.data;
-        state.total = response.data.total;
-        state.loading = false;
-      }
-  );
-};
-//分页页面大小发生变化
-const handleSizeChange = (val: any) => {
-  state.queryParams.pageSize = val;
-  handleQuery();
-};
-//当前页码发生变化
-const handleCurrentChange = (val: any) => {
-  state.queryParams.page = val;
-  handleQuery();
+  state.menuExpand = false;
+  state.menuNodeAll = false;
+  state.apiExpand = false;
+  state.apiNodeAll = false;
+  state.deptExpand = true;
+  state.deptNodeAll = false;
+  state.roleForm = {
+    id: undefined,
+    role_name: undefined,
+    role_key: undefined,
+    sort: 0,
+    status: "0",
+    menu: [],
+    api: [],
+    dept: [],
+    menuCheckStrictly: true,
+    deptCheckStrictly: true,
+    remark: undefined,
+  };
 };
 /** 提交按钮（数据权限） */
 const submitDataScope = () => {
@@ -512,11 +463,6 @@ const getDeptAllCheckedKeys = () => {
   let halfCheckedKeys = formWrap.getHalfCheckedKeys();
   checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
   return checkedKeys;
-};
-/** 搜索按钮操作 */
-const handleQuery = () => {
-  state.queryParams.page = 1;
-  getRoleList();
 };
 /** 查询菜单树结构 */
 const getMenuTreeselect = () => {
@@ -556,12 +502,6 @@ const buildApiTree = (apis: any[]) => {
   return apiTree
 };
 
-// 多选框选中数据
-const handleSelectionChange = (selection: any) => {
-  state.ids = selection.map((item: any) => item.id);
-  state.single = selection.length != 1;
-  state.multiple = !selection.length;
-};
 // 角色状态修改
 const handleStatusChange = (row: any) => {
   let text = row.status === "0" ? "启用" : "停用";
@@ -631,25 +571,6 @@ const handleUpdate = (row: any) => {
     });
   });
   state.bunLoading = false;
-};
-/** 删除按钮操作 */
-const handleDelete = (row: any) => {
-  const roleIds = row.id || state.ids;
-  ElMessageBox({
-    message: '是否确认删除角色编号为"' + roleIds + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-  })
-      .then(function () {
-        return delRole(roleIds);
-      })
-      .then(() => {
-        getRoleList();
-        ElMessage.success("删除成功");
-        state.bunLoading = false;
-      });
 };
 
 /** 根据角色ID查询部门树结构 */

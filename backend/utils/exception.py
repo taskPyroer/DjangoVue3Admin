@@ -1,6 +1,6 @@
 """
 Time:     2023/8/6 16:07
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     
 Describe: 自定义异常处理
@@ -30,7 +30,10 @@ def CustomExceptionHandler(ex, context):
     """
     msg = ''
     code = 400
-    if isinstance(ex, AuthenticationFailed):
+    if isinstance(ex, APIException):
+        code = ex.code
+        msg = ex.message
+    elif isinstance(ex, AuthenticationFailed):
         code = 401
         if 'User is inactive' in str(ex.detail):
             msg = "该账号已被禁用,请联系管理员"
@@ -39,35 +42,23 @@ def CustomExceptionHandler(ex, context):
     elif isinstance(ex, NotAuthenticated):
         code = 401
         msg = ex.detail
-    # elif isinstance(ex,NotFound):
-    #     if str(ex)=="无效页面。":
-    #         msg="暂无数据"
-    #     else:
-    #         msg = str(ex)
     elif isinstance(ex, exceptions.ValidationError):
-        msg = ex.detail
-        errorMsg = msg
-        try:
-            for key in errorMsg:
-                if key:
-                    msg = '%s:%s' % (key, errorMsg[key][0])
+        code = 400
+        error_detail = ex.detail
+        if isinstance(error_detail, dict):
+            messages = []
+            for k, v in error_detail.items():
+                if isinstance(v, list) and v:
+                    messages.append(f"{k}: {v[0]}")
+                elif isinstance(v, dict):
+                    messages.append(f"{k}: {str(v)}")
                 else:
-                    msg = errorMsg[key][0]
-        except:
-            # {comment_author: {non_field_errors: ["无效数据。期待为字典类型，得到的是 str 。"]}, images: ["Not a valid string."]}
-            if isinstance(errorMsg, list):
-                msg = errorMsg[0]
-            elif isinstance(errorMsg, dict):
-                values_list = list(errorMsg.values())
-                keys_list = list(errorMsg.keys())
-                if 'non_field_errors' in values_list[0]:
-                    msg = keys_list[0] + ":" + values_list[0]['non_field_errors'][0]
-                elif isinstance(values_list[0], list):
-                    msg = keys_list[0] + ":" + values_list[0][0]
-                else:
-                    msg = errorMsg[0]
-            else:
-                msg = errorMsg
+                    messages.append(f"{k}: {str(v)}")
+            msg = "; ".join(messages) if messages else "参数验证错误"
+        elif isinstance(error_detail, list) and error_detail:
+            msg = str(error_detail[0])
+        else:
+            msg = str(error_detail)
     elif 'django.db.utils.IntegrityError' in str(type(ex)):
         msg = str(ex)
         res = msg.split(', ')
@@ -76,26 +67,16 @@ def CustomExceptionHandler(ex, context):
     elif isinstance(ex, Http404):
         code = 404
         msg = "404错误：您访问的地址不存在"
-    elif isinstance(ex, DRFAPIException):
-        set_rollback()
-        msg = str(ex.detail)
-    elif isinstance(ex, exceptions.APIException):
-        set_rollback()
-        msg = ex.detail
     elif isinstance(ex, ProtectedError):
         set_rollback()
         msg = "删除失败：该条数据与其他数据有相关绑定,建议将与其绑定的数据解除绑定"
-    # elif isinstance(ex, DatabaseError):
-    #     set_rollback()
-    #     msg = "接口服务器异常,请联系管理员"
+    elif isinstance(ex, (DRFAPIException, exceptions.APIException)):
+        set_rollback()
+        msg = str(ex.detail)
     elif isinstance(ex, Exception):
         logger.error(traceback.format_exc())
-        msg = str(ex)  # 原样输出错误
+        msg = str(ex)
 
-    # errorMsg = msg
-    # for key in errorMsg:
-    #     msg = errorMsg[key][0]
-    # print(traceback.format_exc())
     return ErrorResponse(msg=msg, code=code)
 
 

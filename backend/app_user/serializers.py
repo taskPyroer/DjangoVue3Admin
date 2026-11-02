@@ -1,6 +1,6 @@
 """
 Time:     2023/8/31 16:38
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     serializers
 Describe: 
@@ -34,9 +34,9 @@ class UserSerializer(CustomModelSerializer):
 
 class UserCreateSerializer(CustomModelSerializer):
     """
-    用户信息修改/更新-序列化器
+    用户信息创建/修改-序列化器
     """
-    password = serializers.CharField(required=False, default=make_password("123456"))
+    password = serializers.CharField(required=False, write_only=True, allow_blank=True)
     username = serializers.CharField(
         max_length=50,
         validators=[CustomUniqueValidator(queryset=Users.objects.all(), message="账号必须唯一")])
@@ -53,11 +53,15 @@ class UserCreateSerializer(CustomModelSerializer):
         return value
 
     def create(self, validated_data):
-        if 'password' in validated_data.keys():
-            if validated_data['password']:
-                validated_data['password'] = make_password(validated_data['password'])
-
+        raw_password = validated_data.pop('password', None) or "123456"
+        validated_data['password'] = make_password(raw_password)
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        if password:
+            instance.set_password(password)
+        return super().update(instance, validated_data)
 
     class Meta:
         model = Users
@@ -70,12 +74,19 @@ class UserInfoUpdateSerializer(serializers.ModelSerializer):
     用户个人信息修改-序列化器
     """
     phone = serializers.CharField(
-        validators=[CustomUniqueValidator(queryset=Users.objects.all(), message="手机号必须唯一")],
+        required=False,
         allow_blank=True)
 
     def validate_phone(self, value):
-        if not re.match(REGEX_MOBILE, value):
-            raise serializers.ValidationError('请输入一个有效的手机号码')
+        if value:
+            if not re.match(REGEX_MOBILE, value):
+                raise serializers.ValidationError('请输入一个有效的手机号码')
+            user = self.context.get('request').user if self.context.get('request') else getattr(self, 'instance', None)
+            exists_qs = Users.objects.filter(phone=value)
+            if user:
+                exists_qs = exists_qs.exclude(id=user.id)
+            if exists_qs.exists():
+                raise serializers.ValidationError('手机号必须唯一')
         return value
 
     def update(self, instance, validated_data):
@@ -83,7 +94,7 @@ class UserInfoUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Users
-        fields = ['email', 'avatar', 'nickname', 'gender']
+        fields = ['email', 'avatar', 'nickname', 'gender', 'phone']
 
 
 class UserResource(resources.ModelResource):

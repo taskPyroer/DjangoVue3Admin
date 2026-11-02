@@ -154,142 +154,79 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  ref,
-  reactive,
-  onMounted,
-  getCurrentInstance,
-  onUnmounted,
-} from "vue";
-import {ElMessageBox, ElMessage} from "element-plus";
-import {listPost, delPost, exportPost} from "@/api/system/post";
+import { ref, reactive, onMounted, getCurrentInstance, onUnmounted } from "vue";
+import { listPost, delPost, exportPost } from "@/api/system/post";
 import EditModule from "./component/editModule.vue";
-import {handleFileError} from "@/utils/export";
-const {proxy} = getCurrentInstance() as any;
+import { useCrud } from "@/hooks/useCrud";
+
+const { proxy } = getCurrentInstance() as any;
 const editModuleRef = ref();
-const state = reactive({
-  // 遮罩层
-  loading: true,
-  // 选中数组
-  ids: [],
-  // 非单个禁用
-  single: true,
-  // 非多个禁用
-  multiple: true,
-  // 弹出层标题
-  title: "",
-  // 岗位表格数据
-  tableData: [],
-  // 总条数
-  total: 0,
-  // 状态数据字典
-  statusOptions: [],
-  // 查询参数
-  queryParams: {
-    // 页码
-    page: 1,
-    // 每页大小
-    pageSize: 10,
-    search: '',
+
+const {
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  handleQuery,
+  resetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+  handleExport,
+} = useCrud({
+  listApi: listPost,
+  deleteApi: delPost,
+  exportApi: exportPost,
+  exportPrefix: "岗位表",
+  title: "岗位",
+  defaultParams: {
+    search: "",
     status: undefined,
   },
 });
 
-/** 查询岗位列表 */
-const handleQuery = () => {
-  state.loading = true;
-  listPost(state.queryParams).then((response) => {
-    state.tableData = response.data.data;
-    state.total = response.data.total;
-    state.loading = false;
-  });
-};
-/** 重置按钮操作 */
-const resetQuery = () => {
-  state.queryParams.search = '';
-  state.queryParams.status = undefined;
-  handleQuery();
-};
-
-const handleCurrentChange = (val: number) => {
-  state.queryParams.page = val
-  handleQuery()
-}
-const handleSizeChange = (val: number) => {
-  state.queryParams.pageSize = val
-  handleQuery()
-}
+const state = reactive({
+  title: "",
+  statusOptions: [],
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+});
 
 const statusFormat = (row: any) => {
   return proxy.selectDictLabel(state.statusOptions, row.status);
 };
+
+// 别名兼容模板事件绑定
+const onTabelRowDel = handleDelete;
 
 // 打开新增岗位弹窗
 const onOpenAddModule = () => {
   state.title = "添加岗位";
   editModuleRef.value.openDialog({});
 };
+
 // 打开编辑岗位弹窗
 const onOpenEditModule = (row: object) => {
   state.title = "修改岗位";
   editModuleRef.value.openDialog(row);
 };
-/** 删除按钮操作 */
-const onTabelRowDel = (row: any) => {
-  const postIds = row.id || state.ids;
-  ElMessageBox({
-    message: '是否确认删除岗位编号为"' + postIds + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return delPost(postIds).then(() => {
-      handleQuery();
-      ElMessage.success("删除成功");
-    });
-  });
-};
-// 多选框选中数据
-const handleSelectionChange = (selection: any) => {
-  state.ids = selection.map((item: any) => item.id);
-  state.single = selection.length != 1;
-  state.multiple = !selection.length;
-};
-
-/** 导出按钮操作 */
-const handleExport = () => {
-
-  ElMessageBox({
-    message: "是否确认导出所有数据项?",
-    title: "警告",
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-      .then(function () {
-        return exportPost();
-      })
-      .then((response: any) => {
-        let data: any = new Date().getTime() / 1000
-        let time = parseInt(data) + '';
-        handleFileError(response, "岗位表_" + time + ".xls")
-      });
-};
 
 // 页面加载时
 onMounted(() => {
-  // 查询岗位信息
   handleQuery();
-  // 查询岗位状态数据字典
   proxy.getDicts("sys_yes_no").then((response: any) => {
-    state.statusOptions = response.data.data;
+    state.statusOptions = response?.data?.data || [];
   });
   proxy.mittBus.on("onEditPostModule", () => {
     handleQuery();
   });
 });
+
 // 页面卸载时
 onUnmounted(() => {
   proxy.mittBus.off("onEditPostModule");

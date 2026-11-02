@@ -1,6 +1,6 @@
 """
 Time:     2023/9/11 15:00
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     urls
 Describe:
@@ -27,17 +27,15 @@ class DictTypeViewSet(CustomModelViewSet):
 
     @transaction.atomic
     def destroy(self, request, *args, **kwargs):
-        # 重写删除
+        """
+        重写批量删除，级联删除对应的字典数据
+        """
         instances = self.get_object_list()
         try:
-            with transaction.atomic():
-                # 需要删除系统-字典数值的数据
-                for instance in instances:
-                    dict_data_instances = DictData.objects.filter(dict_type=instance.dict_type)
-                    dict_data_instances.delete()
-
-                self.perform_destroy(instances)
-                return DetailResponse(data=[], msg="删除成功")
+            dict_types = [instance.dict_type for instance in instances]
+            DictData.objects.filter(dict_type__in=dict_types).delete()
+            self.perform_destroy(instances)
+            return DetailResponse(data=[], msg="删除成功")
         except Exception as e:
             return ErrorResponse(data=[], msg="删除失败: {}".format(str(e)))
 

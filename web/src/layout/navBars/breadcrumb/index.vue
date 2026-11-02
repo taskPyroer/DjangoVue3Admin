@@ -7,11 +7,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="layoutBreadcrumbIndex">
 import {
   computed,
-  reactive,
-  toRefs,
+  ref,
   onMounted,
   onUnmounted,
   getCurrentInstance,
@@ -23,97 +22,84 @@ import Breadcrumb from "@/layout/navBars/breadcrumb/breadcrumb.vue";
 import User from "@/layout/navBars/breadcrumb/user.vue";
 import Logo from "@/layout/logo/index.vue";
 import Horizontal from "@/layout/navMenu/horizontal.vue";
-export default {
-  name: "layoutBreadcrumbIndex",
-  components: { Breadcrumb, User, Logo, Horizontal },
-  setup() {
-    const { proxy } = getCurrentInstance() as any;
-     
-    const theme = useThemeConfigStateStore();
-    const routesList = useRoutesListStore();
-    const route = useRoute();
-    const state: any = reactive({
-      menuList: [],
+
+const { proxy } = getCurrentInstance() as any;
+const theme = useThemeConfigStateStore();
+const routesList = useRoutesListStore();
+const route = useRoute();
+const menuList = ref<any[]>([]);
+
+// 设置 logo 显示/隐藏
+const setIsShowLogo = computed(() => {
+  let { isShowLogo, layout } = theme.themeConfig;
+  return (
+    (isShowLogo && layout === "classic") || (isShowLogo && layout === "transverse")
+  );
+});
+
+// 设置是否显示横向导航菜单
+const isLayoutTransverse = computed(() => {
+  let { layout, isClassicSplitMenu } = theme.themeConfig;
+  return layout === "transverse" || (isClassicSplitMenu && layout === "classic");
+});
+
+// 路由过滤递归函数
+const filterRoutesFun = (arr: Array<object>): any[] => {
+  return arr
+    .filter((item: any) => !item.meta?.isHide)
+    .map((item: any) => {
+      item = Object.assign({}, item);
+      if (item.children) item.children = filterRoutesFun(item.children);
+      return item;
     });
-    // 获取布局配置信息
-    const getThemeConfig = computed(() => {
-      return theme.themeConfig;
-    });
-    // 设置 logo 显示/隐藏
-    const setIsShowLogo = computed(() => {
-      let { isShowLogo, layout } = theme.themeConfig;
-      return (
-        (isShowLogo && layout === "classic") || (isShowLogo && layout === "transverse")
-      );
-    });
-    // 设置是否显示横向导航菜单
-    const isLayoutTransverse = computed(() => {
-      let { layout, isClassicSplitMenu } = theme.themeConfig;
-      return layout === "transverse" || (isClassicSplitMenu && layout === "classic");
-    });
-    // 设置/过滤路由（非静态路由/是否显示在菜单中）
-    const setFilterRoutes = () => {
-      let { layout, isClassicSplitMenu } = theme.themeConfig;
-      if (layout === "classic" && isClassicSplitMenu) {
-        state.menuList = delClassicChildren(
-          filterRoutesFun(routesList.routesList)
-        );
-        const resData = setSendClassicChildren(route.path);
-        proxy.mittBus.emit("setSendClassicChildren", resData);
-      } else {
-        state.menuList = filterRoutesFun(routesList.routesList);
-      }
-    };
-    // 设置了分割菜单时，删除底下 children
-    const delClassicChildren = (arr: Array<object>) => {
-      arr.map((v: any) => {
-        if (v.children) delete v.children;
-      });
-      return arr;
-    };
-    // 路由过滤递归函数
-    const filterRoutesFun = (arr: Array<object>) => {
-      return arr
-        .filter((item: any) => !item.meta.isHide)
-        .map((item: any) => {
-          item = Object.assign({}, item);
-          if (item.children) item.children = filterRoutesFun(item.children);
-          return item;
-        });
-    };
-    // 传送当前子级数据到菜单中
-    const setSendClassicChildren = (path: string) => {
-      const currentPathSplit = path.split("/");
-      let currentData: any = {};
-      filterRoutesFun(routesList.routesList).map((v, k) => {
-        if (v.path === `/${currentPathSplit[1]}`) {
-          v["k"] = k;
-          currentData["item"] = [{ ...v }];
-          currentData["children"] = [{ ...v }];
-          if (v.children) currentData["children"] = v.children;
-        }
-      });
-      return currentData;
-    };
-    // 页面加载时
-    onMounted(() => {
-      setFilterRoutes();
-      proxy.mittBus.on("getBreadcrumbIndexSetFilterRoutes", () => {
-        setFilterRoutes();
-      });
-    });
-    // 页面卸载时
-    onUnmounted(() => {
-      proxy.mittBus.off("getBreadcrumbIndexSetFilterRoutes");
-    });
-    return {
-      getThemeConfig,
-      setIsShowLogo,
-      isLayoutTransverse,
-      ...toRefs(state),
-    };
-  },
 };
+
+// 设置了分割菜单时，删除底下 children
+const delClassicChildren = (arr: Array<object>) => {
+  arr.forEach((v: any) => {
+    if (v.children) delete v.children;
+  });
+  return arr;
+};
+
+// 传送当前子级数据到菜单中
+const setSendClassicChildren = (path: string) => {
+  const currentPathSplit = path.split("/");
+  let currentData: any = {};
+  filterRoutesFun(routesList.routesList).forEach((v, k) => {
+    if (v.path === `/${currentPathSplit[1]}`) {
+      v["k"] = k;
+      currentData["item"] = [{ ...v }];
+      currentData["children"] = v.children ? v.children : [{ ...v }];
+    }
+  });
+  return currentData;
+};
+
+// 设置/过滤路由（非静态路由/是否显示在菜单中）
+const setFilterRoutes = () => {
+  let { layout, isClassicSplitMenu } = theme.themeConfig;
+  if (layout === "classic" && isClassicSplitMenu) {
+    menuList.value = delClassicChildren(
+      filterRoutesFun(routesList.routesList)
+    );
+    const resData = setSendClassicChildren(route.path);
+    proxy.mittBus.emit("setSendClassicChildren", resData);
+  } else {
+    menuList.value = filterRoutesFun(routesList.routesList);
+  }
+};
+
+onMounted(() => {
+  setFilterRoutes();
+  proxy.mittBus.on("getBreadcrumbIndexSetFilterRoutes", () => {
+    setFilterRoutes();
+  });
+});
+
+onUnmounted(() => {
+  proxy.mittBus.off("getBreadcrumbIndexSetFilterRoutes");
+});
 </script>
 
 <style scoped lang="scss">

@@ -1,6 +1,6 @@
 """
 Time:     2023/8/24 11:18
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     serializer
 Describe: 
@@ -21,18 +21,8 @@ class MenuSerializer(CustomModelSerializer):
 
 class MenuTreeSerializer(CustomModelSerializer):
     """
-    菜单表的树形序列化器
+    菜单表的树形序列化器（兼容类声明）
     """
-    children = serializers.SerializerMethodField(read_only=True)
-
-    def get_children(self, instance):
-        queryset = Menu.objects.filter(parent=instance.id).filter(status='0')
-        if queryset:
-            serializer = MenuTreeSerializer(queryset, many=True)
-            return serializer.data
-        else:
-            return None
-
     class Meta:
         model = Menu
         fields = "__all__"

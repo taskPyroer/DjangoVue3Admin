@@ -12,10 +12,6 @@ import { useThemeConfigStateStore } from '@/stores/themeConfig';
 
 import pagesLoginZhcn from '@/i18n/pages/login/zh-cn';
 import pagesLoginEn from '@/i18n/pages/login/en';
-import pagesFormI18nZhcn from '@/i18n/pages/formI18n/zh-cn';
-import pagesFormI18nEn from '@/i18n/pages/formI18n/en';
-
-
 
 // 定义语言国际化内容
 /**
@@ -30,7 +26,6 @@ const messages = {
 			...nextZhcn,
 			...pagesHomeZhcn,
 			...pagesLoginZhcn,
-			...pagesFormI18nZhcn,
 		},
 	},
 	[enLocale.name]: {
@@ -39,7 +34,6 @@ const messages = {
 			...nextEn,
 			...pagesHomeEn,
 			...pagesLoginEn,
-			...pagesFormI18nEn,
 		},
 	},
 };

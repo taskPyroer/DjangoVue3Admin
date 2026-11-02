@@ -16,10 +16,20 @@ class DeptViewSet(CustomModelViewSet):
 
     def dept_tree(self, request):
         """
-        部门管理树型接口
-        :param request:
-        :return:
+        部门管理树型接口（单次SQL查询 + 内存O(N)线性建树，彻底拔除递归查库）
         """
-        queryset = Dept.objects.exclude(status='1').filter(parent=None)
-        serializer = DeptTreeSerializer(queryset, many=True)
-        return DetailResponse(data=serializer.data, msg="获取成功")
+        depts = list(Dept.objects.exclude(status='1').order_by('sort', 'id'))
+        serializer_data = DeptSerializer(depts, many=True, context={'request': request}).data
+
+        children_map = {}
+        for item in serializer_data:
+            p_id = item.get('parent')
+            children_map.setdefault(p_id, []).append(item)
+
+        for item in serializer_data:
+            children = children_map.get(item['id'])
+            if children:
+                item['children'] = children
+
+        tree_data = children_map.get(None, [])
+        return DetailResponse(data=tree_data, msg="获取成功")

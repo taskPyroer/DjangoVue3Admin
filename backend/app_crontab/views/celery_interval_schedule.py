@@ -1,6 +1,6 @@
 """
 Time:     2023/11/21 10:27
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     celery_interval_schedule
 Describe: 按时间间隔频率执行定时任务的控制器，(例：每间隔1H/1M/…执行一次)

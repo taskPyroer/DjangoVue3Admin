@@ -225,7 +225,7 @@ import {
   getCurrentInstance,
   onUnmounted,
 } from "vue";
-import {ElMessageBox, ElMessage} from "element-plus";
+import { ElMessageBox, ElMessage } from "element-plus";
 import {
   listJob,
   runStopJob,
@@ -233,160 +233,103 @@ import {
 } from "@/api/tool/job";
 import EditModule from "./component/editModule.vue";
 import CronLogs from "./component/cronLogs.vue";
-import {useRouter} from "vue-router";
-import {dateStrFormat} from "@/utils/formatTime";
+import { dateStrFormat } from "@/utils/formatTime";
+import { useCrud } from "@/hooks/useCrud";
 
-const {proxy} = getCurrentInstance() as any;
+const { proxy } = getCurrentInstance() as any;
 const editModuleRef = ref();
 const cronLogsRef = ref();
-const ruleFormRef = ref<HTMLElement | null>(null);
-const router = useRouter();
-const state = reactive({
-  // 遮罩层
-  loading: true,
-  // 选中数组
-  ids: [],
-  // 非单个禁用
-  single: true,
-  // 非多个禁用
-  multiple: true,
-  // 弹出层标题
-  title: "",
-  // 定时任务表格数据
-  tableData: [],
-  // 总条数
-  total: 0,
-  // 是否显示弹出层
-  open: false,
-  // 表单参数
-  modelForm: {},
-  // 状态字典
-  enabledOptions: [
-    {dictValue: false, dictLabel: '停止'},
-    {dictValue: true, dictLabel: '开启'},
-  ],
-  // 查询参数
-  queryParams: {
-    // 页码
-    page: 1,
-    // 每页大小
-    pageSize: 10,
+
+const {
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  handleQuery,
+  resetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+} = useCrud({
+  listApi: listJob,
+  deleteApi: delJob,
+  title: "定时任务",
+  defaultParams: {
     name: undefined,
     enabled: undefined,
   },
-  // 间隔类型
-  intervalList: [
-    {id: 'days', name: '天'},
-    {id: 'hours', name: '小时'},
-    {id: 'minutes', name: '分钟'},
-    {id: 'seconds', name: '秒'},
-    {id: 'microseconds', name: '微秒'},
-  ]
 });
 
-/** 查询定时任务列表 */
-const handleQuery = () => {
-  state.loading = true;
-  listJob(state.queryParams).then((response) => {
-        state.tableData = response.data.data;
-        state.total = response.data.total;
-        state.loading = false;
-      }
-  );
-};
-/** 重置按钮操作 */
-const resetQuery = () => {
-  state.queryParams.name = undefined;
-  state.queryParams.enabled = undefined;
-  handleQuery();
-};
+const state = reactive({
+  loading,
+  total,
+  tableData,
+  multiple,
+  title: "",
+  open: false,
+  modelForm: {},
+  enabledOptions: [
+    { dictValue: false, dictLabel: "停止" },
+    { dictValue: true, dictLabel: "开启" },
+  ],
+  queryParams,
+  intervalList: [
+    { id: "days", name: "天" },
+    { id: "hours", name: "小时" },
+    { id: "minutes", name: "分钟" },
+    { id: "seconds", name: "秒" },
+    { id: "microseconds", name: "微秒" },
+  ],
+});
 
 // 打开新增定时任务弹窗
 const onOpenAddModule = () => {
   state.title = "添加定时任务";
   editModuleRef.value.openDialog({});
 };
+
 // 打开编辑定时任务弹窗
 const onOpenEditModule = (row: object) => {
   state.title = "修改定时任务";
   editModuleRef.value.openDialog(row);
 };
+
 // 打开日志弹窗
 const onOpenCronLogs = (row: object) => {
   state.title = "任务日志";
   cronLogsRef.value.openDialog(row);
-}
-/** 删除按钮操作 */
-const onTabelRowDel = (row: any) => {
-  const jobIds = row.id || state.ids;
-  ElMessageBox({
-    message: '是否确认删除定时任务编号为"' + jobIds + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return delJob(jobIds).then(() => {
-      handleQuery();
-      ElMessage.success("删除成功");
-    });
-  });
 };
 
-// 多选框选中数据
-const handleSelectionChange = (selection: any) => {
-  state.ids = selection.map((item: any) => item.id);
-  state.single = selection.length != 1;
-  state.multiple = !selection.length;
-};
-
-//分页页面大小发生变化
-const handleSizeChange = (val: any) => {
-  state.queryParams.pageSize = val;
-  handleQuery();
-};
-//当前页码发生变化
-const handleCurrentChange = (val: any) => {
-  state.queryParams.page = val;
-  handleQuery();
-};
+const onTabelRowDel = handleDelete;
 
 const handleRun = (row: any) => {
-  let text = row.enabled == true ? "停止" : "启动"
+  const targetState = !row.enabled;
+  const text = targetState ? "启动" : "停止";
   ElMessageBox({
-    message: '确认要立即' + text + '"' + row.name + '"任务吗?',
+    message: `确认要立即${text}"${row.name}"任务吗?`,
     title: "警告",
     showCancelButton: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
   })
-      .then(function () {
-        if (row.enabled == false) {
-          row.enabled = true
-        } else {
-          row.enabled = false
-        }
-        runStopJob(row.id, row.enabled).then((res: any) => {
-          handleQuery();
-        })
-      })
-      .then(() => {
-        ElMessage({
-          message: text + "执行成功",
-          type: 'success',
-        });
-      });
+    .then(() => runStopJob(row.id, targetState))
+    .then(() => {
+      handleQuery();
+      ElMessage.success(`${text}执行成功`);
+    });
 };
+
 // 页面加载时
 onMounted(() => {
-  // 查询定时任务信息
   handleQuery();
-  proxy.mittBus.on("onEditJobModule", (res: any) => {
+  proxy.mittBus.on("onEditJobModule", () => {
     handleQuery();
   });
 });
+
 // 页面卸载时
 onUnmounted(() => {
   proxy.mittBus.off("onEditJobModule");

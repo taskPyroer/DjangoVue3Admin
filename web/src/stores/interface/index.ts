@@ -78,9 +78,4 @@ declare module 'storeInterface' {
     export interface UserInfosState {
         userInfos: any;
     }
-
-    // 后端返回原始路由(未处理时)
-    export interface RequestOldRoutesState {
-        requestOldRoutes: Array<string>;
-    }
 }

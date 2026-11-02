@@ -323,13 +323,15 @@ const handleSelectionChange = (selection: any) => {
 };
 
 // 关闭弹窗
-const closeDialog = (row?: object) => {
-  proxy.mittBus.emit("onEditNoticeModule", row);
+const closeDialog = (needRefresh: boolean = false) => {
+  if (needRefresh) {
+    proxy.mittBus.emit("onEditNoticeModule", state.ruleForm);
+  }
   state.isShowDialog = false;
 };
 // 取消
 const onCancel = () => {
-  closeDialog();
+  closeDialog(false);
 };
 
 // 保存
@@ -351,7 +353,9 @@ const onSubmit = () => {
         addNotice(state.ruleForm).then(() => {
           ElMessage.success("新增成功");
           state.loading = false;
-          closeDialog(state.ruleForm); // 关闭弹窗
+          closeDialog(true); // 关闭弹窗并刷新
+        }).catch(() => {
+          state.loading = false;
         });
       }
     }

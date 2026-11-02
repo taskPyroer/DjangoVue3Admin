@@ -15,11 +15,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="layoutIfameView">
 import {
-  defineComponent,
-  reactive,
-  toRefs,
+  ref,
   onMounted,
   nextTick,
   watch,
@@ -28,55 +26,47 @@ import {
 import { useRoute } from "vue-router";
 import { useThemeConfigStateStore } from "@/stores/themeConfig";
 import { useTagsViewRoutesStore } from "@/stores/tagsViewRoutes";
-export default defineComponent({
-  name: "layoutIfameView",
-  setup() {
-    const route = useRoute();
-     
-    const theme = useThemeConfigStateStore();
-    const tagsViewRoutes = useTagsViewRoutesStore();
-    const state = reactive({
-      iframeLoading: true,
-      iframeUrl: "",
-    });
-    // 初始化页面加载 loading
-    const initIframeLoad = () => {
-      state.iframeUrl = route.meta.isLink;
-      nextTick(() => {
-        state.iframeLoading = true;
-        const iframe = document.getElementById("iframe");
-        if (!iframe) return false;
-        iframe.onload = () => {
-          state.iframeLoading = false;
-        };
-      });
+
+const route = useRoute();
+const theme = useThemeConfigStateStore();
+const tagsViewRoutes = useTagsViewRoutesStore();
+
+const iframeLoading = ref(true);
+const iframeUrl = ref<any>("");
+
+// 初始化页面加载 loading
+const initIframeLoad = () => {
+  iframeUrl.value = route.meta.isLink;
+  nextTick(() => {
+    iframeLoading.value = true;
+    const iframe = document.getElementById("iframe");
+    if (!iframe) return false;
+    iframe.onload = () => {
+      iframeLoading.value = false;
     };
-    // 设置 iframe 的高度
-    const setIframeHeight = computed(() => {
-      let { isTagsview } = theme.themeConfig;
-      let { isTagsViewCurrenFull } = tagsViewRoutes;
-      if (isTagsViewCurrenFull) {
-        return `1px`;
-      } else {
-        if (isTagsview) return `85px`;
-        else return `51px`;
-      }
-    });
-    // 页面加载时
-    onMounted(() => {
-      initIframeLoad();
-    });
-    // 监听路由变化，多个 iframe 时使用
-    watch(
-      () => route.path,
-      () => {
-        initIframeLoad();
-      }
-    );
-    return {
-      setIframeHeight,
-      ...toRefs(state),
-    };
-  },
+  });
+};
+
+// 设置 iframe 的高度
+const setIframeHeight = computed(() => {
+  let { isTagsview } = theme.themeConfig;
+  let { isTagsViewCurrenFull } = tagsViewRoutes;
+  if (isTagsViewCurrenFull) {
+    return `1px`;
+  } else {
+    return isTagsview ? `85px` : `51px`;
+  }
 });
+
+onMounted(() => {
+  initIframeLoad();
+});
+
+// 监听路由变化，多个 iframe 时使用
+watch(
+  () => route.path,
+  () => {
+    initIframeLoad();
+  }
+);
 </script>

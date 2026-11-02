@@ -1,7 +1,6 @@
 # Create your views here.
+import collections
 import os
-import subprocess
-import platform
 from app_operation_log.filters import OperationLogTimeFilter
 from app_operation_log.models import OperationLog
 from app_operation_log.serializers import OperationLogSerializer
@@ -28,37 +27,37 @@ class OperationLogViewSet(CustomModelViewSet):
 
     def get_read_logs(self, request):
         """
-        获取日志
+        获取日志（纯Python逆序安全读取，杜绝命令注入）
         """
         type_log = request.GET.get('type_log', 'server')
         num_lines = request.GET.get('num_lines')
         keyword = request.GET.get('keyword')
 
-        if type_log == 'server':
-            log_file = os.path.join(BASE_DIR, 'logs', 'server.log')
-        elif type_log == 'error':
+        if type_log == 'error':
             log_file = os.path.join(BASE_DIR, 'logs', 'error.log')
         else:
-            # 默认读取 server.log
             log_file = os.path.join(BASE_DIR, 'logs', 'server.log')
-        # 构建命令
-        plat = platform.system().lower()
-        if plat == 'windows':
-            command = f'powershell -Command "Get-Content'
-            if num_lines:
-                command += f' -Tail {num_lines}'
-        else:
-            command = f'cat {log_file}'
-            if num_lines:
-                command += f' | tail -n {num_lines}'
-        command += f' {log_file}"'
 
-        # 执行命令
-        p = subprocess.run(command, capture_output=True, text=True, shell=True, check=True)
-        content = p.stdout
-        # 如果提供了关键词，则进行搜索过滤
-        if keyword:
-            filtered_content = filter(lambda line: keyword in line, content.split('\n'))
-            content = '\n'.join(filtered_content)
+        if not os.path.exists(log_file):
+            return DetailResponse(data="")
+
+        try:
+            limit = int(num_lines) if num_lines and str(num_lines).isdigit() else None
+        except (ValueError, TypeError):
+            limit = None
+
+        try:
+            with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:
+                if limit and limit > 0:
+                    lines = list(collections.deque(f, maxlen=limit))
+                else:
+                    lines = f.readlines()
+
+            if keyword:
+                lines = [line for line in lines if keyword in line]
+
+            content = ''.join(lines)
+        except Exception as e:
+            content = f"读取日志失败: {str(e)}"
 
         return DetailResponse(data=content)

@@ -5,56 +5,50 @@
 	<Columns v-else-if="getThemeConfig.layout === 'columns'" />
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="layout">
 import { computed, onBeforeMount, onUnmounted, getCurrentInstance } from 'vue';
-import {useThemeConfigStateStore} from '@/stores/themeConfig'
+import { useThemeConfigStateStore } from '@/stores/themeConfig';
 import { Local } from '@/utils/storage';
 import Defaults from '@/layout/main/defaults.vue';
 import Classic from '@/layout/main/classic.vue';
 import Transverse from '@/layout/main/transverse.vue';
 import Columns from '@/layout/main/columns.vue';
 import WebSocketService from "@/api/WebSocketService";
-export default {
-	name: 'layout',
-	components: { Defaults, Classic, Transverse, Columns },
-	setup() {
-		const { proxy } = getCurrentInstance() as any;
-        const theme = useThemeConfigStateStore();
-		// 获取布局配置信息
-		const getThemeConfig = computed(() => {
-			return theme.themeConfig;
+
+const { proxy } = getCurrentInstance() as any;
+const theme = useThemeConfigStateStore();
+
+// 获取布局配置信息
+const getThemeConfig = computed(() => theme.themeConfig);
+
+// 窗口大小改变时(适配移动端)
+const onLayoutResize = () => {
+	if (!Local.get('oldLayout')) Local.set('oldLayout', getThemeConfig.value.layout);
+	const clientWidth = document.body.clientWidth;
+	if (clientWidth < 1000) {
+		getThemeConfig.value.isCollapse = false;
+		proxy.mittBus.emit('layoutMobileResize', {
+			layout: 'defaults',
+			clientWidth,
 		});
-		// 窗口大小改变时(适配移动端)
-		const onLayoutResize = () => {
-			if (!Local.get('oldLayout')) Local.set('oldLayout', getThemeConfig.value.layout);
-			const clientWidth = document.body.clientWidth;
-			if (clientWidth < 1000) {
-				getThemeConfig.value.isCollapse = false;
-				proxy.mittBus.emit('layoutMobileResize', {
-					layout: 'defaults',
-					clientWidth,
-				});
-			} else {
-				proxy.mittBus.emit('layoutMobileResize', {
-					layout: Local.get('oldLayout') ? Local.get('oldLayout') : getThemeConfig.value.layout,
-					clientWidth,
-				});
-			}
-		};
-		// 页面加载前
-		onBeforeMount(() => {
-			onLayoutResize();
-			window.addEventListener('resize', onLayoutResize);
-      WebSocketService.initWebSocket()
+	} else {
+		proxy.mittBus.emit('layoutMobileResize', {
+			layout: Local.get('oldLayout') ? Local.get('oldLayout') : getThemeConfig.value.layout,
+			clientWidth,
 		});
-		// 页面卸载时
-		onUnmounted(() => {
-			window.removeEventListener('resize', onLayoutResize);
-      WebSocketService.closeWebsocket()
-		});
-		return {
-			getThemeConfig,
-		};
-	},
+	}
 };
+
+// 页面加载前
+onBeforeMount(() => {
+	onLayoutResize();
+	window.addEventListener('resize', onLayoutResize);
+	WebSocketService.initWebSocket();
+});
+
+// 页面卸载时
+onUnmounted(() => {
+	window.removeEventListener('resize', onLayoutResize);
+	WebSocketService.closeWebsocket();
+});
 </script>

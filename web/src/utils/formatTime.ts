@@ -156,10 +156,9 @@ export function dateFormat(fmt: string, date: Date) {
 	return fmt;
 }
 
-export function dateStrFormat(dateStr: string) {
-	if (dateStr==""){
-		return dateFormat('yyyy-MM-dd HH:mm:ss', new Date());
-	}else {
-		return dateFormat('yyyy-MM-dd HH:mm:ss', new Date(dateStr));
-	}
+export function dateStrFormat(dateStr?: string | Date | null, fmt: string = 'yyyy-MM-dd HH:mm:ss') {
+	if (!dateStr) return '';
+	const date = dateStr instanceof Date ? dateStr : new Date(dateStr);
+	if (isNaN(date.getTime())) return '';
+	return dateFormat(fmt, date);
 }

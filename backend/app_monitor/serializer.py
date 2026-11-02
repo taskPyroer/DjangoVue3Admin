@@ -1,6 +1,6 @@
 """
 Time:     2023/12/1 9:41
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     serializer
 Describe: 

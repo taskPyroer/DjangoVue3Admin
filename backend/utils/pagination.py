@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from django.core import paginator
 from django.core.paginator import Paginator as DjangoPaginator
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, _positive_int
 from rest_framework.response import Response
 from django.core.paginator import InvalidPage
 
@@ -14,9 +14,21 @@ class CustomPagination(PageNumberPagination):
     max_page_size = 999
     django_paginator_class = DjangoPaginator
 
+    def get_page_size(self, request):
+        """
+        同时兼容 pageSize 与 limit 参数
+        """
+        val = request.query_params.get(self.page_size_query_param) or request.query_params.get('limit')
+        if val is not None:
+            try:
+                return _positive_int(val, strict=True, cutoff=self.max_page_size)
+            except (KeyError, ValueError):
+                pass
+        return self.page_size
+
     def paginate_queryset(self, queryset, request, view=None):
         """
-        重写paginate_queryset让分页超过正常分页:有原来的400错误无效页面。改写为返回200成功，data=[]提示
+        重写paginate_queryset让分页超过正常分页:由原来的400错误改为返回空列表
         """
         page_size = self.get_page_size(request)
         if not page_size:
@@ -25,11 +37,10 @@ class CustomPagination(PageNumberPagination):
         page_number = self.get_page_number(request, paginator)
         try:
             self.page = paginator.page(page_number)
-        except InvalidPage as exc:
+        except InvalidPage:
             self.page = []
 
         if paginator.num_pages > 1 and self.template is not None:
-            # The browsable API should display pagination controls.
             self.display_page_controls = True
 
         self.request = request
@@ -38,13 +49,14 @@ class CustomPagination(PageNumberPagination):
     def get_paginated_response(self, data):
         code = 200
         msg = 'success'
-        currentPage = int(self.get_page_number(self.request, paginator)) or 1
+        current_page = getattr(self.page, 'number', 1) if self.page else 1
         page_size = int(self.get_page_size(self.request)) or 10
-        total = self.page.paginator.count if self.page else 0
+        total = self.page.paginator.count if getattr(self.page, 'paginator', None) else 0
         res = {
-            "page": currentPage,
+            "page": current_page,
             "total": total,
             "pageSize": page_size,
+            "limit": page_size,
             "data": data
         }
         if not data:

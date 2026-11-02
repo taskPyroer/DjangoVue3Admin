@@ -61,10 +61,10 @@ class MessageCenterViewSet(CustomModelViewSet):
         获取最新的一条消息
         """
         self_user_id = self.request.user.id
-        queryset = MessageCenterTargetUser.objects.filter(users__id=self_user_id).order_by('create_datetime').last()
+        queryset = MessageCenterTargetUser.objects.filter(users__id=self_user_id).order_by('-create_datetime').first()
         data = None
         if queryset:
-            serializer = MessageCenterTargetUserListSerializer(queryset.messagecenter, many=False, request=request)
+            serializer = MessageCenterTargetUserListSerializer(queryset.messagecenter, many=False, context={'request': request})
             data = serializer.data
         return DetailResponse(data=data, msg="获取成功")
 
@@ -76,14 +76,14 @@ class MessageCenterViewSet(CustomModelViewSet):
         title = request.query_params.get('search')  # 从 URL 参数中获取 search
 
         self_user_id = self.request.user.id
-        queryset = MessageCenter.objects.filter(target_user__id=self_user_id)
+        queryset = MessageCenter.objects.filter(target_user__id=self_user_id).order_by('-create_datetime')
         if target_type is not None:
             queryset = queryset.filter(target_type=target_type)
         if title is not None:
             queryset = queryset.filter(title__icontains=title)
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = MessageCenterTargetUserListSerializer(page, many=True, request=request)
+            serializer = MessageCenterTargetUserListSerializer(page, many=True, context={'request': request})
             return self.get_paginated_response(serializer.data)
-        serializer = MessageCenterTargetUserListSerializer(queryset, many=True, request=request)
+        serializer = MessageCenterTargetUserListSerializer(queryset, many=True, context={'request': request})
         return SuccessResponse(data=serializer.data, msg="获取成功")

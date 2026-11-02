@@ -284,155 +284,144 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="editMenu">
 import { reactive, toRefs, ref, unref, getCurrentInstance } from "vue";
 import IconSelector from "@/components/iconSelector/index.vue";
 import { treeselect, updateMenu, addMenu } from "@/api/system/menu";
 import { ElMessage } from "element-plus";
 
-export default {
-  name: "editMenu",
-  components: { IconSelector },
-  props: {
-    // 弹窗标题
-    title: {
-      type: String,
-      default: () => "",
-    },
+defineProps({
+  title: {
+    type: String,
+    default: () => "",
   },
-  setup() {
-    const { proxy } = getCurrentInstance() as any;
-    const ruleFormRef = ref<HTMLElement | null>(null);
-    const state = reactive({
-      // 是否显示弹出层
-      isShowDialog: false,
-      loading: false,
-      /**
-       * 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式（请注意参数类型！）
-       * 受到 `element plus` 类型 `string/number/object` 影响，不可使用 `:value="true"`
-       * 的写法，所以传值到后台时，需要转换成布尔值，否则页面可能出现玄学。
-       * 路由权限标识为数组格式，基本都需要自行转换类型
-       */
-      ruleForm: {
-        id: 0, // 菜单ID
-        menu_name: "", // 菜单名称
-        menu_type: "",
-        parent: undefined, // 父菜单ID
-        component: "", // 组件地址
-        path: "",
-        sort: 1, // 菜单排序
-        status: "", //菜单状态
-        title: "", // 菜单名称
-        icon: "", // 菜单图标
-        is_hide: "", // 是否隐藏
-        is_keep_alive: "", // 是否缓存
-        is_affix: "", // 是否固定
-        is_link: "", // 是否外链，开启外链条件，`1、isLink:true 2、链接地址不为空`
-        is_iframe: "", // 是否内嵌，开启条件，`1、isIframe:true 2、链接地址不为空`
-        permission: "", // 路由权限标识（多个请用逗号隔开），最后转成数组格式
-        remark: "", // 备注
-      },
-      // 显示状态数据字典
-      isHideOptions: [],
-      // 菜单状态数据字典
-      statusOptions: [],
-      // 菜单类型数据字典
-      menuTypeOptions: [],
-      // 数字是否数据字典
-      yesOrNoOptions: [],
-      // 菜单树选项
-      menuOptions: [],
-      // 表单校验
-      ruleRules: {
-        menu_name: [{ required: true, message: "菜单名称不能为空", trigger: "blur" }],
-        parent: [{ required: true, message: "父菜单不能为空", trigger: "blur" }],
-        menu_type: [{ required: true, message: "菜单类型不能为空", trigger: "blur" }],
-        status: [{ required: true, message: "菜单状态不能为空", trigger: "blur" }],
-        sort: [{ required: true, message: "菜单顺序不能为空", trigger: "blur" }],
-      },
-    });
-    const clear = () =>{
-      console.log(state.ruleForm.is_link)
-    }
-    // 打开弹窗
-    const openDialog = (row: any) => {
-      state.ruleForm = JSON.parse(JSON.stringify(row));
+});
 
-      state.isShowDialog = true;
-      state.loading = false;
-      // 查询显示状态数据字典
-      proxy.getDicts("sys_show_hide").then((response: any) => {
-        state.isHideOptions = response.data.data;
-      });
-      // 查询菜单状态数据字典
-      proxy.getDicts("sys_yes_no").then((response: any) => {
-        state.statusOptions = response.data.data;
-      });
-      // 查询菜单类型数据字典
-      proxy.getDicts("sys_menu_type").then((response: any) => {
-        state.menuTypeOptions = response.data.data;
-      });
-      // 查询数字是否数据字典
-      proxy.getDicts("sys_num_yes_no").then((response: any) => {
-        state.yesOrNoOptions = response.data.data;
-      });
-      // 查询菜单下拉树结构
-      treeselect().then((response: any) => {
-        state.menuOptions = [];
-        const menu = { id: undefined, menu_name: "主类目", children: [] };
-        menu.children = response.data.data;
-        state.menuOptions.push(menu);
-      });
-    };
-    // 关闭弹窗
-    const closeDialog = (row?: object) => {
-      proxy.mittBus.emit("onEditMenuModule", row);
-      state.isShowDialog = false;
-    };
-    // 取消
-    const onCancel = () => {
-      closeDialog();
-    };
-    // 保存
-    const onSubmit = () => {
-      const formWrap = unref(ruleFormRef) as any;
-      if (!formWrap) return;
-      formWrap.validate((valid: boolean) => {
-        if (valid) {
-          if (state.ruleForm.component == "") {
-            if (state.ruleForm.menu_type == "F") {
-              state.ruleForm.component = "";
-            } else {
-              state.ruleForm.component = "Layout";
-            }
-          }
-          state.loading = true;
-          if (state.ruleForm.id != undefined && state.ruleForm.id != 0) {
-            updateMenu(state.ruleForm).then((response) => {
-              ElMessage.success("修改成功");
-              state.loading = false;
-              closeDialog(); // 关闭弹窗
-            });
-          } else {
-            addMenu(state.ruleForm).then((response) => {
-              ElMessage.success("新增成功");
-              state.loading = false;
-              closeDialog(); // 关闭弹窗
-            });
-          }
-        }
-      });
-    };
-
-    return {
-      ruleFormRef,
-      clear,
-      openDialog,
-      closeDialog,
-      onCancel,
-      onSubmit,
-      ...toRefs(state),
-    };
+const { proxy } = getCurrentInstance() as any;
+const ruleFormRef = ref<HTMLElement | null>(null);
+const state = reactive({
+  isShowDialog: false,
+  loading: false,
+  ruleForm: {
+    id: 0,
+    menu_name: "",
+    menu_type: "",
+    parent: undefined as any,
+    component: "",
+    path: "",
+    sort: 1,
+    status: "",
+    title: "",
+    icon: "",
+    is_hide: "",
+    is_keep_alive: "",
+    is_affix: "",
+    is_link: "",
+    is_iframe: "",
+    permission: "",
+    remark: "",
   },
+  isHideOptions: [] as any[],
+  statusOptions: [] as any[],
+  menuTypeOptions: [] as any[],
+  yesOrNoOptions: [] as any[],
+  menuOptions: [] as any[],
+  ruleRules: {
+    menu_name: [{ required: true, message: "菜单名称不能为空", trigger: "blur" }],
+    parent: [{ required: true, message: "父菜单不能为空", trigger: "blur" }],
+    menu_type: [{ required: true, message: "菜单类型不能为空", trigger: "blur" }],
+    status: [{ required: true, message: "菜单状态不能为空", trigger: "blur" }],
+    sort: [{ required: true, message: "菜单顺序不能为空", trigger: "blur" }],
+  },
+});
+
+const {
+  isShowDialog,
+  loading,
+  ruleForm,
+  isHideOptions,
+  statusOptions,
+  menuTypeOptions,
+  yesOrNoOptions,
+  menuOptions,
+  ruleRules,
+} = toRefs(state);
+
+// 打开弹窗
+const openDialog = (row: any) => {
+  state.ruleForm = JSON.parse(JSON.stringify(row));
+  state.isShowDialog = true;
+  state.loading = false;
+  // 查询显示状态数据字典
+  proxy.getDicts("sys_show_hide").then((response: any) => {
+    state.isHideOptions = response.data.data;
+  });
+  // 查询菜单状态数据字典
+  proxy.getDicts("sys_yes_no").then((response: any) => {
+    state.statusOptions = response.data.data;
+  });
+  // 查询菜单类型数据字典
+  proxy.getDicts("sys_menu_type").then((response: any) => {
+    state.menuTypeOptions = response.data.data;
+  });
+  // 查询数字是否数据字典
+  proxy.getDicts("sys_num_yes_no").then((response: any) => {
+    state.yesOrNoOptions = response.data.data;
+  });
+  // 查询菜单下拉树结构
+  treeselect().then((response: any) => {
+    state.menuOptions = [];
+    const menu = { id: undefined, menu_name: "主类目", children: [] };
+    menu.children = response.data.data;
+    state.menuOptions.push(menu);
+  });
 };
+
+// 关闭弹窗
+const closeDialog = (needRefresh: boolean = false) => {
+  if (needRefresh) {
+    proxy.mittBus.emit("onEditMenuModule", state.ruleForm);
+  }
+  state.isShowDialog = false;
+};
+
+// 取消
+const onCancel = () => {
+  closeDialog(false);
+};
+
+// 保存
+const onSubmit = () => {
+  const formWrap = unref(ruleFormRef) as any;
+  if (!formWrap) return;
+  formWrap.validate((valid: boolean) => {
+    if (valid) {
+      if (state.ruleForm.component == "") {
+        if (state.ruleForm.menu_type == "F") {
+          state.ruleForm.component = "";
+        } else {
+          state.ruleForm.component = "Layout";
+        }
+      }
+      state.loading = true;
+      if (state.ruleForm.id != undefined && state.ruleForm.id != 0) {
+        updateMenu(state.ruleForm).then(() => {
+          ElMessage.success("修改成功");
+          state.loading = false;
+          closeDialog(true);
+        }).catch(() => { state.loading = false; });
+      } else {
+        addMenu(state.ruleForm).then(() => {
+          ElMessage.success("新增成功");
+          state.loading = false;
+          closeDialog(true);
+        }).catch(() => { state.loading = false; });
+      }
+    }
+  });
+};
+
+defineExpose({
+  openDialog,
+});
 </script>

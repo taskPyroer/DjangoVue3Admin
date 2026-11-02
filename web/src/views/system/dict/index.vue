@@ -275,13 +275,13 @@ const editDictItem = (record: any) => {
 onMounted(() => {
   // 查询字典信息
   handleQuery();
-  proxy.mittBus.on("onEditPostModule", () => {
+  proxy.mittBus.on("onEditDictTypeModule", () => {
     handleQuery();
   });
 });
 // 页面卸载时
 onUnmounted(() => {
-  proxy.mittBus.off("onEditPostModule");
+  proxy.mittBus.off("onEditDictTypeModule");
 });
 
 </script>

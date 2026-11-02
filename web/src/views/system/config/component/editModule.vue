@@ -104,13 +104,15 @@ const openDialog = (row: any) => {
 };
 
 // 关闭弹窗
-const closeDialog = (row?: object) => {
-  proxy.mittBus.emit("onEditPostModule", row);
+const closeDialog = (needRefresh: boolean = false) => {
+  if (needRefresh) {
+    proxy.mittBus.emit("onEditConfigModule", state.ruleForm);
+  }
   state.isShowDialog = false;
 };
 // 取消
 const onCancel = () => {
-  closeDialog();
+  closeDialog(false);
 };
 
 // 保存
@@ -121,17 +123,17 @@ const onSubmit = () => {
     if (valid) {
       state.loading = true;
       if (state.ruleForm.configId != undefined && state.ruleForm.configId != 0) {
-        updateConfig(state.ruleForm).then((response) => {
+        updateConfig(state.ruleForm).then(() => {
           ElMessage.success("修改成功");
           state.loading = false;
-          closeDialog(state.ruleForm); // 关闭弹窗
-        });
+          closeDialog(true); // 成功关闭并刷新
+        }).catch(() => { state.loading = false; });
       } else {
-        addConfig(state.ruleForm).then((response) => {
+        addConfig(state.ruleForm).then(() => {
           ElMessage.success("新增成功");
           state.loading = false;
-          closeDialog(state.ruleForm); // 关闭弹窗
-        });
+          closeDialog(true); // 成功关闭并刷新
+        }).catch(() => { state.loading = false; });
       }
     }
   });

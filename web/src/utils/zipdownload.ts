@@ -25,7 +25,7 @@ export function downLoadFile(str: string) {
     aLink.href = url
     document.body.appendChild(aLink)
     aLink.click()
-    document.body.appendChild(aLink)
+    document.body.removeChild(aLink)
 }
 /**
  * 解析blob响应内容并下载

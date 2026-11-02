@@ -5,7 +5,7 @@
 				<SvgIcon :name="val.meta.icon"/>
 				<span>{{ $t(val.meta.title) }}</span>
 			</template>
-			<sub-item :chil="val.children" />
+			<subItem :chil="val.children" />
 		</el-sub-menu>
 		<el-menu-item :index="val.path" :key="val.path" v-else>
 			<template v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
@@ -22,24 +22,18 @@
 	</template>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-export default defineComponent({
-	name: 'navMenuSubItem',
-	props: {
-		chil: {
-			type: Array,
-			default: () => [],
-		},
-	},
-	setup(props) {
-		// 获取父级菜单数据
-		const chils = computed(() => {
-			return props.chil;
-		});
-		return {
-			chils,
-		};
-	},
-});
+<script setup lang="ts" name="navMenuSubItem">
+import { computed } from 'vue';
+
+const props = withDefaults(
+	defineProps<{
+		chil?: any[];
+	}>(),
+	{
+		chil: () => [],
+	}
+);
+
+// 获取父级菜单数据
+const chils = computed(() => props.chil);
 </script>

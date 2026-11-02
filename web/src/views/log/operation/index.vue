@@ -209,50 +209,36 @@
 </template>
 
 <script lang="ts" setup name="Operlog">
-import {reactive, onMounted, toRefs, ref, getCurrentInstance} from "vue";
+import { reactive, onMounted, getCurrentInstance } from "vue";
 import {
   listOperInfo,
   delOperInfo,
   cleanOpernfo,
 } from "@/api/log/oper";
-import {ElMessageBox, ElMessage} from "element-plus";
-import {dateStrFormat} from "@/utils/formatTime";
+import { ElMessageBox, ElMessage } from "element-plus";
+import { dateStrFormat } from "@/utils/formatTime";
 import SvgIcon from "@/components/svgIcon/index.vue";
+import { useCrud } from "@/hooks/useCrud";
 
-const {proxy} = getCurrentInstance() as any;
-const ruleFormRef = ref<HTMLElement | null>(null);
-const state = reactive({
-  // 遮罩层
-  loading: true,
-  // 总条数
-  total: 0,
-  // 列表表格数据
-  tableData: [],
-  // 选中数组
-  ids: [],
-  // 非单个禁用
-  single: true,
-  // 非多个禁用
-  multiple: true,
-  // 弹出层标题
-  title: "",
-  // 是否显示弹出层
-  open: false,
-  //隐藏过长的搜索条件
-  showOtherSearch:false,
-  // 表单参数
-  modelForm: {},
-  // 类型数据字典
-  methodOptions: {},
-  // 时间选择
-  expire_time: [],
-  // 查询参数
-  queryParams: {
-    // 页码
-    page: 1,
-    // 每页大小
-    pageSize: 10,
-    // 以下为参数
+const { proxy } = getCurrentInstance() as any;
+
+const {
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  handleQuery,
+  resetQuery: crudResetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+} = useCrud({
+  listApi: listOperInfo,
+  deleteApi: delOperInfo,
+  title: "操作日志",
+  defaultParams: {
     start_time: undefined,
     end_time: undefined,
     search: undefined,
@@ -264,29 +250,34 @@ const state = reactive({
   },
 });
 
-/** 查询定时任务列表 */
-const handleQuery = () => {
-  state.loading = true;
-  listOperInfo(state.queryParams).then(
-      (response) => {
-        state.tableData = response.data.data;
-        state.total = response.data.total;
-        state.loading = false;
-      }
-  );
-};
+const state = reactive({
+  loading,
+  total,
+  tableData,
+  multiple,
+  title: "",
+  open: false,
+  showOtherSearch: false,
+  modelForm: {} as any,
+  methodOptions: {},
+  expire_time: [],
+  queryParams,
+});
 
 /** 重置按钮操作 */
 const resetQuery = () => {
-  state.queryParams.search = undefined;
-  state.queryParams.request_modular = undefined;
-  state.queryParams.request_path = undefined;
-  state.queryParams.request_ip = undefined;
-  state.queryParams.request_method = undefined;
   state.expire_time = [];
-  state.queryParams.start_time = undefined;
-  state.queryParams.end_time = undefined;
-  handleQuery();
+  crudResetQuery(() => {
+    state.queryParams.start_time = undefined;
+    state.queryParams.end_time = undefined;
+    state.queryParams.search = undefined;
+    state.queryParams.request_modular = undefined;
+    state.queryParams.request_path = undefined;
+    state.queryParams.request_ip = undefined;
+    state.queryParams.request_method = undefined;
+    state.queryParams.page = 1;
+    state.queryParams.pageSize = 10;
+  });
 };
 
 /** 清空按钮操作 */
@@ -299,32 +290,14 @@ const handleClean = () => {
     cancelButtonText: "取消",
     type: "warning",
   })
-      .then(function () {
-        return cleanOpernfo();
-      })
-      .then(() => {
-        handleQuery();
-        ElMessage.success("清空成功");
-      });
+    .then(() => cleanOpernfo())
+    .then(() => {
+      handleQuery();
+      ElMessage.success("清空成功");
+    });
 };
 
-/** 删除按钮操作 */
-const onTabelRowDel = (row: any) => {
-  const operIds = row.id || state.ids;
-  ElMessageBox({
-    message: '是否确认删除日志编号为"' + operIds + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return delOperInfo(operIds).then(() => {
-      handleQuery();
-      ElMessage.success("删除成功");
-    });
-  });
-};
+const onTabelRowDel = handleDelete;
 
 /** 详细按钮操作 */
 const handleView = (row: any) => {
@@ -334,48 +307,27 @@ const handleView = (row: any) => {
 
 /** 点击查看更多或收起 */
 const clickMore = () => {
-  state.showOtherSearch = !state.showOtherSearch
-  window.dispatchEvent(new Event('resize'))
-}
-
-/** 分页页面大小发生变化 */
-const handleSizeChange = (val: any) => {
-  state.queryParams.pageSize = val;
-  handleQuery();
-};
-
-/** 当前页码发生变化 */
-const handleCurrentChange = (val: any) => {
-  state.queryParams.page = val;
-  handleQuery();
-};
-
-/** 多选框选中数据 */
-const handleSelectionChange = (selection: any) => {
-  state.ids = selection.map((item: any) => item.id);
-  state.single = selection.length != 1;
-  state.multiple = !selection.length;
+  state.showOtherSearch = !state.showOtherSearch;
+  window.dispatchEvent(new Event("resize"));
 };
 
 /** 时间范围处理 */
 const handleDateChange = () => {
-  const expire_time = state.expire_time
+  const expire_time = state.expire_time;
   if (expire_time && expire_time.length === 2) {
-    state.queryParams.start_time = dateStrFormat(expire_time[0])
-    state.queryParams.end_time = dateStrFormat(expire_time[1])
+    state.queryParams.start_time = dateStrFormat(expire_time[0]);
+    state.queryParams.end_time = dateStrFormat(expire_time[1]);
   } else {
-    state.queryParams.start_time = undefined
-    state.queryParams.end_time = undefined
+    state.queryParams.start_time = undefined;
+    state.queryParams.end_time = undefined;
   }
-}
+};
 
 /** 页面加载时调用 */
 onMounted(() => {
-  // 查询列表数据信息
   handleQuery();
-  // 查询配置参数状态数据配置参数
   proxy.getDicts("sys_method_api").then((response: any) => {
-    state.methodOptions = response.data.data;
+    state.methodOptions = response?.data?.data || [];
   });
 });
 </script>

@@ -1,11 +1,12 @@
 """
 Time:     2023/11/21 15:28
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     celery_periodic_task
 Describe: 
 """
 import json
+import importlib
 
 from django.db import transaction
 from django_celery_beat.models import PeriodicTask, CrontabSchedule, cronexp, PeriodicTasks, IntervalSchedule
@@ -57,17 +58,14 @@ def get_task_list():
     task_dict_list = []
     for app in settings.INSTALLED_APPS:
         try:
-            exec(f"""
-from {app} import tasks
-for t in [i for i in dir(tasks) if i.startswith('cron_job_')]:
-    task_dict = dict()
-    task_dict['label'] = '{app}.tasks.' + t
-    task_dict['value'] = '{app}.tasks.' + t
-    task_list.append('{app}.tasks.' + t)
-    task_dict_list.append(task_dict)
-                """)
-        except ImportError:
-            pass
+            tasks_mod = importlib.import_module(f"{app}.tasks")
+            for t in dir(tasks_mod):
+                if t.startswith('cron_job_'):
+                    full_name = f"{app}.tasks.{t}"
+                    task_list.append(full_name)
+                    task_dict_list.append({'label': full_name, 'value': full_name})
+        except (ImportError, AttributeError):
+            continue
     return {'task_list': task_list, 'task_dict_list': task_dict_list}
 
 

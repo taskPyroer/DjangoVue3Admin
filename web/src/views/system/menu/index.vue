@@ -300,7 +300,7 @@ onMounted(() => {
 });
 // 页面卸载时
 onUnmounted(() => {
-  proxy.mittBus.off("onEditDeptModule");
+  proxy.mittBus.off("onEditMenuModule");
 });
 </script>
 

@@ -1,6 +1,6 @@
 """
 Time:     2023/12/3 14:16
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     middleware
 Describe: Request工具类
@@ -33,28 +33,17 @@ def get_request_user(request):
 
 def get_request_ip(request):
     """
-    获取请求IP
+    获取请求真实IP（优先获取X-Forwarded-For首个客户端IP）
     :param request:
     :return:
     """
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')
     if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[-1].strip()
-        return ip
+        ip = x_forwarded_for.split(',')[0].strip()
+        if ip:
+            return ip
     ip = request.META.get('REMOTE_ADDR', '') or getattr(request, 'request_ip', None)
     return ip or 'unknown'
-
-    # ip = getattr(request, 'request_ip', None)
-    # if ip:
-    #     return ip
-    # ip = request.META.get('REMOTE_ADDR', '')
-    # if not ip:
-    #     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')
-    #     if x_forwarded_for:
-    #         ip = x_forwarded_for.split(',')[-1].strip()
-    #     else:
-    #         ip = 'unknown'
-    # return ip
 
 
 def get_request_data(request):
@@ -108,19 +97,17 @@ def get_request_path(request, *args, **kwargs):
     return path
 
 
-def get_request_canonical_path(request, ):
+def get_request_canonical_path(request):
     """
-    获取请求路径
-    :param request:
-    :param args:
-    :param kwargs:
-    :return:
+    获取请求规范路径
     """
     request_path = getattr(request, 'request_canonical_path', None)
     if request_path:
         return request_path
     path: str = request.path
-    resolver_match: ResolverMatch = request.resolver_match
+    resolver_match: ResolverMatch = getattr(request, 'resolver_match', None)
+    if not resolver_match:
+        return path
     for value in resolver_match.args:
         path = path.replace(f"/{value}", "/{id}")
     for key, value in resolver_match.kwargs.items():
@@ -191,20 +178,3 @@ def get_verbose_name(queryset=None, view=None, model=None):
     except Exception as e:
         pass
     return model if model else ""
-
-
-def save_login_log(request):
-    """
-    保存登录日志
-    :return:
-    """
-    ip = get_request_ip(request=request)
-    analysis_data = {}
-    analysis_data['username'] = str(request.user.username)
-    analysis_data['ip'] = ip
-    analysis_data['agent'] = str(parse(request.META['HTTP_USER_AGENT']))
-    analysis_data['browser'] = get_browser(request)
-    analysis_data['os'] = get_os(request)
-    analysis_data['creator_id'] = request.user.id
-    analysis_data['dept_belong_id'] = getattr(request.user, 'dept_id', '')
-    # LoginLog.objects.create(**analysis_data)

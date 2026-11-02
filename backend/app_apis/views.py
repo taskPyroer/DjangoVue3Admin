@@ -1,6 +1,6 @@
 """
 Time:     2023/8/22 10:40
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     urls
 Describe:
@@ -27,30 +27,38 @@ class ApisViewSet(CustomModelViewSet):
         """
         unique_api_groups = cache.get('api_group')
         if unique_api_groups is None:
-            # 查询数据库或其他操作获取数据
-            unique_api_groups = APIS.objects.order_by('api_group').values('api_group').distinct()
-            # 将获取的数据缓存起来，并设置缓存过期时间为1天
+            unique_api_groups = list(APIS.objects.order_by('api_group').values('api_group').distinct())
             cache.set('api_group', unique_api_groups, 1 * 24 * 60 * 60)
 
         return DetailResponse(data={
             'api_groups': unique_api_groups,
         }, msg="获取成功")
 
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        cache.delete('api_group')
+
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        cache.delete('api_group')
+
     @transaction.atomic
     def update(self, request, *args, **kwargs):
-        # 获取当前对象
         from casbin_adapter.models import CasbinRule
 
         instance = self.get_object()
-        old_v1 = instance.path  # 获取旧的值
-        serializer = self.get_serializer(instance, data=request.data)
+        old_v1 = instance.path  # 获取旧的路径
+        old_v2 = instance.method
+        serializer = self.get_serializer(instance, data=request.data, partial=kwargs.get('partial', False))
         serializer.is_valid(raise_exception=True)
 
-        # 更新符合条件的数据
-        updated_fields = {'v1': request.data['path'], 'v2': request.data['method']}
+        new_path = serializer.validated_data.get('path', old_v1)
+        new_method = serializer.validated_data.get('method', old_v2)
 
-        CasbinRule.objects.filter(v1=old_v1).update(**updated_fields)
+        # 同步更新 Casbin 策略中的路由与请求方式
+        CasbinRule.objects.filter(v1=old_v1, v2=old_v2).update(v1=new_path, v2=new_method)
 
         self.perform_update(serializer)
+        cache.delete('api_group')
 
-        return DetailResponse(data=[], msg="更新成功")
+        return DetailResponse(data=serializer.data, msg="更新成功")

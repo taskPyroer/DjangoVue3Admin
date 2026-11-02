@@ -18,41 +18,34 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { reactive, toRefs,onMounted, } from 'vue';
-import {listReceiveNotice} from "@/api/system/notice";
-import {useRouter} from "vue-router";
-export default {
-	name: 'layoutBreadcrumbUserNews',
-	setup() {
-		const router = useRouter();
-		const state = reactive({
-			newsList: [],
-		});
-		const handleQuery = () => {
-      listReceiveNotice({pageNum: 1,pageSize: 3}).then((response) => {
-						state.newsList = response.data.data;
-					}
-			);
-		};
-		// 全部已读点击
-		const onAllReadClick = () => {
-			state.newsList = [];
-		};
-		// 前往通知中心点击
-		const onGoToGiteeClick = () => {
-			router.push("/system/message-center")
-		};
-		onMounted(() => {
-			handleQuery()
-		})
-		return {
-			onAllReadClick,
-			onGoToGiteeClick,
-			...toRefs(state),
-		};
-	},
+<script setup lang="ts" name="layoutBreadcrumbUserNews">
+import { ref, onMounted } from 'vue';
+import { listReceiveNotice } from "@/api/system/notice";
+import { useRouter } from "vue-router";
+import { dateStrFormat } from "@/utils/formatTime";
+
+const router = useRouter();
+const newsList = ref<any[]>([]);
+
+const handleQuery = () => {
+	listReceiveNotice({ pageNum: 1, pageSize: 3 }).then((response: any) => {
+		newsList.value = response.data?.data || [];
+	});
 };
+
+// 全部已读点击
+const onAllReadClick = () => {
+	newsList.value = [];
+};
+
+// 前往通知中心点击
+const onGoToGiteeClick = () => {
+	router.push("/system/message-center");
+};
+
+onMounted(() => {
+	handleQuery();
+});
 </script>
 
 <style scoped lang="scss">
@@ -106,7 +99,7 @@ export default {
 			opacity: 1;
 		}
 	}
-	::v-deep(.el-empty__description p) {
+	:deep(.el-empty__description p) {
 		font-size: 13px;
 	}
 }

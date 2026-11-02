@@ -319,13 +319,19 @@ const onSubmit = () => {
         updateUser(state.ruleForm).then(() => {
           ElMessage.success("修改成功");
           state.loading = false;
+          proxy.mittBus.emit("onEditUserModule");
           closeDialog(); // 关闭弹窗
+        }).catch(() => {
+          state.loading = false;
         });
       } else {
         addUser(state.ruleForm).then(() => {
           ElMessage.success("新增成功");
           state.loading = false;
+          proxy.mittBus.emit("onEditUserModule");
           closeDialog(); // 关闭弹窗
+        }).catch(() => {
+          state.loading = false;
         });
       }
     }

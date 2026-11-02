@@ -40,12 +40,29 @@ const viteConfig: UserConfig = {
 		outDir: 'dist',
 		minify: 'esbuild',
 		sourcemap: false,
-		chunkSizeWarningLimit: 1500,
+		chunkSizeWarningLimit: 800,
 		rollupOptions: {
 			output: {
-				entryFileNames: `assets/[name].${new Date().getTime()}.js`,
-				chunkFileNames: `assets/[name].${new Date().getTime()}.js`,
-				assetFileNames: `assets/[name].${new Date().getTime()}.[ext]`,
+				entryFileNames: 'assets/[name].[hash].js',
+				chunkFileNames: 'assets/[name].[hash].js',
+				assetFileNames: 'assets/[name].[hash].[ext]',
+				manualChunks(id) {
+					if (id.includes('node_modules')) {
+						if (id.includes('element-plus') || id.includes('@element-plus')) {
+							return 'element-plus';
+						}
+						if (id.includes('echarts') || id.includes('zrender')) {
+							return 'echarts';
+						}
+						if (id.includes('@wangeditor')) {
+							return 'wangeditor';
+						}
+						if (id.includes('vue') || id.includes('pinia')) {
+							return 'vue-vendor';
+						}
+						return 'vendor';
+					}
+				},
 			},
 		},
 	},

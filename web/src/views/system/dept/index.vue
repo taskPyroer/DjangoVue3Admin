@@ -145,48 +145,41 @@
 </template>
 
 <script setup lang="ts">
-import {ref, reactive, onMounted, getCurrentInstance, onUnmounted,} from "vue";
-import {ElMessageBox, ElMessage} from "element-plus";
-import {listDept, delDept} from "@/api/system/dept";
+import { ref, reactive, onMounted, getCurrentInstance, onUnmounted } from "vue";
+import { listDept, delDept } from "@/api/system/dept";
 import EditModule from "./component/editModule.vue";
-import {dateStrFormat} from "@/utils/formatTime";
-import {toArrayTree} from "@/utils/transListDataToTreeData";
+import { toArrayTree } from "@/utils/transListDataToTreeData";
+import { useCrud } from "@/hooks/useCrud";
 
-const {proxy} = getCurrentInstance() as any;
+const { proxy } = getCurrentInstance() as any;
 const editModuleRef = ref();
-const state = reactive({
-  // 遮罩层
-  loading: true,
-  // 弹出层标题
-  title: "",
-  // 部门表格树数据
-  tableData: [] as any,
-  // 状态数据字典
-  statusOptions: [],
-  // 查询参数
-  queryParams: {
+
+const {
+  loading,
+  tableData,
+  queryParams,
+  handleQuery,
+  resetQuery,
+  handleDelete,
+} = useCrud({
+  listApi: listDept,
+  deleteApi: delDept,
+  title: "部门",
+  transformData: toArrayTree,
+  defaultParams: {
     search: undefined,
     status: undefined,
     pageSize: 9999,
-    page: 1
   },
 });
 
-/** 查询部门列表 */
-const handleQuery = () => {
-  state.loading = true;
-  listDept(state.queryParams).then((response: any) => {
-    // state.tableData = response.data.data;
-    state.tableData = toArrayTree(response.data.data);
-    state.loading = false;
-  });
-};
-/** 重置按钮操作 */
-const resetQuery = () => {
-  state.queryParams.search = undefined;
-  state.queryParams.status = undefined;
-  handleQuery();
-};
+const state = reactive({
+  title: "",
+  loading,
+  tableData,
+  statusOptions: [],
+  queryParams,
+});
 
 // 部门状态字典翻译
 const statusFormat = (row: any) => {
@@ -201,39 +194,26 @@ const onOpenAddModule = (row: any) => {
   state.title = "添加部门";
   editModuleRef.value.openDialog(row);
 };
+
 // 打开编辑部门弹窗
 const onOpenEditModule = (row: object) => {
   state.title = "修改部门";
   editModuleRef.value.openDialog(row);
 };
-/** 删除按钮操作 */
-const onTabelRowDel = (row: any) => {
-  ElMessageBox({
-    message: '是否确认删除名称为"' + row.dept_name + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return delDept(row.id).then(() => {
-      handleQuery();
-      ElMessage.success("删除成功");
-    });
-  });
-};
+
+const onTabelRowDel = handleDelete;
+
 // 页面加载时
 onMounted(() => {
-  // 查询部门信息
   handleQuery();
-  // 查询部门状态数据字典
   proxy.getDicts("sys_yes_no").then((response: any) => {
-    state.statusOptions = response.data.data;
+    state.statusOptions = response?.data?.data || [];
   });
-  proxy.mittBus.on("onEditDeptModule", (res: any) => {
+  proxy.mittBus.on("onEditDeptModule", () => {
     handleQuery();
   });
 });
+
 // 页面卸载时
 onUnmounted(() => {
   proxy.mittBus.off("onEditDeptModule");

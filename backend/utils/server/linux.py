@@ -1,6 +1,6 @@
 """
 Time:     2023/12/1 11:01
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     linux
 Describe: linux系统命令工具类封装
@@ -51,13 +51,15 @@ def GetSystemVersion():
     version = cache.get(key)
     if version: return version
     try:
-        # Python 3.8 已移除 此方法 "linux_distribution()"
-        platform_dist = platform.linux_distribution()
-        version = platform_dist[0] + " " + platform_dist[1]
-    except:
-        with os.popen("cat /etc/redhat-release", "r") as p:
-            release = p.read()
-        version = release.replace('release ', '').replace('Linux', '').replace('(Core)', '').strip()
+        import distro
+        version = f"{distro.name()} {distro.version()}"
+    except Exception:
+        try:
+            with os.popen("cat /etc/redhat-release", "r") as p:
+                release = p.read()
+            version = release.replace('release ', '').replace('Linux', '').replace('(Core)', '').strip()
+        except Exception:
+            version = "Linux"
 
     pyv_info = sys.version_info
     version = "{} {}(Py{}.{}.{})".format(version, os.uname().machine, pyv_info.major, pyv_info.minor, pyv_info.micro)

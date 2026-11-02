@@ -165,130 +165,76 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  ref,
-  reactive,
-  onMounted,
-  getCurrentInstance,
-  onUnmounted,
-} from "vue";
-import {ElMessageBox, ElMessage} from "element-plus";
-import {listApi, delApi, getApiGroup} from "@/api/system/api";
+import { ref, reactive, onMounted, getCurrentInstance, onUnmounted } from "vue";
+import { listApi, delApi, getApiGroup } from "@/api/system/api";
 import EditModule from "./component/editModule.vue";
+import { useCrud } from "@/hooks/useCrud";
 
-const {proxy} = getCurrentInstance() as any;
+const { proxy } = getCurrentInstance() as any;
 const editModuleRef = ref();
-const state = reactive({
-  // 遮罩层
-  loading: true,
-  // 选中数组
-  ids: [],
-  // 非单个禁用
-  single: true,
-  // 非多个禁用
-  multiple: true,
-  // 弹出层标题
-  title: "",
-  // 配置参数表格数据
-  tableData: [],
-  // 总条数
-  total: 0,
-  methodOptions: [],
-  apiGroups: [],
-  // 查询参数
-  queryParams: {
-    // 页码
-    page: 1,
-    // 每页大小
-    pageSize: 10,
+
+const {
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  handleQuery,
+  resetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+} = useCrud({
+  listApi,
+  deleteApi: delApi,
+  title: "API接口",
+  defaultParams: {
     method: undefined,
     api_group: undefined,
     search: undefined,
   },
 });
 
-/** 查询配置参数列表 */
-const handleQuery = () => {
-  state.loading = true;
-  listApi(state.queryParams).then(
-      (response) => {
-        state.tableData = response.data.data;
-        state.total = response.data.total;
-        state.loading = false;
-      }
-  );
-};
-/** 重置按钮操作 */
-const resetQuery = () => {
-  state.queryParams.method = undefined;
-  state.queryParams.api_group = undefined;
-  state.queryParams.search = undefined;
-  handleQuery();
-};
+const state = reactive({
+  title: "",
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  methodOptions: [],
+  apiGroups: [],
+});
 
-// 打开新增配置参数弹窗
+// 打开新增接口弹窗
 const onOpenAddModule = () => {
-  state.title = "添加Api参数";
+  state.title = "添加API参数";
   editModuleRef.value.openDialog({});
 };
-// 打开编辑配置参数弹窗
+
+// 打开编辑接口弹窗
 const onOpenEditModule = (row: object) => {
-  state.title = "修改Api参数";
+  state.title = "修改API参数";
   editModuleRef.value.openDialog(row);
 };
-/** 删除按钮操作 */
-const onTabelRowDel = (row: any) => {
-  const ids = row.id || state.ids;
-  ElMessageBox({
-    message: '是否确认删除配置参数编号为"' + ids + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return delApi(ids).then(() => {
-      handleQuery();
-      ElMessage.success("删除成功");
-    });
-  });
-};
-// 多选框选中数据
-const handleSelectionChange = (selection: any) => {
-  state.ids = selection.map((item: any) => item.id);
-  state.single = selection.length != 1;
-  state.multiple = !selection.length;
-};
 
-//分页页面大小发生变化
-const handleSizeChange = (val: any) => {
-  state.queryParams.pageSize = val;
-  handleQuery();
-};
-//当前页码发生变化
-const handleCurrentChange = (val: any) => {
-  state.queryParams.page = val;
-  handleQuery();
-};
-
+const onTabelRowDel = handleDelete;
 
 // 页面加载时
 onMounted(() => {
-  // 查询配置参数信息
   handleQuery();
   proxy.getDicts("sys_method_api").then((response: any) => {
-    state.methodOptions = response.data.data;
+    state.methodOptions = response?.data?.data || [];
   });
-  proxy.mittBus.on("onEditApiModule", (res: any) => {
+  proxy.mittBus.on("onEditApiModule", () => {
     handleQuery();
   });
-  // 获取api分组数据
-  getApiGroup().then(
-      (response) => {
-        state.apiGroups = response.data.api_groups;
-      }
-  );
+  getApiGroup().then((response: any) => {
+    state.apiGroups = response?.data?.api_groups || [];
+  });
 });
+
 // 页面卸载时
 onUnmounted(() => {
   proxy.mittBus.off("onEditApiModule");

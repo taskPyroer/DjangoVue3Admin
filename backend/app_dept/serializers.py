@@ -1,6 +1,6 @@
 """
 Time:     2023/8/23 15:51
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     serializers
 Describe:
@@ -33,30 +33,35 @@ class DeptCreateUpdateSerializer(CustomModelSerializer):
     def rename(self, validated_data):
         from pypinyin import pinyin, Style
         dept_name = validated_data['dept_name']
-        # 转换为拼音首字母
+        # 转换为拼音首字母作为基础key
         pinyin_list = pinyin(dept_name, style=Style.FIRST_LETTER)
-        dept_key = ''.join([x[0] for x in pinyin_list])
-        # 追加递增的数字来确保唯一性
+        base_key = ''.join([x[0] for x in pinyin_list]) or 'dept'
+        dept_key = base_key
+        
+        # 排除当前正在编辑的实例
+        current_id = getattr(self.instance, 'id', None) if hasattr(self, 'instance') else None
+        
         suffix = 1
         while True:
-            result = ''
-            if Dept.objects.filter(dept_key=dept_key).exists():
+            qs = Dept.objects.filter(dept_key=dept_key)
+            if current_id:
+                qs = qs.exclude(id=current_id)
+            if qs.exists():
                 suffix += 1
-                # 将转换后的拼音添加到结果字符串
-                result += dept_key + str(suffix)
-                dept_key = result
+                dept_key = f"{base_key}{suffix}"
             else:
                 break
         validated_data['dept_key'] = dept_key
         return validated_data
 
     def create(self, validated_data):
-        if 'dept_name' in validated_data.keys():
+        if 'dept_name' in validated_data:
             validated_data = self.rename(validated_data)
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        if 'dept_name' in validated_data.keys():
+        # 仅当dept_name被实际修改时才重新生成dept_key
+        if 'dept_name' in validated_data and validated_data['dept_name'] != instance.dept_name:
             validated_data = self.rename(validated_data)
         return super().update(instance, validated_data)
 
@@ -68,18 +73,8 @@ class DeptCreateUpdateSerializer(CustomModelSerializer):
 
 class DeptTreeSerializer(CustomModelSerializer):
     """
-    部门表的树形序列化器
+    部门表的树形序列化器（兼容类声明）
     """
-    children = serializers.SerializerMethodField(read_only=True)
-
-    def get_children(self, instance):
-        queryset = Dept.objects.filter(parent=instance.id).exclude(status='1')
-        if queryset:
-            serializer = DeptTreeSerializer(queryset, many=True)
-            return serializer.data
-        else:
-            return None
-
     class Meta:
         model = Dept
         fields = "__all__"

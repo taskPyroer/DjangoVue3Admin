@@ -163,7 +163,7 @@
         <el-pagination
             background
             :total="state.total"
-            :current-page="state.queryParams.pageNum"
+            :current-page="state.queryParams.page"
             :page-size="state.queryParams.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             @size-change="handleSizeChange"
@@ -177,70 +177,51 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  ref,
-  toRefs,
-  reactive,
-  onMounted,
-  getCurrentInstance,
-  onUnmounted,
-} from "vue";
-import {ElMessageBox, ElMessage} from "element-plus";
-import {listConfig, delConfig, exportConfig} from "@/api/system/config";
+import { ref, reactive, onMounted, getCurrentInstance, onUnmounted } from "vue";
+import { listConfig, delConfig, exportConfig } from "@/api/system/config";
 import EditModule from "./component/editModule.vue";
+import { useCrud } from "@/hooks/useCrud";
 
-const {proxy} = getCurrentInstance() as any;
+const { proxy } = getCurrentInstance() as any;
 const editModuleRef = ref();
-const state = reactive({
-  // 遮罩层
-  loading: true,
-  // 选中数组
-  ids: [],
-  // 非单个禁用
-  single: true,
-  // 非多个禁用
-  multiple: true,
-  // 弹出层标题
-  title: "",
-  // 配置参数表格数据
-  tableData: [],
-  // 总条数
-  total: 0,
-  // 类型数据配置参数
-  typeOptions: [],
-  // 查询参数
-  queryParams: {
-    // 页码
-    pageNum: 1,
-    // 每页大小
-    pageSize: 10,
+
+const {
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  handleQuery,
+  resetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+  handleExport,
+} = useCrud({
+  listApi: listConfig,
+  deleteApi: delConfig,
+  exportApi: exportConfig,
+  title: "参数",
+  defaultParams: {
     configName: undefined,
     configKey: undefined,
     configType: undefined,
   },
 });
 
-/** 查询配置参数列表 */
-const handleQuery = () => {
-  state.loading = true;
-  listConfig(state.queryParams).then(
-      (response) => {
-        state.tableData = response.data.data;
-        state.total = response.data.total;
-        state.loading = false;
-      }
-  );
-};
-/** 重置按钮操作 */
-const resetQuery = () => {
-  state.queryParams.configName = undefined;
-  state.queryParams.configKey = undefined;
-  state.queryParams.configType = undefined;
-  handleQuery();
-};
+const state = reactive({
+  title: "",
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  typeOptions: [],
+});
 
 // 配置参数状态配置参数翻译
-const typeFormat = (row: any, column: any) => {
+const typeFormat = (row: any) => {
   return proxy.selectDictLabel(state.typeOptions, row.configType);
 };
 
@@ -249,77 +230,28 @@ const onOpenAddModule = () => {
   state.title = "添加配置参数";
   editModuleRef.value.openDialog({});
 };
+
 // 打开编辑配置参数弹窗
 const onOpenEditModule = (row: object) => {
   state.title = "修改配置参数";
   editModuleRef.value.openDialog(row);
 };
-/** 删除按钮操作 */
-const onTabelRowDel = (row: any) => {
-  const configIds = row.configId || state.ids;
-  ElMessageBox({
-    message: '是否确认删除配置参数编号为"' + configIds + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return delConfig(configIds).then(() => {
-      handleQuery();
-      ElMessage.success("删除成功");
-    });
-  });
-};
-// 多选框选中数据
-const handleSelectionChange = (selection: any) => {
-  state.ids = selection.map((item: any) => item.configId);
-  state.single = selection.length != 1;
-  state.multiple = !selection.length;
-};
-/** 导出按钮操作 */
-const handleExport = () => {
-  const queryParams = state.queryParams;
 
-  ElMessageBox({
-    message: '是否确认导出所有参数数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return exportConfig(queryParams);
-  }).then((response: any) => {
-    proxy.download(response.data);
-  })
-};
-//分页页面大小发生变化
-const handleSizeChange = (val: any) => {
-  state.queryParams.pageSize = val;
-  handleQuery();
-};
-//当前页码发生变化
-const handleCurrentChange = (val: any) => {
-  state.queryParams.pageNum = val;
-  handleQuery();
-};
-
+const onTabelRowDel = handleDelete;
 
 // 页面加载时
 onMounted(() => {
-  // 查询配置参数信息
   handleQuery();
-  // 查询配置参数状态数据配置参数
   proxy.getDicts("sys_yes_no").then((response: any) => {
     state.typeOptions = response.data;
   });
-  proxy.mittBus.on("onEditPostModule", (res: any) => {
+  proxy.mittBus.on("onEditConfigModule", () => {
     handleQuery();
   });
 });
+
 // 页面卸载时
 onUnmounted(() => {
-  proxy.mittBus.off("onEditPostModule");
+  proxy.mittBus.off("onEditConfigModule");
 });
 </script>

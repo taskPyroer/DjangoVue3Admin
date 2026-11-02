@@ -47,104 +47,87 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="editDictModule">
 import {reactive, toRefs, ref, unref, getCurrentInstance} from "vue";
 import {addType, updateType} from "@/api/system/dict/type";
 import {ElMessage} from "element-plus";
 
-export default {
-  name: "editMenu",
-  props: {
-    // 弹窗标题
-    title: {
-      type: String,
-      default: () => "",
-    },
+defineProps({
+  title: {
+    type: String,
+    default: () => "",
   },
-  setup() {
-    const {proxy} = getCurrentInstance() as any;
-    const ruleFormRef = ref<HTMLElement | null>(null);
-    const state = reactive({
-      // 是否显示弹出层
-      isShowDialog: false,
-      loading: false,
-      // 表单参数对象
-      ruleForm: {
-        id: 0, // 字典ID
-        dict_name: "", // 字典名称
-        dict_type: "", // 字典类型
-        status: "", //字典状态
-        remark: "", // 备注
-      },
-      // 字典状态数据字典
-      statusOptions: [{
-        dictValue: "0",
-        dictLabel: "正常"
-      }, {
-        dictValue: "1",
-        dictLabel: "禁用"
-      }],
-      // 字典树选项
-      deptOptions: [],
-      // 表单校验
-      ruleRules: {
-        dict_name: [
-          {required: true, message: "字典名称不能为空", trigger: "blur"},
-        ],
-        dict_type: [
-          {required: true, message: "字典类型不能为空", trigger: "blur"},
-        ],
-      },
-    });
-    // 打开弹窗
-    const openDialog = (row: any) => {
-      state.ruleForm = JSON.parse(JSON.stringify(row));
-      state.isShowDialog = true;
-      state.loading = false;
-    };
+});
 
-    // 关闭弹窗
-    const closeDialog = (row?: object) => {
-      proxy.mittBus.emit("onEditPostModule", row);
-      state.isShowDialog = false;
-    };
-    // 取消
-    const onCancel = () => {
-      closeDialog();
-    };
-
-    // 保存
-    const onSubmit = () => {
-      const formWrap = unref(ruleFormRef) as any;
-      if (!formWrap) return;
-      formWrap.validate((valid: boolean) => {
-        if (valid) {
-          state.loading = true;
-          if (state.ruleForm.id != undefined && state.ruleForm.id != 0) {
-            updateType(state.ruleForm).then(() => {
-              ElMessage.success("修改成功");
-              state.loading = false;
-              closeDialog(state.ruleForm); // 关闭弹窗
-            });
-          } else {
-            addType(state.ruleForm).then(() => {
-              ElMessage.success("新增成功");
-              state.loading = false;
-              closeDialog(state.ruleForm); // 关闭弹窗
-            });
-          }
-        }
-      });
-    };
-
-    return {
-      ruleFormRef,
-      openDialog,
-      closeDialog,
-      onCancel,
-      onSubmit,
-      ...toRefs(state),
-    };
+const {proxy} = getCurrentInstance() as any;
+const ruleFormRef = ref<HTMLElement | null>(null);
+const state = reactive({
+  isShowDialog: false,
+  loading: false,
+  ruleForm: {
+    id: 0,
+    dict_name: "",
+    dict_type: "",
+    status: "",
+    remark: "",
   },
+  statusOptions: [
+    { dictValue: "0", dictLabel: "正常" },
+    { dictValue: "1", dictLabel: "禁用" }
+  ],
+  ruleRules: {
+    dict_name: [{required: true, message: "字典名称不能为空", trigger: "blur"}],
+    dict_type: [{required: true, message: "字典类型不能为空", trigger: "blur"}],
+  },
+});
+
+const { isShowDialog, loading, ruleForm, statusOptions, ruleRules } = toRefs(state);
+
+// 打开弹窗
+const openDialog = (row: any) => {
+  state.ruleForm = JSON.parse(JSON.stringify(row));
+  state.isShowDialog = true;
+  state.loading = false;
 };
+
+// 关闭弹窗
+const closeDialog = (needRefresh: boolean = false) => {
+  if (needRefresh) {
+    proxy.mittBus.emit("onEditDictTypeModule", state.ruleForm);
+  }
+  state.isShowDialog = false;
+};
+
+// 取消
+const onCancel = () => {
+  closeDialog(false);
+};
+
+// 保存
+const onSubmit = () => {
+  const formWrap = unref(ruleFormRef) as any;
+  if (!formWrap) return;
+  formWrap.validate((valid: boolean) => {
+    if (valid) {
+      state.loading = true;
+      if (state.ruleForm.id != undefined && state.ruleForm.id != 0) {
+        updateType(state.ruleForm).then(() => {
+          ElMessage.success("修改成功");
+          state.loading = false;
+          closeDialog(true);
+        }).catch(() => { state.loading = false; });
+      } else {
+        addType(state.ruleForm).then(() => {
+          ElMessage.success("新增成功");
+          state.loading = false;
+          closeDialog(true);
+        }).catch(() => { state.loading = false; });
+      }
+    }
+  });
+};
+
+defineExpose({
+  openDialog,
+});
 </script>

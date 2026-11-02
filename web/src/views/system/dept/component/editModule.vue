@@ -186,13 +186,15 @@ const openDialog = (row: any) => {
 };
 
 // 关闭弹窗
-const closeDialog = (row?: object) => {
-  proxy.mittBus.emit("onEditDeptModule",row)
+const closeDialog = (needRefresh: boolean = false) => {
+  if (needRefresh) {
+    proxy.mittBus.emit("onEditDeptModule", state.ruleForm);
+  }
   state.isShowDialog = false;
 };
 // 取消
 const onCancel = () => {
-  closeDialog();
+  closeDialog(false);
 };
 
 // 保存
@@ -203,19 +205,17 @@ const onSubmit = () => {
     if (valid) {
       state.loading = true;
       if (state.ruleForm.id != undefined && state.ruleForm.id != 0) {
-        // eslint-disable-next-line no-unused-vars
-        updateDept(state.ruleForm).then((response) => {
+        updateDept(state.ruleForm).then(() => {
           ElMessage.success("修改成功");
           state.loading = false;
-          closeDialog(state.ruleForm); // 关闭弹窗
-        });
+          closeDialog(true); // 成功关闭并刷新
+        }).catch(() => { state.loading = false; });
       } else {
-        // eslint-disable-next-line no-unused-vars
-        addDept(state.ruleForm).then((response) => {
+        addDept(state.ruleForm).then(() => {
           ElMessage.success("新增成功");
           state.loading = false;
-          closeDialog(state.ruleForm); // 关闭弹窗
-        });
+          closeDialog(true); // 成功关闭并刷新
+        }).catch(() => { state.loading = false; });
       }
     }
   });

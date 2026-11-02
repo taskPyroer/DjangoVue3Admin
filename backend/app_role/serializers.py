@@ -1,6 +1,6 @@
 """
 Time:     2023/8/28 14:19
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     serializers
 Describe: 
@@ -59,22 +59,33 @@ class RoleCreateSerializer(CustomModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        if 'api' in validated_data.keys():
+        old_role_key = instance.role_key
+        new_role_key = validated_data.get('role_key', old_role_key)
+
+        if 'api' in validated_data:
             api_data = validated_data.pop('api')
-            sub = validated_data['role_key']
-            filtered_policy = enforcer.get_filtered_policy(0, sub)
-            set_data1 = set((sub, item['path'], item['method']) for item in api_data)
+            if old_role_key != new_role_key:
+                enforcer.remove_filtered_policy(0, old_role_key)
+                filtered_policy = []
+            else:
+                filtered_policy = enforcer.get_filtered_policy(0, new_role_key)
+
+            set_data1 = set((new_role_key, item['path'], item['method']) for item in api_data)
             set_data2 = set(tuple(item) for item in filtered_policy)
 
             # 找出在data1中存在但在data2中不存在的元素，执行添加
-            elements_only_in_data1 = set_data1 - set_data2
-            for element in elements_only_in_data1:
+            for element in (set_data1 - set_data2):
                 enforcer.add_policy(*element)
 
             # 找出在data2中存在但在data1中不存在的元素,执行删除
-            elements_only_in_data2 = set_data2 - set_data1
-            for element in elements_only_in_data2:
+            for element in (set_data2 - set_data1):
                 enforcer.remove_policy(*element)
+        elif old_role_key != new_role_key:
+            # 仅修改了 role_key，同步迁移权限策略
+            filtered_policy = enforcer.get_filtered_policy(0, old_role_key)
+            for item in filtered_policy:
+                enforcer.remove_policy(*item)
+                enforcer.add_policy(new_role_key, item[1], item[2])
 
         return super().update(instance, validated_data)
 

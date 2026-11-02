@@ -151,7 +151,7 @@
         <el-pagination
             background
             :total="state.total"
-            :current-page="state.queryParams.pageNum"
+            :current-page="state.queryParams.page"
             :page-size="state.queryParams.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             @size-change="handleSizeChange"
@@ -159,7 +159,7 @@
         />
       </div>
     </el-card>
-    <!-- 添加或修改岗位对话框 -->
+    <!-- 添加或修改邮件服务配置对话框 -->
     <EditModule ref="editModuleRef" :title="state.title"/>
 
     <el-dialog title="测试发送邮件" v-model="state.debugOpen" width="769px" center>
@@ -167,21 +167,21 @@
         <el-form-item label="邮箱编号">
           <el-input v-model="state.debugForm.mailId" :disabled="true"/>
         </el-form-item>
-        <el-form-item label="联系人">
+        <el-form-item label="联系人" prop="to">
           <el-input placeholder="请输入要发送给谁" v-model="state.debugForm.to"/>
         </el-form-item>
-        <el-form-item label="发送主题">
+        <el-form-item label="发送主题" prop="subject">
           <el-input placeholder="请输入发送主题" v-model="state.debugForm.subject"/>
         </el-form-item>
-        <el-form-item label="发送内容">
+        <el-form-item label="发送内容" prop="body">
           <el-input type="textarea" placeholder="请输入发送内容" v-model="state.debugForm.body"/>
         </el-form-item>
       </el-form>
       <template #footer>
-                <span class="dialog-footer">
-                 <el-button type="primary" @click="submitDebug">确 定</el-button>
-                <el-button @click="cancelDebug">取 消</el-button>
-                </span>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="submitDebug">确 定</el-button>
+          <el-button @click="cancelDebug">取 消</el-button>
+        </span>
       </template>
     </el-dialog>
   </div>
@@ -190,90 +190,65 @@
 <script lang="ts" setup>
 import {
   ref,
-  toRefs,
   reactive,
   onMounted,
   getCurrentInstance,
-  onUnmounted, unref,
+  onUnmounted,
+  unref,
 } from "vue";
 import {ElMessageBox, ElMessage} from "element-plus";
 import {listResEmails, delResEmails, changeMailStatus, debugMail} from "@/api/resource/email";
 import EditModule from "./component/editModule.vue";
+import {useCrud} from "@/hooks/useCrud";
 
 const {proxy} = getCurrentInstance() as any;
 const editModuleRef = ref();
 const debugFormRef = ref();
-const state: any = reactive({
-  // 遮罩层
-  loading: true,
-  debugOpen: false,
-  // 选中数组
-  ids: [],
-  // 非单个禁用
-  single: true,
-  // 非多个禁用
-  multiple: true,
-  // 弹出层标题
-  title: "",
-  // 岗位表格数据
-  tableData: [],
-  // 总条数
-  total: 0,
-  // 状态数据字典
-  statusOptions: [],
-  mailOptions: [],
-  debugForm: {
-    to: "",
-    subject: "",
-    body: ""
-  },
-  // 查询参数
-  queryParams: {
-    // 页码
-    pageNum: 1,
-    // 每页大小
-    pageSize: 10,
-    // 以下为参数
+
+const {
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  handleQuery,
+  resetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+} = useCrud({
+  listApi: listResEmails,
+  deleteApi: delResEmails,
+  title: "邮件服务配置",
+  defaultParams: {
     category: undefined,
     status: undefined,
   },
-  debugRules: {
-    to: [
-      {required: true, message: "联系人不能为空", trigger: "blur"}
-    ],
-    subject: [
-      {required: true, message: "主题不能为空", trigger: "blur"}
-    ],
-    body: [
-      {required: true, message: "内容不能为空", trigger: "blur"}
-    ],
-  },
 });
 
-/** 查询岗位列表 */
-const handleQuery = () => {
-  state.loading = true;
-  listResEmails(state.queryParams).then((response) => {
-    state.tableData = response.data.data;
-    state.total = response.data.total;
-    state.loading = false;
-  });
-};
-/** 重置按钮操作 */
-const resetQuery = () => {
-  state.queryParams.category = undefined;
-  state.queryParams.status = undefined;
-  handleQuery();
-};
-
-const handleCurrentChange = (val: number) => {
-  state.queryParams.pageNum = val
-  handleQuery()
-}
-const handleSizeChange = (val: number) => {
-  state.queryParams.pageSize = val
-  handleQuery()
-}
+const state = reactive({
+  loading,
+  total,
+  tableData,
+  multiple,
+  debugOpen: false,
+  title: "",
+  statusOptions: [],
+  mailOptions: [],
+  debugForm: {
+    mailId: undefined,
+    to: "",
+    subject: "",
+    body: "",
+  },
+  queryParams,
+  debugRules: {
+    to: [{required: true, message: "联系人不能为空", trigger: "blur"}],
+    subject: [{required: true, message: "主题不能为空", trigger: "blur"}],
+    body: [{required: true, message: "内容不能为空", trigger: "blur"}],
+  },
+});
 
 const statusFormat = (row: any) => {
   return proxy.selectDictLabel(state.statusOptions, row.status);
@@ -285,99 +260,82 @@ const mailFormat = (row: any) => {
 
 // 打开新增弹窗
 const onOpenAddModule = () => {
-  state.title = "添加ResEmails";
+  state.title = "添加邮件配置";
   editModuleRef.value.openDialog({});
 };
+
 // 打开编辑弹窗
 const onOpenEditModule = (row: object) => {
-  state.title = "修改ResEmails";
+  state.title = "修改邮件配置";
   editModuleRef.value.openDialog(row);
 };
 
 // 打开调试弹窗
 const onOpenDebugModule = (row: any) => {
-  state.debugOpen = true
-  state.debugForm.mailId = row.mailId
+  state.debugOpen = true;
+  state.debugForm.mailId = row.mailId;
 };
+
 // 提交测试
 const submitDebug = () => {
   const formWrap = unref(debugFormRef) as any;
   if (!formWrap) return;
   formWrap.validate((valid: boolean) => {
     if (valid) {
-      debugMail(state.debugForm).then((response) => {
+      debugMail(state.debugForm).then(() => {
         ElMessage.success("测试成功");
-        cancelDebug(); // 关闭弹窗
+        cancelDebug();
       });
     }
   });
 };
+
 const cancelDebug = () => {
-  state.debugOpen = false
-  state.debugForm = {}
-}
+  state.debugOpen = false;
+  state.debugForm = {
+    mailId: undefined,
+    to: "",
+    subject: "",
+    body: "",
+  };
+};
+
 // 状态修改
 const handleStatusChange = (row: any) => {
-  let text = row.status === "0" ? "启用" : "停用";
+  const text = row.status === "0" ? "启用" : "停用";
   ElMessageBox({
-    message: '确认要"' + text + '""' + row.mailId + '"吗?',
+    message: `确认要${text}"${row.mailId}"吗?`,
     title: "警告",
     showCancelButton: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
   })
-      .then(function () {
-        return changeMailStatus({mailId: row.mailId, status: row.status});
-      })
-      .then(() => {
-        ElMessage({
-          message: text + "成功",
-          type: 'success',
-        });
-      })
-      .catch(function () {
-        row.status = row.status === "0" ? "1" : "0";
-      });
-};
-/** 删除按钮操作 */
-const onTabelRowDel = (row: any) => {
-  const mailIds = row.mailId || state.ids;
-  ElMessageBox({
-    message: '是否确认删除岗位编号为"' + mailIds + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return delResEmails(mailIds).then(() => {
-      handleQuery();
-      ElMessage.success("删除成功");
+    .then(() => changeMailStatus({ mailId: row.mailId, status: row.status }))
+    .then(() => {
+      ElMessage.success(`${text}成功`);
+    })
+    .catch(() => {
+      row.status = row.status === "0" ? "1" : "0";
     });
-  });
 };
-// 多选框选中数据
-const handleSelectionChange = (selection: any) => {
-  state.ids = selection.map((item: any) => item.mailId);
-  state.single = selection.length != 1;
-  state.multiple = !selection.length;
-};
+
+const onTabelRowDel = handleDelete;
+
 // 页面加载时
 onMounted(() => {
-  // 查询岗位信息
   handleQuery();
-  // 查询状态数据字典
   proxy.getDicts("sys_normal_disable").then((response: any) => {
-    state.statusOptions = response.data;
+    state.statusOptions = response?.data || [];
   });
   proxy.getDicts("res_mail_category").then((response: any) => {
-    state.mailOptions = response.data;
+    state.mailOptions = response?.data || [];
   });
-  proxy.mittBus.on("onEditResEmailsModule", (res: any) => {
+  proxy.mittBus.on("onEditResEmailsModule", () => {
     handleQuery();
   });
 });
+
 // 页面卸载时
 onUnmounted(() => {
   proxy.mittBus.off("onEditResEmailsModule");

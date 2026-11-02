@@ -177,7 +177,7 @@ const handleQuery = () => {
   state.loading = true;
   listExample(state.queryParams).then((response: any) => {
     state.tableData = response.data.data;
-    state.total = response.data.count;
+    state.total = response.data.total ?? response.data.count ?? 0;
     state.loading = false;
   });
 };

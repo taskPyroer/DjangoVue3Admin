@@ -143,98 +143,68 @@
 </template>
 
 <script lang="ts" setup name="Notice">
-import {
-  ref,
-  reactive,
-  onMounted,
-  getCurrentInstance,
-  onUnmounted,
-} from "vue";
-import {ElMessageBox, ElMessage} from "element-plus";
-import {
-  listSendNotice,
-  listReceiveNotice,
-  delNotice,
-} from "@/api/system/notice";
+import { ref, reactive, onMounted, getCurrentInstance, onUnmounted } from "vue";
+import { listSendNotice, listReceiveNotice, delNotice } from "@/api/system/notice";
 import EditModule from "./component/editModule.vue";
 import ViewModule from "./component/viewModule.vue";
+import { useCrud } from "@/hooks/useCrud";
 
-const {proxy} = getCurrentInstance() as any;
+const { proxy } = getCurrentInstance() as any;
 const editModuleRef = ref();
 const viewModuleRef = ref();
 const ruleFormRef = ref<HTMLElement | null>(null);
-const state = reactive({
-  // 遮罩层
-  loading: true,
-  // 选中数组
-  ids: [],
-  // 非单个禁用
-  single: true,
-  // 非多个禁用
-  multiple: true,
-  // 弹出层标题
-  title: "",
-  // 定时任务表格数据
-  tableData: [],
-  // 总条数
-  total: 0,
-  // 是否显示弹出层
-  open: false,
-  // 表单参数
-  modelForm: {},
-  // 状态字典
-  noticeTypeOptions: [],
-  // 查询参数
-  queryParams: {
-    // 页码
-    page: 1,
-    // 每页大小
-    pageSize: 10,
+
+const activeTab = ref<"receive" | "send">("receive");
+
+const {
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  handleQuery: crudQuery,
+  resetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+} = useCrud({
+  listApi: (params) => (activeTab.value === "send" ? listSendNotice(params) : listReceiveNotice(params)),
+  deleteApi: delNotice,
+  title: "公告",
+  defaultParams: {
     search: undefined,
     target_type: undefined,
   },
-  tabActive: 'receive', // 设置初始默认值
-  tabOptions: [
-    {value: 'send', label: '我的发布'},
-    {value: 'receive', label: '我的接收'},
-  ],
-  tab: false
 });
 
-/** 查询定时任务列表 */
+const state = reactive({
+  title: "",
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  noticeTypeOptions: [],
+  tabActive: "receive",
+  tabOptions: [
+    { value: "send", label: "我的发布" },
+    { value: "receive", label: "我的接收" },
+  ],
+  tab: true,
+});
+
 const handleQuery = () => {
-  state.loading = true;
-  if (state.tabActive === 'send') {
-    state.tab = false
-    listSendNotice(state.queryParams).then((response) => {
-          state.tableData = response.data.data;
-          state.total = response.data.total;
-          state.loading = false;
-        }
-    );
-  } else if (state.tabActive === 'receive') {
-    state.tab = true
-    listReceiveNotice(state.queryParams).then((response) => {
-          state.tableData = response.data.data;
-          state.total = response.data.total;
-          state.loading = false;
-        }
-    );
-  }
-};
-/** 重置按钮操作 */
-const resetQuery = () => {
-  state.queryParams.search = undefined;
-  state.queryParams.target_type = undefined;
-  handleQuery();
+  activeTab.value = state.tabActive as any;
+  state.tab = state.tabActive === "receive";
+  crudQuery();
 };
 
-// 定时任务状态定时任务翻译
 const noticeTypeFormat = (row: any) => {
   return proxy.selectDictLabel(state.noticeTypeOptions, row.target_type);
 };
 
-// 打开新增定时任务弹窗
+// 打开新增公告弹窗
 const onOpenAddModule = () => {
   state.title = "添加公告";
   editModuleRef.value.openDialog({});
@@ -243,52 +213,20 @@ const onOpenAddModule = () => {
 const handleRun = (row: any) => {
   viewModuleRef.value.openDialog(row, state.noticeTypeOptions);
 };
-/** 删除按钮操作 */
-const onTabelRowDel = (row: any) => {
-  const noticeIds = row.id || state.ids;
-  ElMessageBox({
-    message: '是否确认删除公告编号为"' + noticeIds + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return delNotice(noticeIds).then(() => {
-      handleQuery();
-      ElMessage.success("删除成功");
-    });
-  });
-};
 
-// 多选框选中数据
-const handleSelectionChange = (selection: any) => {
-  state.ids = selection.map((item: any) => item.id);
-  state.single = selection.length != 1;
-  state.multiple = !selection.length;
-};
+const onTabelRowDel = handleDelete;
 
-//分页页面大小发生变化
-const handleSizeChange = (val: any) => {
-  state.queryParams.pageSize = val;
-  handleQuery();
-};
-//当前页码发生变化
-const handleCurrentChange = (val: any) => {
-  state.queryParams.page = val;
-  handleQuery();
-};
 // 页面加载时
 onMounted(() => {
-  // 查询定时任务信息
   handleQuery();
   proxy.getDicts("sys_notice_type").then((response: any) => {
-    state.noticeTypeOptions = response.data.data;
+    state.noticeTypeOptions = response?.data?.data || [];
   });
   proxy.mittBus.on("onEditNoticeModule", () => {
     handleQuery();
   });
 });
+
 // 页面卸载时
 onUnmounted(() => {
   proxy.mittBus.off("onEditNoticeModule");

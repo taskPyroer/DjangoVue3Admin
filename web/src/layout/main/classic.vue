@@ -12,25 +12,14 @@
 	</el-container>
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="layoutClassic">
 import { computed } from 'vue';
-import {useThemeConfigStateStore} from '@/stores/themeConfig'
+import { useThemeConfigStateStore } from '@/stores/themeConfig';
 import Aside from '@/layout/component/aside.vue';
 import Header from '@/layout/component/header.vue';
 import Main from '@/layout/component/main.vue';
 import TagsView from '@/layout/navBars/tagsView/tagsView.vue';
-export default {
-	name: 'layoutClassic',
-	components: { Aside, Header, Main, TagsView },
-	setup() {
-        const theme = useThemeConfigStateStore();
-		// 获取布局配置信息
-		const getThemeConfig = computed(() => {
-			return theme.themeConfig;
-		});
-		return {
-			getThemeConfig,
-		};
-	},
-};
+
+const theme = useThemeConfigStateStore();
+const getThemeConfig = computed(() => theme.themeConfig);
 </script>

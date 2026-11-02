@@ -8,37 +8,28 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="layoutLogo">
 import { computed, getCurrentInstance } from 'vue';
-import {useThemeConfigStateStore} from '@/stores/themeConfig'
-import logo from '@/assets/logo.png'
-export default {
-	name: 'layoutLogo',
-	setup() {
-		const { proxy } = getCurrentInstance() as any;
-        const theme = useThemeConfigStateStore();
-		// 获取布局配置信息
-		const getThemeConfig = computed(() => {
-			return theme.themeConfig;
-		});
-		// 设置 logo 的显示。classic 经典布局默认显示 logo
-		const setShowLogo = computed(() => {
-			let { isCollapse, layout } = theme.themeConfig;
-			return !isCollapse || layout === 'classic' || document.body.clientWidth < 1000;
-		});
-		// logo 点击实现菜单展开/收起
-		const onThemeConfigChange = () => {
-			if (theme.themeConfig.layout === 'transverse') return false;
-			proxy.mittBus.emit('onMenuClick');
-			theme.themeConfig.isCollapse = !theme.themeConfig.isCollapse;
-		};
-		return {
-			logo,
-			setShowLogo,
-			getThemeConfig,
-			onThemeConfigChange,
-		};
-	},
+import { useThemeConfigStateStore } from '@/stores/themeConfig';
+import logo from '@/assets/logo.png';
+
+const { proxy } = getCurrentInstance() as any;
+const theme = useThemeConfigStateStore();
+
+// 获取布局配置信息
+const getThemeConfig = computed(() => theme.themeConfig);
+
+// 设置 logo 的显示。classic 经典布局默认显示 logo
+const setShowLogo = computed(() => {
+	let { isCollapse, layout } = theme.themeConfig;
+	return !isCollapse || layout === 'classic' || document.body.clientWidth < 1000;
+});
+
+// logo 点击实现菜单展开/收起
+const onThemeConfigChange = () => {
+	if (theme.themeConfig.layout === 'transverse') return false;
+	proxy.mittBus.emit('onMenuClick');
+	theme.themeConfig.isCollapse = !theme.themeConfig.isCollapse;
 };
 </script>
 

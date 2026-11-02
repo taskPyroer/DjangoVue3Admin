@@ -1,5 +1,3 @@
-import hashlib
-
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -53,10 +51,6 @@ class Users(BaseModel, AbstractUser):
     last_name = None
     groups = None
     user_permissions = None
-
-
-    def set_password(self, raw_password):
-        super().set_password(hashlib.md5(raw_password.encode(encoding="UTF-8")).hexdigest())
 
     class Meta:
         db_table = table_prefix + "users"

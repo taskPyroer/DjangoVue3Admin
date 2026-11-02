@@ -100,9 +100,16 @@
   </div>
 </template>
 
-<script lang="ts">
-import { ref, getCurrentInstance, computed, reactive, toRefs, onMounted } from "vue";
-import {useRoute, useRouter} from "vue-router";
+<script setup lang="ts" name="layoutBreadcrumbUser">
+import {
+  ref,
+  reactive,
+  toRefs,
+  computed,
+  onMounted,
+  getCurrentInstance,
+} from "vue";
+import { useRouter } from "vue-router";
 import { ElMessageBox, ElMessage } from "element-plus";
 import screenfull from "screenfull";
 import { useI18n } from "vue-i18n";
@@ -112,157 +119,137 @@ import other from "@/utils/other";
 import { Session, Local } from "@/utils/storage";
 import UserNews from "@/layout/navBars/breadcrumb/userNews.vue";
 import Search from "@/layout/navBars/breadcrumb/search.vue";
-import {storeToRefs} from "pinia";
-export default {
-  name: "layoutBreadcrumbUser",
-  components: { UserNews, Search },
-  setup() {
-    const { t } = useI18n();
-    const { proxy } = getCurrentInstance() as any;
-    const router = useRouter();
-    const theme = useThemeConfigStateStore();
 
-    const userInfos = useUserInfosState();
-    const searchRef = ref();
-    const state = reactive({
-      isScreenfull: false,
-      isShowUserNewsPopover: false,
-      disabledI18n: "zh-cn"
-    });
-    // 获取用户信息 vuex
-    const getUserInfos = computed(() => {
-      return userInfos.userInfos;
-    });
-    // 获取布局配置信息
-    const getThemeConfig = computed(() => {
-      return theme.themeConfig;
-    });
-    // 设置分割样式
-    const layoutUserFlexNum = computed(() => {
-      let { layout, isClassicSplitMenu } = getThemeConfig.value;
-      let num = 0;
-      if (
-        layout === "defaults" ||
-        (layout === "classic" && !isClassicSplitMenu) ||
-        layout === "columns"
-      )
-        num = 1;
-      else num = 0;
-      return num;
-    });
-    // 全屏点击时
-    const onScreenfullClick = () => {
-      if (!screenfull.isEnabled) {
-        ElMessage.warning("暂不不支持全屏");
-        return false;
-      }
-      screenfull.toggle();
-      screenfull.on("change", () => {
-        if (screenfull.isFullscreen) state.isScreenfull = true;
-        else state.isScreenfull = false;
-      });
-    };
-    // 下拉菜单点击时
-    const onHandleCommandClick = (path: string) => {
-      if (path === "logOut") {
-        ElMessageBox({
-          closeOnClickModal: false,
-          closeOnPressEscape: false,
-          title: t("message.user.logOutTitle"),
-          message: t("message.user.logOutMessage"),
-          showCancelButton: true,
-          confirmButtonText: t("message.user.logOutConfirm"),
-          cancelButtonText: t("message.user.logOutCancel"),
-          buttonSize: 'default',
-          beforeClose: (action:string, instance:any, done:any) => {
-            if (action === "confirm") {
-              instance.confirmButtonLoading = true;
-              instance.confirmButtonText = t("message.user.logOutExit");
-              setTimeout(() => {
-                done();
-                setTimeout(() => {
-                  instance.confirmButtonLoading = false;
-                }, 300);
-              }, 700);
-            } else {
-              done();
-            }
-          },
-        })
-          .then(async () => {
-            Session.clear(); // 清除缓存/token等
-            window.location.reload();
-          })
-          .catch(() => {});
-      } else if (path === "wareHouse") {
-        window.open("");
-      } else {
-        router.push(path);
-      }
-    };
-    // 菜单搜索点击
-    const onSearchClick = () => {
-      searchRef.value.openSearch();
-    };
-    // 语言切换
-    const onLanguageChange = (lang: string) => {
-      Local.remove("themeConfig");
-      getThemeConfig.value.globalI18n = lang;
-      Local.set("themeConfig", getThemeConfig.value);
-      proxy.$i18n.locale = lang;
-      initI18n();
-      other.useTitle();
-    };
-    // 设置 element plus 组件的国际化
-    const setI18nConfig = (locale: string) => {
-      if (proxy.$i18n && proxy.$i18n.messages){
-        proxy.mittBus.emit("getI18nConfig", proxy.$i18n.messages[locale]);
-      }
-    };
-    // 菜单锁屏点击
-    const onLockClick = () => {
-      //Local.remove("themeConfig");
-      getThemeConfig.value.isLockScreen = true;
-      getThemeConfig.value.lockScreenTime = 0;
-      Local.set("themeConfig", getThemeConfig.value);
-    };
-    // 初始化言语国际化
-    const initI18n = () => {
-      switch (Local.get("themeConfig").globalI18n) {
-        case "zh-cn":
-          state.disabledI18n = "zh-cn";
-          setI18nConfig("zh-cn");
-          break;
-        case "en":
-          state.disabledI18n = "en";
-          setI18nConfig("en");
-          break;
-      }
-    };
-    const portalChange = async (porid:any)=>{
-      console.log(porid)
-    }
-    // 页面加载时
-    onMounted(() => {
-      if (Local.get("themeConfig")) {
-        initI18n();
-        //initComponentSize();
-      }
-    });
-    return {
-      getUserInfos,
-      onHandleCommandClick,
-      onScreenfullClick,
-      onSearchClick,
-      onLockClick,
-      onLanguageChange,
-      portalChange,
-      searchRef,
-      layoutUserFlexNum,
-      ...toRefs(state),
-    };
-  },
+const { t } = useI18n();
+const { proxy } = getCurrentInstance() as any;
+const router = useRouter();
+const theme = useThemeConfigStateStore();
+const userInfos = useUserInfosState();
+const searchRef = ref();
+
+const state = reactive({
+  isScreenfull: false,
+  isShowUserNewsPopover: false,
+  disabledI18n: "zh-cn"
+});
+
+const { isScreenfull, isShowUserNewsPopover, disabledI18n } = toRefs(state);
+
+// 获取用户信息
+const getUserInfos = computed(() => userInfos.userInfos);
+
+// 获取布局配置信息
+const getThemeConfig = computed(() => theme.themeConfig);
+
+// 设置分割样式
+const layoutUserFlexNum = computed(() => {
+  let { layout, isClassicSplitMenu } = getThemeConfig.value;
+  return layout === "defaults" ||
+    (layout === "classic" && !isClassicSplitMenu) ||
+    layout === "columns"
+    ? 1
+    : 0;
+});
+
+// 全屏点击时
+const onScreenfullClick = () => {
+  if (!screenfull.isEnabled) {
+    ElMessage.warning("暂不支持全屏");
+    return false;
+  }
+  screenfull.toggle();
+  screenfull.on("change", () => {
+    state.isScreenfull = screenfull.isFullscreen;
+  });
 };
+
+// 下拉菜单点击时
+const onHandleCommandClick = (path: string) => {
+  if (path === "logOut") {
+    ElMessageBox({
+      closeOnClickModal: false,
+      closeOnPressEscape: false,
+      title: t("message.user.logOutTitle"),
+      message: t("message.user.logOutMessage"),
+      showCancelButton: true,
+      confirmButtonText: t("message.user.logOutConfirm"),
+      cancelButtonText: t("message.user.logOutCancel"),
+      buttonSize: 'default',
+      beforeClose: (action: string, instance: any, done: any) => {
+        if (action === "confirm") {
+          instance.confirmButtonLoading = true;
+          instance.confirmButtonText = t("message.user.logOutExit");
+          setTimeout(() => {
+            done();
+            setTimeout(() => {
+              instance.confirmButtonLoading = false;
+            }, 300);
+          }, 700);
+        } else {
+          done();
+        }
+      },
+    })
+      .then(async () => {
+        Session.clear();
+        window.location.reload();
+      })
+      .catch(() => {});
+  } else if (path === "wareHouse") {
+    // 仓库链接预留
+  } else {
+    router.push(path);
+  }
+};
+
+// 菜单搜索点击
+const onSearchClick = () => {
+  searchRef.value.openSearch();
+};
+
+// 设置 element plus 组件的国际化
+const setI18nConfig = (locale: string) => {
+  if (proxy.$i18n && proxy.$i18n.messages){
+    proxy.mittBus.emit("getI18nConfig", proxy.$i18n.messages[locale]);
+  }
+};
+
+// 初始化语言国际化
+const initI18n = () => {
+  switch (Local.get("themeConfig")?.globalI18n) {
+    case "zh-cn":
+      state.disabledI18n = "zh-cn";
+      setI18nConfig("zh-cn");
+      break;
+    case "en":
+      state.disabledI18n = "en";
+      setI18nConfig("en");
+      break;
+  }
+};
+
+// 语言切换
+const onLanguageChange = (lang: string) => {
+  Local.remove("themeConfig");
+  getThemeConfig.value.globalI18n = lang;
+  Local.set("themeConfig", getThemeConfig.value);
+  proxy.$i18n.locale = lang;
+  initI18n();
+  other.useTitle();
+};
+
+// 菜单锁屏点击
+const onLockClick = () => {
+  getThemeConfig.value.isLockScreen = true;
+  getThemeConfig.value.lockScreenTime = 0;
+  Local.set("themeConfig", getThemeConfig.value);
+};
+
+onMounted(() => {
+  if (Local.get("themeConfig")) {
+    initI18n();
+  }
+});
 </script>
 
 <style scoped lang="scss">
@@ -300,16 +287,16 @@ export default {
       }
     }
   }
-  ::v-deep(.el-dropdown) {
+  :deep(.el-dropdown) {
     color: var(--bg-topBarColor);
   }
-  ::v-deep(.el-badge) {
+  :deep(.el-badge) {
     height: 40px;
     line-height: 40px;
     display: flex;
     align-items: center;
   }
-  ::v-deep(.el-badge__content.is-fixed) {
+  :deep(.el-badge__content.is-fixed) {
     top: 12px;
   }
 }

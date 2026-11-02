@@ -1,6 +1,6 @@
 """
 Time:     2023/12/6 17:09
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     serializer
 Describe: 信息中心数据序列化
@@ -83,7 +83,10 @@ class MessageCenterTargetUserListSerializer(CustomModelSerializer):
     is_read = serializers.SerializerMethodField()
 
     def get_is_read(self, instance):
-        user_id = self.request.user.id
+        request = self.request or self.context.get('request')
+        if not request or not getattr(request, 'user', None) or not request.user.is_authenticated:
+            return False
+        user_id = request.user.id
         message_center_id = instance.id
         queryset = MessageCenterTargetUser.objects.filter(messagecenter__id=message_center_id, users_id=user_id).first()
         if queryset:
@@ -104,21 +107,19 @@ class MessageCenterCreateSerializer(CustomModelSerializer):
     def save(self, **kwargs):
         data = super().save(**kwargs)
         initial_data = self.initial_data
-        target_type = initial_data.get('target_type')
-        print(initial_data)
+        target_type = str(initial_data.get('target_type', ''))
         # 在保存之前,根据目标类型,把目标用户查询出来并保存
         users = initial_data.get('target_user', [])
-        if target_type in ['1']:  # 按角色
+        if target_type == '1':  # 按角色
             target_role = initial_data.get('target_role', [])
-            users = Users.objects.filter(role__id__in=target_role).values_list('id', flat=True)
-        if target_type in ['2']:  # 按部门
+            users = list(Users.objects.filter(role__id__in=target_role).values_list('id', flat=True))
+        elif target_type == '2':  # 按部门
             target_dept = initial_data.get('target_dept', [])
-            users = Users.objects.filter(dept__id__in=target_dept).values_list('id', flat=True)
-        if target_type in ['3']:  # 系统通知
-            users = Users.objects.values_list('id', flat=True)
+            users = list(Users.objects.filter(dept__id__in=target_dept).values_list('id', flat=True))
+        elif target_type == '3':  # 系统通知
+            users = list(Users.objects.values_list('id', flat=True))
             websocket_push("PaoAdmin", message={"sender": 'system', "contentType": 'SYSTEM',
                                                 "content": '您有一条新消息~', "refresh_unread": True})
-        print(users)
         targetuser_data = []
         for user in users:
             targetuser_data.append({
@@ -127,10 +128,9 @@ class MessageCenterCreateSerializer(CustomModelSerializer):
             })
             if target_type in ['0', '1', '2']:
                 room_name = f"user_{user}"
-                print("room_name", room_name)
                 websocket_push(room_name, message={"sender": 'system', "contentType": 'SYSTEM',
                                                    "content": '您有一条新消息~', "refresh_unread": True})
-        targetuser_instance = MessageCenterTargetUserSerializer(data=targetuser_data, many=True, request=self.request)
+        targetuser_instance = MessageCenterTargetUserSerializer(data=targetuser_data, many=True, context={'request': self.request})
         targetuser_instance.is_valid(raise_exception=True)
         targetuser_instance.save()
         return data

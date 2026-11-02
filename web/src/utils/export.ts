@@ -1,26 +1,28 @@
 import {ElMessage} from "element-plus";
 
-export function handleFileError (res:any, fileName:any) {
-    if (typeof (res.data) !== 'undefined') {
-        if (res.data.type === 'application/json') {
-            const reader:any = new FileReader()
-            reader.onload = function() {
-                const message = JSON.parse(reader.result).msg
-                ElMessage({
-                    showClose: true,
-                    message: message,
-                    type: 'error'
-                })
+export function handleFileError(res: any, fileName: string) {
+    const rawData = res?.data !== undefined ? res.data : res;
+    if (rawData && rawData.type === 'application/json') {
+        const reader = new FileReader();
+        reader.onload = function() {
+            try {
+                const message = JSON.parse(reader.result as string).msg || '导出失败';
+                ElMessage.error(message);
+            } catch (e) {
+                ElMessage.error('导出失败');
             }
-            reader.readAsText(new Blob([res.data]))
-        }
-    } else {
-        var downloadUrl = window.URL.createObjectURL(new Blob([res]))
-        var a = document.createElement('a')
-        a.style.display = 'none'
-        a.href = downloadUrl
-        a.download = fileName
-        var event = new MouseEvent('click')
-        a.dispatchEvent(event)
+        };
+        reader.readAsText(new Blob([rawData]));
+        return;
     }
+    const blob = rawData instanceof Blob ? rawData : new Blob([rawData]);
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = downloadUrl;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(downloadUrl);
 }

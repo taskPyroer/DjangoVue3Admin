@@ -18,24 +18,14 @@
   </el-container>
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="layoutColumns">
 import { computed } from "vue";
 import { useThemeConfigStateStore } from "@/stores/themeConfig";
 import Aside from "@/layout/component/aside.vue";
 import Header from "@/layout/component/header.vue";
 import Main from "@/layout/component/main.vue";
 import ColumnsAside from "@/layout/component/columnsAside.vue";
-export default {
-  name: "layoutColumns",
-  components: { Aside, Header, Main, ColumnsAside },
-  setup() {
-    const theme = useThemeConfigStateStore();
-    const isFixedHeader = computed(() => {
-      return theme.themeConfig.isFixedHeader;
-    });
-    return {
-      isFixedHeader,
-    };
-  },
-};
+
+const theme = useThemeConfigStateStore();
+const isFixedHeader = computed(() => theme.themeConfig.isFixedHeader);
 </script>

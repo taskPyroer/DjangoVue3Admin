@@ -7,27 +7,19 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { toRefs, reactive } from 'vue';
+<script setup lang="ts" name="layoutFooter">
+import { ref } from 'vue';
 import { onBeforeRouteUpdate } from 'vue-router';
-export default {
-	name: 'layoutFooter',
-	setup() {
-		const state = reactive({
-			isDelayFooter: true,
-		});
-		// 路由改变时，等主界面动画加载完毕再显示 footer
-		onBeforeRouteUpdate(() => {
-			state.isDelayFooter = false;
-			setTimeout(() => {
-				state.isDelayFooter = true;
-			}, 800);
-		});
-		return {
-			...toRefs(state),
-		};
-	},
-};
+
+const isDelayFooter = ref(true);
+
+// 路由改变时，等主界面动画加载完毕再显示 footer
+onBeforeRouteUpdate(() => {
+	isDelayFooter.value = false;
+	setTimeout(() => {
+		isDelayFooter.value = true;
+	}, 800);
+});
 </script>
 
 <style scoped lang="scss">

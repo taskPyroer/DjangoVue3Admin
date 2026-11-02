@@ -18,21 +18,13 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
-import img from '@/assets/404.png'
-export default {
-	name: '404',
-	setup() {
-		const router = useRouter();
-		const onGoHome = () => {
-			router.push('/');
-		};
-		return {
-			img,
-			onGoHome,
-		};
-	},
+import img from '@/assets/404.png';
+
+const router = useRouter();
+const onGoHome = () => {
+	router.push('/');
 };
 </script>
 

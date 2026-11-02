@@ -161,7 +161,7 @@
         <el-pagination
             background
             :total="state.total"
-            :current-page="state.queryParams.pageNum"
+            :current-page="state.queryParams.page"
             :page-size="state.queryParams.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             @size-change="handleSizeChange"
@@ -169,7 +169,7 @@
         />
       </div>
     </el-card>
-    <!-- 添加或修改岗位对话框 -->
+    <!-- 添加或修改OSS资源对话框 -->
     <EditModule ref="editModuleRef" :title="state.title"/>
 
     <el-dialog title="测试文件上传" v-model="state.debugOpen" width="769px" center>
@@ -210,72 +210,50 @@ import {ElMessageBox, ElMessage} from "element-plus";
 import {listResOsses, delResOsses, changeOssStatus} from "@/api/resource/oss";
 import EditModule from "./component/editModule.vue";
 import {Session} from "@/utils/storage";
+import {useCrud} from "@/hooks/useCrud";
 
 const {proxy} = getCurrentInstance() as any;
 const editModuleRef = ref();
+const baseURL = import.meta.env.VITE_API_URL;
 
-const baseURL = import.meta.env.VITE_API_URL
-const state: any = reactive({
-  // 遮罩层
-  loading: true,
-  debugOpen: false,
-  url: '',
-  headers: {},
-  // 选中数组
-  ids: [],
-  // 非单个禁用
-  single: true,
-  // 非多个禁用
-  multiple: true,
-  // 弹出层标题
-  title: "",
-  // 岗位表格数据
-  tableData: [],
-  // 总条数
-  total: 0,
-  // 状态数据字典
-  statusOptions: [],
-  // oss分类数据字典
-  ossOptions: [],
-  debugForm: {},
-  // 查询参数
-  queryParams: {
-    // 页码
-    pageNum: 1,
-    // 每页大小
-    pageSize: 10,
-    // 以下为参数
+const {
+  loading,
+  tableData,
+  total,
+  queryParams,
+  multiple,
+  handleQuery,
+  resetQuery,
+  handleCurrentChange,
+  handleSizeChange,
+  handleSelectionChange,
+  handleDelete,
+} = useCrud({
+  listApi: listResOsses,
+  deleteApi: delResOsses,
+  title: "OSS资源",
+  defaultParams: {
     category: undefined,
     ossCode: undefined,
     status: undefined,
   },
 });
 
-/** 查询岗位列表 */
-const handleQuery = () => {
-  state.loading = true;
-  listResOsses(state.queryParams).then((response: any) => {
-    state.tableData = response.data.data;
-    state.total = response.data.total;
-    state.loading = false;
-  });
-};
-/** 重置按钮操作 */
-const resetQuery = () => {
-  state.queryParams.category = undefined;
-  state.queryParams.ossCode = undefined;
-  state.queryParams.status = undefined;
-  handleQuery();
-};
-
-const handleCurrentChange = (val: number) => {
-  state.queryParams.pageNum = val
-  handleQuery()
-}
-const handleSizeChange = (val: number) => {
-  state.queryParams.pageSize = val
-  handleQuery()
-}
+const state = reactive({
+  loading,
+  total,
+  tableData,
+  multiple,
+  debugOpen: false,
+  url: "",
+  headers: {} as Record<string, string>,
+  title: "",
+  statusOptions: [],
+  ossOptions: [],
+  debugForm: {} as any,
+  queryParams,
+  limit: 10,
+});
 
 const statusFormat = (row: any) => {
   return proxy.selectDictLabel(state.statusOptions, row.status);
@@ -287,98 +265,79 @@ const ossFormat = (row: any) => {
 
 // 打开新增弹窗
 const onOpenAddModule = () => {
-  state.title = "添加ResOss";
+  state.title = "添加OSS资源";
   editModuleRef.value.openDialog({});
 };
+
 // 打开编辑弹窗
 const onOpenEditModule = (row: object) => {
-  state.title = "修改ResOss";
+  state.title = "修改OSS资源";
   editModuleRef.value.openDialog(row);
 };
+
 // 打开调试弹窗
 const onOpenDebugModule = (row: any) => {
-  state.debugOpen = true
-  state.debugForm = row
-  state.url = baseURL + '/resource/oss/uploadFile?ossCode=' + row.ossCode
-  state.headers = {'Authorization': `${Session.get('token')}`}
+  state.debugOpen = true;
+  state.debugForm = row;
+  state.url = `${baseURL}/resource/oss/uploadFile?ossCode=${row.ossCode}`;
+  const token = Session.get("token");
+  state.headers = {
+    Authorization: token ? (token.startsWith("Bearer ") ? token : `Bearer ${token}`) : "",
+  };
 };
+
 // 状态修改
 const handleStatusChange = (row: any) => {
-  let text = row.status === "0" ? "启用" : "停用";
+  const text = row.status === "0" ? "启用" : "停用";
   ElMessageBox({
-    message: '确认要"' + text + '""' + row.ossCode + '"Oss吗?',
+    message: `确认要${text}"${row.ossCode}"Oss吗?`,
     title: "警告",
     showCancelButton: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
   })
-      .then(function () {
-        return changeOssStatus({ossId: row.ossId, status: row.status});
-      })
-      .then(() => {
-        ElMessage({
-          message: text + "成功",
-          type: 'success',
-        });
-      })
-      .catch(function () {
-        row.status = row.status === "0" ? "1" : "0";
-      });
-};
-/** 删除按钮操作 */
-const onTabelRowDel = (row: any) => {
-  const ossIds = row.ossId || state.ids;
-  ElMessageBox({
-    message: '是否确认删除岗位编号为"' + ossIds + '"的数据项?',
-    title: "警告",
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(function () {
-    return delResOsses(ossIds).then(() => {
-      handleQuery();
-      ElMessage.success("删除成功");
+    .then(() => changeOssStatus({ ossId: row.ossId, status: row.status }))
+    .then(() => {
+      ElMessage.success(`${text}成功`);
+    })
+    .catch(() => {
+      row.status = row.status === "0" ? "1" : "0";
     });
-  });
 };
-// 多选框选中数据
-const handleSelectionChange = (selection: any) => {
-  state.ids = selection.map((item: any) => item.ossId);
-  state.single = selection.length != 1;
-  state.multiple = !selection.length;
-};
+
+const onTabelRowDel = handleDelete;
+
 const handleLimit = (e: any) => {
   if (e.length > state.limit) {
     ElMessage.warning(`最大单次只可上传${state.limit}条`);
   }
 };
-const handleUplaodSuccess = (res: any, file: any) => {
+
+const handleUplaodSuccess = (res: any) => {
   if (res.code == 200) {
     ElMessage.success(`文件上传成功，路径为${res.data}`);
   } else {
     ElMessage.error(`文件上传失败`);
   }
-}
+};
+
 // 页面加载时
 onMounted(() => {
-  // 查询岗位信息
   handleQuery();
-  // 查询状态数据字典
   proxy.getDicts("sys_normal_disable").then((response: any) => {
-    state.statusOptions = response.data;
+    state.statusOptions = response?.data || [];
   });
   proxy.getDicts("res_oss_category").then((response: any) => {
-    state.ossOptions = response.data;
+    state.ossOptions = response?.data || [];
   });
-  proxy.mittBus.on("onEditResOssesModule", (res: any) => {
+  proxy.mittBus.on("onEditResOssesModule", () => {
     handleQuery();
   });
 });
+
 // 页面卸载时
 onUnmounted(() => {
   proxy.mittBus.off("onEditResOssesModule");
 });
-
 </script>

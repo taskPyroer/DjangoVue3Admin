@@ -1,6 +1,6 @@
 """
 Time:     2023/9/2 14:56
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     serializer
 Describe:
@@ -38,17 +38,21 @@ class LoginSerializer(TokenObtainPairSerializer):
 
     # 开启验证码验证
     def validate_captcha(self, captcha):
-        self.image_code = CaptchaStore.objects.filter(id=self.initial_data['captchaKey']).first()
+        captcha_key = self.initial_data.get('captchaKey')
+        if not captcha_key:
+            raise CustomValidationError('验证码标识缺失，请刷新重试')
+        self.image_code = CaptchaStore.objects.filter(id=captcha_key).first()
+        if not self.image_code:
+            raise CustomValidationError('验证码已失效，请刷新重试')
         five_minute_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
-        if self.image_code and five_minute_ago > self.image_code.expiration:
-            self.image_code and self.image_code.delete()
+        if five_minute_ago > self.image_code.expiration:
+            self.image_code.delete()
             raise CustomValidationError('验证码过期')
+        if self.image_code.response == captcha or self.image_code.challenge == captcha:
+            self.image_code.delete()
         else:
-            if self.image_code and (self.image_code.response == captcha or self.image_code.challenge == captcha):
-                self.image_code and self.image_code.delete()
-            else:
-                self.image_code and self.image_code.delete()
-                raise CustomValidationError("图片验证码错误")
+            self.image_code.delete()
+            raise CustomValidationError("图片验证码错误")
 
     def validate(self, attrs):
         username = attrs['username']

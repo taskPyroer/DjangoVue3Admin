@@ -1,11 +1,10 @@
 """
 Time:     2023/8/6 16:07
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:
 Describe: 公共基础model类
 """
-import secrets
 import time
 
 from django.db import models
@@ -14,29 +13,51 @@ from application import settings
 table_prefix = "sys_"  # 数据库表名前缀
 
 
+class SnowflakeGenerator:
+    """
+    轻量级高并发雪花ID生成器 (41位时间戳 + 10位工作节点 + 12位序号)
+    """
+    def __init__(self, worker_id=1):
+        self.worker_id = worker_id & 0x3FF
+        self.sequence = 0
+        self.last_timestamp = -1
+        self.epoch = 1609459200000  # 2021-01-01 起始基准时间戳
+
+    def _get_timestamp(self):
+        return int(time.time() * 1000)
+
+    def get_id(self):
+        timestamp = self._get_timestamp()
+        if timestamp < self.last_timestamp:
+            # 时钟回拨保护
+            timestamp = self.last_timestamp
+
+        if timestamp == self.last_timestamp:
+            self.sequence = (self.sequence + 1) & 0xFFF
+            if self.sequence == 0:
+                # 单毫秒溢出，等待下一毫秒
+                while timestamp <= self.last_timestamp:
+                    timestamp = self._get_timestamp()
+        else:
+            self.sequence = 0
+
+        self.last_timestamp = timestamp
+        return ((timestamp - self.epoch) << 22) | (self.worker_id << 12) | self.sequence
+
+
+_snowflake = SnowflakeGenerator(worker_id=1)
+
+
 class SnowflakeIDField(models.BigIntegerField):
     """
-    雪花id-生成16位
+    雪花主键字段：确保新增且未指定ID时自动生成，更新时绝对不篡改主键
     """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def generate_id(self):
-        timestamp = int(time.time() * 1000)
-        # 将时间戳缩小到合适的位数（例如，取后面的10位）
-        timestamp = (timestamp - 1564454400000) % 10000000000
-        return (timestamp << 6)  # 使用6位表示时间戳，剩余10位可根据需要分配给机器ID和序列号
-
     def pre_save(self, model_instance, add):
-        snowflake_id = self.generate_id()
-        setattr(model_instance, self.attname, snowflake_id)
-        return snowflake_id
-
-def generate_id():
-    timestamp = int(time.perf_counter_ns())  # 获取纳秒级时间戳
-    random_number = secrets.randbelow(10**4)  # 生成一个4位随机数
-    id = str(timestamp) + str(random_number).zfill(6)  # 将时间戳和随机数拼接成ID，随机数左侧填充0
-    return id
+        value = getattr(model_instance, self.attname, None)
+        if add and not value:
+            value = _snowflake.get_id()
+            setattr(model_instance, self.attname, value)
+        return value
 
 
 class BaseModel(models.Model):

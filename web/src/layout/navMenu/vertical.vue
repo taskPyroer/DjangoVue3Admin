@@ -37,12 +37,10 @@
   </el-menu>
 </template>
 
-<script lang="ts">
+<script setup lang="ts" name="navMenuVertical">
 import {
-  toRefs,
-  reactive,
+  ref,
   computed,
-  defineComponent,
   getCurrentInstance,
   onMounted,
   watch,
@@ -50,68 +48,61 @@ import {
 import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useThemeConfigStateStore } from "@/stores/themeConfig";
 import SubItem from "@/layout/navMenu/subItem.vue";
-export default defineComponent({
-  name: "navMenuVertical",
-  components: { SubItem },
-  props: {
-    menuList: {
-      type: Array,
-      default: () => [],
-    },
+
+const props = withDefaults(
+  defineProps<{
+    menuList?: any[];
+  }>(),
+  {
+    menuList: () => [],
+  }
+);
+
+const { proxy } = getCurrentInstance() as any;
+const theme = useThemeConfigStateStore();
+const route = useRoute();
+
+const defaultActive = ref<any>(
+  route.meta?.isDynamic ? route.meta?.isDynamicPath : route.path
+);
+const isCollapse = ref(false);
+
+// 获取父级菜单数据
+const menuLists = computed(() => props.menuList);
+
+// 获取布局配置信息
+const getThemeConfig = computed(() => theme.themeConfig);
+
+// 菜单高亮（详情时，父级高亮）
+const setParentHighlight = (currentRoute: any) => {
+  const { path, meta } = currentRoute;
+  const pathSplit = meta?.isDynamic ? meta.isDynamicPath.split("/") : path.split("/");
+  if (pathSplit.length >= 4 && meta?.isHide) return pathSplit.slice(0, 3).join("/");
+  return path;
+};
+
+// 设置菜单的收起/展开
+watch(
+  () => theme.themeConfig.isCollapse,
+  () => {
+    isCollapse.value =
+      document.body.clientWidth <= 1000 ? false : !!getThemeConfig.value.isCollapse;
   },
-  setup(props) {
-    const { proxy } = getCurrentInstance() as any;
-    const theme = useThemeConfigStateStore();
-    const route = useRoute();
-    const state = reactive({
-      // 修复
-      defaultActive: route.meta.isDynamic ? route.meta.isDynamicPath : route.path,
-      isCollapse: false,
-    });
-    // 获取父级菜单数据
-    const menuLists = computed(() => {
-      return props.menuList;
-    });
-    // 获取布局配置信息
-    const getThemeConfig = computed(() => {
-      return theme.themeConfig;
-    });
-    // 菜单高亮（详情时，父级高亮）
-    const setParentHighlight = (currentRoute:any) => {
-      const { path, meta } = currentRoute;
-      const pathSplit = meta.isDynamic ? meta.isDynamicPath.split("/") : path.split("/");
-      if (pathSplit.length >= 4 && meta.isHide) return pathSplit.splice(0, 3).join("/");
-      else return path;
-    };
-    // 设置菜单的收起/展开
-    watch(
-      theme.themeConfig,
-      () => {
-        document.body.clientWidth <= 1000
-          ? (state.isCollapse = false)
-          : (state.isCollapse = getThemeConfig.value.isCollapse);
-      },
-      {
-        immediate: true,
-      }
-    );
-    // 页面加载时
-    onMounted(() => {
-      state.defaultActive = setParentHighlight(route);
-    });
-    // 路由更新时
-    onBeforeRouteUpdate((to) => {
-      // 修复
-      state.defaultActive = setParentHighlight(to);
-      proxy.mittBus.emit("onMenuClick");
-      const clientWidth = document.body.clientWidth;
-      if (clientWidth < 1000) getThemeConfig.value.isCollapse = false;
-    });
-    return {
-      menuLists,
-      getThemeConfig,
-      ...toRefs(state),
-    };
-  },
+  {
+    immediate: true,
+  }
+);
+
+onMounted(() => {
+  defaultActive.value = setParentHighlight(route);
+});
+
+// 路由更新时
+onBeforeRouteUpdate((to) => {
+  defaultActive.value = setParentHighlight(to);
+  proxy.mittBus.emit("onMenuClick");
+  if (document.body.clientWidth < 1000) {
+    getThemeConfig.value.isCollapse = false;
+  }
 });
 </script>

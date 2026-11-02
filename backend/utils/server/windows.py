@@ -1,6 +1,6 @@
 """
 Time:     2023/11/30 17:04
-Author:   公众号【布鲁的Python之旅】，【github】https://github.com/taskPyroer， 【gitee】https://gitee.com/hu_yupeng123/projects
+Author:   公众号【布鲁的Python之旅】
 Version:  V 0.1
 File:     windows
 Describe: windows系统命令工具类封装
