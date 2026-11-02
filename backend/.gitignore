@@ -19,3 +19,4 @@ logs
 # information for Eclipse / Flash Builder.
 __pycache__/
 *.pyc
+test_*.py

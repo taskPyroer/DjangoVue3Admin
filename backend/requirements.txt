@@ -25,7 +25,7 @@ cron-descriptor==1.4.0
 cryptography==41.0.3
 daphne==3.0.2
 distro==1.8.0
-Django==4.2.1
+Django>=4.2.16,<5.0
 django-celery-beat==2.5.0
 django-celery-results==2.5.1
 django-comment-migrate==0.1.7
